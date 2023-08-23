@@ -1,0 +1,36 @@
+{
+  "hotels": [
+    {
+      "id": 1,
+      "name": "Cais da Praia Hotel",
+      "description": "Localizado à beira-mar com vistas incríveis.",
+      "rating": 4,
+      "imageUrl": "./assets/images/hotels/1.jpg",
+      "isFavourited": false
+    },
+    {
+      "id": 2,
+      "name": "Hotel Brisa Suites",
+      "description": "Uma estadia luxuosa esperando por você.",
+      "rating": 5,
+      "imageUrl": "./assets/images/hotels/2.jpg",
+      "isFavourited": true
+    },
+    {
+      "id": 3,
+      "name": "Verano Pajuçara",
+      "description": "Um paraíso tropical no coração da cidade.",
+      "rating": 3,
+      "imageUrl": "./assets/images/hotels/3.jpg",
+      "isFavourited": false
+    },
+    {
+      "id": 4,
+      "name": "Hotel Água de Coco",
+      "description": "Desfrute de uma estadia tranquila e relaxante.",
+      "rating": 4,
+      "imageUrl": "./assets/images/hotels/4.jpg",
+      "isFavourited": true
+    }
+  ]
+}

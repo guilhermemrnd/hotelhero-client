@@ -1,0 +1,17 @@
+.angular/
+.scannerwork/
+node_modules/
+coverage/
+src/assets/
+dist/
+
+*.md
+.env
+.browserslistrc
+.editorconfig
+.eslintignore
+.gitignore
+.prettierignore
+
+*.bat
+*.ico

@@ -1,0 +1,77 @@
+// Navigation
+nav .rounded-circle {
+  border: 2px solid orange;
+}
+
+// Search Bar
+.search-section {
+  background-color: var(--neutral);
+
+  .form-control {
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .btn-primary {
+    background-color: var(--secondary);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: var(--primary);
+    }
+  }
+}
+
+// Filters Modal
+::ng-deep .ngx-slider {
+  .ngx-slider-pointer-min,
+  .ngx-slider-pointer-max,
+  .ngx-slider-selection {
+    background: var(--primary) !important;
+  }
+}
+
+// Recommended Destinations
+.recommended-section {
+  .destination-card {
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    img {
+      height: 200px;
+      object-fit: cover;
+      width: 100%;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .destination-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      padding: 5px;
+      border-radius: 3px;
+      font-weight: 500;
+    }
+  }
+}

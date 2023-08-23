@@ -1,1 +1,55 @@
-/* You can add global styles to this file, and also import other style files */
+// Paleta de Cores:root {
+:root {
+  --primary: #5a67d8;
+  --secondary: #4c51bf;
+  --neutral: #2d3748;
+  --background: #edf2f7;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: block;
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.content {
+  padding-bottom: 60px;
+}
+
+// Navbar
+.navbar {
+  background-color: var(--neutral);
+
+  // Dropdown
+  .dropdown-menu {
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--background);
+  }
+
+  .dropdown-menu .dropdown-item {
+    color: var(--neutral);
+  }
+
+  .dropdown-menu .dropdown-item:hover {
+    color: var(--secondary);
+  }
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+  color: var(--background);
+}
+
+// Footer
+footer.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  color: var(--neutral);
+}
