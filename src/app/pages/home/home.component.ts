@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
-import { HttpClient } from '@angular/common/http';
+
+import { HotelService } from './../../services/hotel.service';
 
 @Component({
   selector: 'app-home',
@@ -8,8 +9,6 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  private readonly API = 'http://localhost:3000';
-
   isLoggedIn = false;
 
   hotels: any[] = [];
@@ -32,10 +31,10 @@ export class HomeComponent implements OnInit {
     }
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private hotelService: HotelService) {}
 
-  ngOnInit() {
-    this.http.get<any[]>(`${this.API}/hotels`).subscribe((data) => {
+  ngOnInit(): void {
+    this.hotelService.getHotelList().subscribe((data) => {
       this.hotels = data;
     });
   }

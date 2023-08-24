@@ -12,7 +12,7 @@ export class HotelCardComponent implements OnInit {
 
   ngOnInit() {}
 
-  toggleFavourite() {
-    this.hotel.isFavourite = !this.hotel.isFavourite
+  toggleFavorite() {
+    this.hotel.isFavorite = !this.hotel.isFavorite
   }
 }

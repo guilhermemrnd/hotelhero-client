@@ -7,11 +7,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/components.module';
 import { HomeComponent } from './pages/home/home.component';
-import { RoomDetailsComponent } from './pages/room-details/room-details.component';
+import { HotelDetailsComponent } from './pages/hotel-details/hotel-details.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, RoomDetailsComponent, CheckoutComponent],
+  declarations: [AppComponent, HomeComponent, HotelDetailsComponent, CheckoutComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgxSliderModule, ComponentsModule],
   providers: [],
   bootstrap: [AppComponent]

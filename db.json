@@ -3,34 +3,48 @@
     {
       "id": 1,
       "name": "Cais da Praia Hotel",
-      "description": "Localizado à beira-mar com vistas incríveis.",
+      "short_description": "Localizado à beira-mar com vistas incríveis.",
+      "long_description": "Situado junto às areias brancas da Praia de Jatiúca, não muito longe do centro de Maceió, este hotel oferece quartos com ar-condicionado e uma piscina rodeada por jardins. O WiFi e o estacionamento são gratuitos. <br><br>As acomodações do Cais da Praia Hotel também possuem TV a cabo, frigobar e telefone. Para sua comodidade, a recepção está aberta 24 horas. <br><br>No restaurante você pode desfrutar de um buffet de café da manhã variado, que inclui frutas da estação e sucos naturais, além de pães e bolos da região. <br><br>O Cais da Praia Hotel fica a apenas 5 minutos de carro do centro da cidade, onde os visitantes podem encontrar muitos restaurantes e opções de compras.",
+      "address": "Av Alvaro Otacilio, 4353, Maceió, CEP 57035-180, Brazil ",
       "rating": 4,
-      "imageUrl": "./assets/images/hotels/1.jpg",
-      "isFavourited": false
+      "images": [
+        "./assets/images/hotels/1_1.jpg",
+        "./assets/images/hotels/1_2.jpg",
+        "./assets/images/hotels/1_3.jpg",
+        "./assets/images/hotels/1_4.jpg",
+        "./assets/images/hotels/1_5.jpg",
+        "./assets/images/hotels/1_6.jpg",
+        "./assets/images/hotels/1_7.jpg"
+      ],
+      "isFavorite": false,
+      "price": 150.0
     },
     {
       "id": 2,
       "name": "Hotel Brisa Suites",
-      "description": "Uma estadia luxuosa esperando por você.",
+      "short_description": "Uma estadia luxuosa esperando por você.",
       "rating": 5,
-      "imageUrl": "./assets/images/hotels/2.jpg",
-      "isFavourited": true
+      "images": ["./assets/images/hotels/2_1.jpg"],
+      "isFavorite": true,
+      "price": 250.0
     },
     {
       "id": 3,
       "name": "Verano Pajuçara",
-      "description": "Um paraíso tropical no coração da cidade.",
+      "short_description": "Um paraíso tropical no coração da cidade.",
       "rating": 3,
-      "imageUrl": "./assets/images/hotels/3.jpg",
-      "isFavourited": false
+      "images": ["./assets/images/hotels/3_1.jpg"],
+      "isFavorite": false,
+      "price": 100.0
     },
     {
       "id": 4,
       "name": "Hotel Água de Coco",
-      "description": "Desfrute de uma estadia tranquila e relaxante.",
+      "short_description": "Desfrute de uma estadia tranquila e relaxante.",
       "rating": 4,
-      "imageUrl": "./assets/images/hotels/4.jpg",
-      "isFavourited": true
+      "images": ["./assets/images/hotels/4_1.jpg"],
+      "isFavorite": true,
+      "price": 180.0
     }
   ]
 }

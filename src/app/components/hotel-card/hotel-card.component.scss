@@ -6,7 +6,7 @@
   transition: transform 0.2s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
 
   .hotel-image {
@@ -15,7 +15,7 @@
     object-fit: cover;
   }
 
-  .favourite-icon {
+  .favorite-icon {
     width: 24px;
     height: 24px;
     position: absolute;
@@ -25,44 +25,80 @@
 
     svg {
       filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.5));
-
-      path {
-        stroke: white;
-      }
     }
-  }
 
-  .favourite-icon.active svg {
-    fill: #e70a18 !important;
+    svg:hover {
+      fill: rgba(0, 0, 0, 0.5);
+    }
+
+    &.active svg {
+      fill: #e70a18 !important;
+    }
   }
 
   .hotel-header {
     display: flex;
-    align-items: center;
+    align-items: stretch;
+    vertical-align: middle;
 
-    h5 {
+    h5 a {
       margin-right: 5px;
+      color: var(--neutral);
+      text-decoration: none;
+
+      &:hover {
+        color: black;
+      }
     }
 
     .star-icon {
-      width: 20px;
-      height: 20px;
-      margin-bottom: 16px;
+      display: inline-block;
+      vertical-align: middle;
+      width: 16px;
+      height: 16px;
 
       svg {
         fill: #ffd700;
+      }
 
-        path {
-          stroke: #e9c600;
-        }
+      svg path {
+        stroke: #e9c600;
       }
     }
   }
 
-  .reserve-btn {
-    background-color: var(--primary);
-    color: white;
-    border-radius: 5px;
+  .booking-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 10px;
+
+    .hotel-price {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .price-info {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: lighter;
+      color: #2d3748;
+    }
+
+    .reserve-btn {
+      background-color: transparent;
+      border: 1px solid #5a67d8;
+      color: #5a72d8;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+
+      &:hover {
+        background-color: #5a67d8;
+        color: white;
+      }
+    }
   }
 }
