@@ -1,0 +1,128 @@
+<div class="container">
+  <div class="row">
+    <h4 class="pb-1">{{ hotel?.name }}</h4>
+    <div class="d-flex">
+      <div class="title-section align-items-center">
+        <i class="fas fa-star"></i>
+        <span class="rating">{{ hotel?.rating }}</span>
+        <span class="reviews">(324 avaliações)</span>
+        <span class="point">•</span>
+        <span class="address">{{ hotel?.address }}</span>
+      </div>
+      <div class="icon-section">
+        <span class="share-icon"> <i class="fas fa-share-alt"></i> Compartilhar </span>
+        <span class="favorite-icon"> <i class="far fa-heart"></i> Salvar </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-section row pt-3">
+    <div class="col-md-9 px-2">
+      <img [src]="hotel?.images[1]" class="img-fluid main-image w-100" />
+    </div>
+    <div class="col-md-3 px-0">
+      <div class="d-flex flex-column">
+        <div class="position-relative">
+          <img [src]="hotel?.images[2]" class="img-fluid side-image" />
+          <img [src]="hotel?.images[3]" class="img-fluid side-image" />
+          <img [src]="hotel?.images[4]" class="img-fluid side-image" />
+          <button class="btn-show-all"><i class="far fa-images"></i> Ver todas as fotos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-7">
+      <div class="description-section">
+        <h5 class="mb-3">Visão Geral</h5>
+        <div class="d-block mb-3">
+          <p class="fw-bold">
+            <i class="fas fa-home fa-lg me-1"></i>
+            {{ hotel.max_guests }} pessoas • {{ hotel.beds }} camas • {{ hotel.bathrooms }} banheiros
+          </p>
+        </div>
+        <span [innerHTML]="hotel?.long_description"></span>
+      </div>
+
+      <div class="separator my-4"></div>
+
+      <div class="facilities-section">
+        <h5 class="mb-4">Principais Comodidades</h5>
+        <div class="d-flex flex-wrap">
+          <ng-container *ngFor="let facility of mainFacilities">
+            <div class="facility-item" *ngIf="hasFacility(facility.key)">
+              <i class="fas {{ facility.icon }} fa-lg"></i>
+              <span> {{ facility.label }} </span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="booking-section">
+        <div class="d-flex mb-4">
+          <span class="daily-price">
+            <strong>{{ hotel?.price | currency: 'BRL' }}</strong
+            >/noite
+          </span>
+          <div class="rating">
+            <i class="fas fa-star"></i>
+            <span class="rating fw-bold">{{ hotel?.rating }}</span>
+          </div>
+        </div>
+
+        <div class="form mb-4">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="">Check-in</label>
+              <input class="form-control" type="date" />
+            </div>
+
+            <div class="col-md-6">
+              <label for="">Check-out</label>
+              <input class="form-control" type="date" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <label for="">Hóspedes</label>
+              <select class="form-control" name="" id="">
+                <option value="">1 hóspede</option>
+                <option value="">2 hóspedes</option>
+                <option value="">3 hóspedes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex mb-2">
+          <span class="">{{ hotel?.price | currency: 'BRL' }} x 3 noites</span>
+          <span class="price">R$ 450,00</span>
+        </div>
+        <div class="d-flex mb-2">
+          <span class="">Desconto de novo usuário</span>
+          <span class="price disccount">-R$ 50,00</span>
+        </div>
+        <div class="d-flex mb-2">
+          <span class="">Taxa de serviço</span>
+          <span class="price">R$ 24,50</span>
+        </div>
+
+        <div class="separator my-3"></div>
+
+        <div class="d-flex mb-3 fw-bold">
+          <span class="description">Total (BRL)</span>
+          <span class="price">R$ 424,50</span>
+        </div>
+
+        <div class="d-grid">
+          <button class="btn booking-btn py-2 mb-2" [routerLink]="'/checkout'">Reservar</button>
+          <span class="text-center">Você não será cobrado ainda.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

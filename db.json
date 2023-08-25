@@ -6,7 +6,7 @@
       "short_description": "Localizado à beira-mar com vistas incríveis.",
       "long_description": "Situado junto às areias brancas da Praia de Jatiúca, não muito longe do centro de Maceió, este hotel oferece quartos com ar-condicionado e uma piscina rodeada por jardins. O WiFi e o estacionamento são gratuitos. <br><br>As acomodações do Cais da Praia Hotel também possuem TV a cabo, frigobar e telefone. Para sua comodidade, a recepção está aberta 24 horas. <br><br>No restaurante você pode desfrutar de um buffet de café da manhã variado, que inclui frutas da estação e sucos naturais, além de pães e bolos da região. <br><br>O Cais da Praia Hotel fica a apenas 5 minutos de carro do centro da cidade, onde os visitantes podem encontrar muitos restaurantes e opções de compras.",
       "address": "Av Alvaro Otacilio, 4353, Maceió, CEP 57035-180, Brazil ",
-      "rating": 4,
+      "rating": 4.84,
       "images": [
         "./assets/images/hotels/1_1.jpg",
         "./assets/images/hotels/1_2.jpg",
@@ -16,6 +16,20 @@
         "./assets/images/hotels/1_6.jpg",
         "./assets/images/hotels/1_7.jpg"
       ],
+      "main_facilities": [
+        { "wifi": true },
+        { "parking": true },
+        { "reception_24h": true },
+        { "access_card": true },
+        { "air_conditioning": true },
+        { "outdoor_pool": true },
+        { "room_service": true },
+        { "breakfast": true },
+        { "airport_transfer": true }
+      ],
+      "max_guests": 3,
+      "beds": 2,
+      "bathrooms": 1,
       "isFavorite": false,
       "price": 150.0
     },
@@ -23,8 +37,13 @@
       "id": 2,
       "name": "Hotel Brisa Suites",
       "short_description": "Uma estadia luxuosa esperando por você.",
+      "long_description": "",
       "rating": 5,
       "images": ["./assets/images/hotels/2_1.jpg"],
+      "main_facilities": [],
+      "max_guests": 2,
+      "beds": 1,
+      "bathrooms": 1,
       "isFavorite": true,
       "price": 250.0
     },
@@ -32,8 +51,13 @@
       "id": 3,
       "name": "Verano Pajuçara",
       "short_description": "Um paraíso tropical no coração da cidade.",
+      "long_description": "",
       "rating": 3,
       "images": ["./assets/images/hotels/3_1.jpg"],
+      "main_facilities": [],
+      "max_guests": 4,
+      "beds": 2,
+      "bathrooms": 2,
       "isFavorite": false,
       "price": 100.0
     },
@@ -41,8 +65,13 @@
       "id": 4,
       "name": "Hotel Água de Coco",
       "short_description": "Desfrute de uma estadia tranquila e relaxante.",
+      "long_description": "",
       "rating": 4,
       "images": ["./assets/images/hotels/4_1.jpg"],
+      "main_facilities": [],
+      "max_guests": 2,
+      "beds": 1,
+      "bathrooms": 1,
       "isFavorite": true,
       "price": 180.0
     }

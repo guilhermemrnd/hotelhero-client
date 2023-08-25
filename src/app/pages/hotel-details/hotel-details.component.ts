@@ -9,9 +9,19 @@ import { HotelService } from '../../services/hotel.service';
   styleUrls: ['./hotel-details.component.scss']
 })
 export class HotelDetailsComponent implements OnInit {
-  isLoggedIn = false;
-
   hotel: any;
+
+  mainFacilities = [
+    { key: 'wifi', label: 'Wi-Fi gratuito', icon: 'fa-wifi' },
+    { key: 'parking', label: 'Estacionamento gratuto', icon: 'fa-parking' },
+    { key: 'reception_24h', label: 'Recepção 24 horas', icon: 'fa-concierge-bell' },
+    { key: 'access_card', label: 'Cartão de acesso', icon: 'fa-key' },
+    { key: 'air_conditioning', label: 'Ar-condicionado', icon: 'fa-snowflake' },
+    { key: 'outdoor_pool', label: 'Piscina ao ar livre', icon: 'fa-swimming-pool' },
+    { key: 'room_service', label: 'Serviço de quarto', icon: 'fa-broom' },
+    { key: 'breakfast', label: 'Café da manhã', icon: 'fa-coffee' },
+    { key: 'airport_transfer', label: 'Transfer (aeroporto)', icon: 'fa-shuttle-van' }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +38,11 @@ export class HotelDetailsComponent implements OnInit {
     }
   }
 
-  toggleFavorite() {
+  toggleFavorite(): void {
     this.hotel.isFavorite = !this.hotel.isFavorite;
+  }
+
+  hasFacility(key: string): boolean {
+    return this.hotel.main_facilities.some((facility: any) => facility[key]);
   }
 }
