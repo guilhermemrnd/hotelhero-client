@@ -1,104 +1,49 @@
-.hotel-card {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+img {
+  max-width: 398px;
+  max-height: 197px;
+  border-radius: 8px;
+}
 
-  &:hover {
-    transform: scale(1.02);
-  }
+.hotel-info {
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+  height: 100%;
 
-  .hotel-image {
+  h5 {
+    position: relative;
+    overflow: hidden;
     width: 100%;
-    height: 150px;
-    object-fit: cover;
-  }
+    text-align: left;
 
-  .favorite-icon {
-    width: 24px;
-    height: 24px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-
-    svg {
-      filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.5));
-    }
-
-    svg:hover {
-      fill: rgba(0, 0, 0, 0.5);
-    }
-
-    &.active svg {
-      fill: #e70a18 !important;
-    }
-  }
-
-  .hotel-header {
-    display: flex;
-    align-items: stretch;
-    vertical-align: middle;
-
-    h5 a {
-      margin-right: 5px;
-      color: var(--neutral);
+    a {
+      color: #171a1fff;
       text-decoration: none;
 
       &:hover {
-        color: black;
+        text-decoration: underline;
       }
     }
 
-    .star-icon {
-      display: inline-block;
-      vertical-align: middle;
-      width: 16px;
-      height: 16px;
+    i {
+      font-size: 22px;
+      position: absolute;
+      cursor: pointer;
+      right: 0px;
 
-      svg {
-        fill: #ffd700;
-      }
-
-      svg path {
-        stroke: #e9c600;
+      &.bi-suit-heart-fill {
+        color: #cf101d;
       }
     }
   }
 
-  .booking-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-
-    .hotel-price {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    .price-info {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: lighter;
-      color: #2d3748;
-    }
-
-    .reserve-btn {
-      background-color: transparent;
-      border: 1px solid #5a67d8;
-      color: #5a72d8;
-      padding: 5px 10px;
-      border-radius: 5px;
-      transition:
-        background-color 0.3s,
-        color 0.3s;
-
-      &:hover {
-        background-color: #5a67d8;
-        color: white;
-      }
-    }
+  .separator {
+    max-width: 60px;
+    border-bottom: 2px solid #dee1e6ff;
   }
+}
+
+.light-text {
+  font-size: 13px;
+  color: #9095a1ff;
 }

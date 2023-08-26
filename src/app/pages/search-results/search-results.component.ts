@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Options, LabelType } from '@angular-slider/ngx-slider';
+import { LabelType, Options } from '@angular-slider/ngx-slider';
+
+import { HotelService } from './../../services/hotel.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-search-results',
+  templateUrl: './search-results.component.html',
+  styleUrls: ['./search-results.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class SearchResultsComponent implements OnInit {
   hotels: any[] = [];
 
   minValue: number = 50;
@@ -27,7 +29,11 @@ export class HomeComponent implements OnInit {
     }
   };
 
-  constructor() {}
+  constructor(private hotelService: HotelService) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.hotelService.getHotelList().subscribe((data) => {
+      this.hotels = data;
+    });
+  }
 }

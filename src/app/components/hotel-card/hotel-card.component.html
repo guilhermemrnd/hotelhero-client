@@ -1,47 +1,42 @@
-<div class="hotel-card">
-  <img [src]="hotel.images[0]" [alt]="hotel.name" class="img-fluid hotel-image" />
-
-  <div class="favorite-icon" [ngClass]="{ active: hotel.isFavorite }" (click)="toggleFavorite()">
-    <!-- TODO: Implement "Favorite" feature -->
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.04L12 21.35Z"
-        stroke="white"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+<div class="d-flex">
+  <div class="col-md-5">
+    <img src="{{ hotel.images[0] }}" alt="" class="img-fluid w-100" />
   </div>
-
-  <div class="p-3">
-    <div class="hotel-header">
+  <div class="col-md-6">
+    <div class="hotel-info">
       <h5>
         <a [routerLink]="['/hotel-details', hotel.id]">{{ hotel.name }}</a>
+        <i
+          [ngClass]="hotel.isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
+          (click)="toggleFavorite()"
+          title="Salvar"
+        ></i>
       </h5>
-      <div class="star-icon" *ngFor="let star of [].constructor(hotel.rating)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </div>
-    </div>
 
-    <p class="small">{{ hotel.short_description }}</p>
+      <div class="separator mt-2 mb-3"></div>
 
-    <div class="booking-section">
-      <div class="hotel-price">
-        <!-- TODO: Replace daily price with total price -->
-        {{ hotel.price | currency: 'BRL' }}
-        <!-- TODO: Replace "X" with selected number of days -->
-        <span class="price-info">Preço para X noites.</span>
+      <span class="d-block light-text"
+        >{{ hotel.max_guests }} hóspedes • {{ hotel.beds }} cama • {{ hotel.bathrooms }} banheiro
+        privado</span
+      >
+      <span class="d-block light-text">WiFi • Ar-condicionado</span>
+
+      <div class="mt-auto">
+        <div class="d-flex">
+          <span class="ms-auto light-text">R$450 total</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <i class="fas fa-star me-1" style="color: orange"></i>
+          <span class="fw-bold me-1">{{ hotel.rating }}</span>
+          <span class="light-text">(324 avaliações)</span>
+          <div class="ms-auto" style="font-size: 18px">
+            <span
+              ><strong>{{ hotel.price | currency: 'BRL' }}</strong
+              >/noite
+            </span>
+          </div>
+        </div>
       </div>
-      <button class="btn reserve-btn" [routerLink]="['/hotel-details', hotel.id]">Reservar Agora</button>
     </div>
   </div>
 </div>

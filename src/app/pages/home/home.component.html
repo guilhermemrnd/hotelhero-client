@@ -2,7 +2,7 @@
   <div class="row">
     <div class="background-image position-relative">
       <div class="form-section position-absolute">
-        <div class="d-flex">
+        <form class="d-flex">
           <div class="me-3 ms-2">
             <label for="">Destino</label>
             <input class="form-control" type="text" placeholder="Qual seu destino?" />
@@ -23,8 +23,8 @@
             <input class="form-control" type="number" placeholder="Quantos hóspedes?" />
           </div>
 
-          <button class="btn ms-2"><i class="bi bi-search"></i></button>
-        </div>
+          <button class="btn ms-2" [routerLink]="'/search'"><i class="bi bi-search"></i></button>
+        </form>
       </div>
     </div>
   </div>
