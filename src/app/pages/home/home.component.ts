@@ -9,8 +9,6 @@ import { HotelService } from './../../services/hotel.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  isLoggedIn = false;
-
   hotels: any[] = [];
 
   minValue: number = 50;

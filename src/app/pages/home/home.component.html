@@ -1,210 +1,31 @@
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
-    <a class="navbar-brand" href="/">HotelHero</a>
-    <!-- <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button> -->
-    <div class="d-fluid" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li *ngIf="!isLoggedIn" class="nav-item">
-          <a class="nav-link" href="/login">Login/Signup</a>
-        </li>
-        <li *ngIf="isLoggedIn" class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            id="navbarDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <img
-              src="../../assets/images/selfie.jpg"
-              alt="Foto de perfil"
-              width="35"
-              class="rounded-circle"
-            />
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/profile"> <i class="fas fa-user-circle mr-2"></i> Meu perfil </a>
-            <a class="dropdown-item" href="/logout"> <i class="fas fa-sign-out-alt mr-2"></i> Sair </a>
+<div class="container">
+  <div class="row">
+    <div class="background-image position-relative">
+      <div class="form-section position-absolute">
+        <div class="d-flex">
+          <div class="me-3 ms-2">
+            <label for="">Destino</label>
+            <input class="form-control" type="text" placeholder="Qual seu destino?" />
           </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-<!-- Search bar -->
-<div class="search-section">
-  <div class="container pt-5 pb-3">
-    <form>
-      <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-          <input type="text" class="form-control mb-2" placeholder="Qual seu destino?" />
-        </div>
-        <div class="col-lg-2 col-md-3 col-sm-4">
-          <input type="date" class="form-control mb-2" placeholder="Check-in" />
-        </div>
-        <div class="col-lg-2 col-md-3 col-sm-4">
-          <input type="date" class="form-control mb-2" placeholder="Check-out" />
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-4">
-          <input type="number" class="form-control mb-2" placeholder="Número de hóspedes" />
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-12">
-          <button class="btn btn-primary w-100">Buscar</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Hotel sections -->
-<div class="container mt-5" *ngIf="hotels.length > 0">
-  <div class="d-flex justify-content-between align-items-center">
-    <h4>Resultado da pesquisa</h4>
-    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#filterModal">
-      <i class="fa fa-filter"></i> Filtro
-    </button>
-  </div>
-
-  <div class="row mt-4">
-    <div class="col-lg-3 col-md-6 col-sm-6 mb-4" *ngFor="let hotel of hotels">
-      <app-hotel-card [hotel]="hotel"></app-hotel-card>
-    </div>
-  </div>
-
-  <!-- Filters Modal -->
-  <div
-    class="modal fade"
-    id="filterModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="filterModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content px-4">
-        <div class="modal-header">
-          <h5 class="modal-title" id="filterModalLabel">Filtros</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <label class="fw-bold mb-1" for="priceRange">Faixa de preço (por noite):</label>
-          <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
-
-          <label class="fw-bold mt-3 mb-1" for="rating">Avaliação mínima:</label>
-          <select class="form-control" id="rating">
-            <option>Todas</option>
-            <option>4+</option>
-            <option>4.5+</option>
-            <option>5</option>
-          </select>
-
-          <label class="fw-bold mt-3 mb-1" for="roomType">Tipo de quarto:</label>
-          <select class="form-control" id="roomType">
-            <option>Todos</option>
-            <option>Suíte</option>
-            <option>Quarto de solteiro</option>
-            <option>Quarto de casal</option>
-          </select>
-
-          <label class="fw-bold mt-3 mb-1">Serviços:</label>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="wifi" id="wifi" />
-            <label class="form-check-label" for="wifi">Wi-Fi</label>
+          <div class="me-3">
+            <label for="">Check-in</label>
+            <input class="form-control" type="date" placeholder="Escolha uma data" />
           </div>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="parking" id="parking" />
-            <label class="form-check-label" for="parking">Estacionamento</label>
+
+          <div class="me-3">
+            <label for="">Check-out</label>
+            <input class="form-control" type="date" placeholder="Escolha uma data" />
           </div>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="pool" id="pool" />
-            <label class="form-check-label" for="pool">Piscina</label>
+
+          <div class="me-3">
+            <label for="">Hóspedes</label>
+            <input class="form-control" type="number" placeholder="Quantos hóspedes?" />
           </div>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="breakfast" id="breakfast" />
-            <label class="form-check-label" for="breakfast">Café da manhã incluso</label>
-          </div>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" value="air-conditioning" id="air-conditioning" />
-            <label class="form-check-label" for="air-conditioning">Ar condicionado</label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-pruimary">Aplicar Filtros</button>
+
+          <button class="btn ms-2"><i class="bi bi-search"></i></button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- Recommended Destinations -->
-<section class="recommended-section mt-5" *ngIf="hotels.length < 1">
-  <div class="container">
-    <h4 class="mb-4">Destinos Recomendados</h4>
-    <div class="row">
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/maldivas.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">Maldivas</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/londres.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">Londres</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/paris.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">Paris</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/bahamas.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">Bahamas</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/new-york.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">New York</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/dubai.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">Dubai</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/grecia.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">Grécia</h3>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 mb-4">
-        <div class="destination-card">
-          <img src="./../../assets/images/recommended/aspen.jpg" alt="" class="img-fluid" />
-          <h3 class="destination-title">Aspen</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
