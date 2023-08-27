@@ -10,6 +10,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { HotelDetailsComponent } from './pages/hotel-details/hotel-details.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { PaymentSuccessComponent } from './pages/payment-success/payment-success.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
     HomeComponent,
     SearchResultsComponent,
     HotelDetailsComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    PaymentSuccessComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgxSliderModule, ComponentsModule],
   providers: [],

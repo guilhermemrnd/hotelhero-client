@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { HotelService } from '../../services/hotel.service';
 
@@ -9,6 +8,13 @@ import { HotelService } from '../../services/hotel.service';
   styleUrls: ['./hotel-details.component.scss']
 })
 export class HotelDetailsComponent implements OnInit {
+  reservationDetails = {
+    checkIn: '2023-04-26',
+    checkOut: '2023-04-29',
+    numberOfGuests: 2,
+    hotelID: 1
+  };
+
   hotel: any;
 
   mainFacilities = [
@@ -23,19 +29,12 @@ export class HotelDetailsComponent implements OnInit {
     { key: 'airport_transfer', label: 'Transfer (aeroporto)', icon: 'fa-shuttle-van' }
   ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private hotelService: HotelService
-  ) {}
+  constructor(private hotelService: HotelService) {}
 
   ngOnInit(): void {
-    const hotelId = this.route.snapshot.paramMap.get('id');
-
-    if (hotelId) {
-      this.hotelService.getHotelById(+hotelId).subscribe((data) => {
-        this.hotel = data;
-      });
-    }
+    this.hotelService.getHotelById(this.reservationDetails.hotelID).subscribe((data) => {
+      this.hotel = data;
+    });
   }
 
   toggleFavorite(): void {

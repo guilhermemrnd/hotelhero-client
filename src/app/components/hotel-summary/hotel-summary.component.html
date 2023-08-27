@@ -1,0 +1,22 @@
+<div class="d-flex">
+  <div class="col-md-6 pe-2">
+    <img src="{{ hotel.images[0] }}" alt="" class="img-fluid rounded-1 w-100" />
+  </div>
+  <div class="col-md-6">
+    <div class="d-flex flex-column h-100 mb-3">
+      <h5>{{ hotel.name }}</h5>
+
+      <div class="mini-separator mb-2"></div>
+
+      <span class="d-block light-text">
+        {{ hotel.max_guests }} guests • {{ hotel.beds }} beds • {{ hotel.bathrooms }} private bath
+      </span>
+
+      <div class="mt-auto">
+        <i class="fas fa-star me-1" style="color: orange"></i>
+        <span class="fw-bold me-1">{{ hotel.rating }}</span>
+        <span class="light-text">(324 reviews)</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,7 +5,7 @@
   <div class="col-md-6">
     <div class="hotel-info">
       <h5>
-        <a [routerLink]="['/hotel-details', hotel.id]">{{ hotel.name }}</a>
+        <a [routerLink]="'/hotel-details'">{{ hotel.name }}</a>
         <i
           [ngClass]="hotel.isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
           (click)="toggleFavorite()"

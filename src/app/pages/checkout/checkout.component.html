@@ -1,5 +1,5 @@
 <div class="container">
-  <button class="btn-back"><i class="bi bi-arrow-left-short"></i> Back</button>
+  <button class="btn-back" (click)="goBack()"><i class="bi bi-arrow-left-short"></i> Back</button>
   <h4 class="mb-5">Confirm and Pay</h4>
   <div class="row g-5">
     <div class="col-md-6">
@@ -82,36 +82,15 @@
         </p>
 
         <div class="d-grid">
-          <button class="btn" [routerLink]="" type="submit">Confirm and pay</button>
+          <button class="btn" [routerLink]="'/payment-success'" type="submit">Confirm and pay</button>
         </div>
       </form>
     </div>
     <div class="col-md-6">
       <div class="hotel-info">
-        <div class="d-flex pb-4">
-          <div class="col-md-6 pe-2">
-            <img src="{{ hotel.images[0] }}" alt="" class="img-fluid w-100" />
-          </div>
-          <div class="col-md-6">
-            <div class="d-flex flex-column h-100 mb-3">
-              <h5>{{ hotel.name }}</h5>
+        <app-hotel-summary [hotel]="hotel"></app-hotel-summary>
 
-              <div class="mini-separator mb-2"></div>
-
-              <span class="d-block light-text">
-                {{ hotel.max_guests }} guests • {{ hotel.beds }} beds • {{ hotel.bathrooms }} private bath
-              </span>
-
-              <div class="mt-auto">
-                <i class="fas fa-star me-1" style="color: orange"></i>
-                <span class="neutral-text fw-bold me-1">{{ hotel.rating }}</span>
-                <span class="light-text">(324 reviews)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column pt-4">
           <h5 class="mb-3">Price details</h5>
           <div class="d-flex mb-1">
             <span class="">{{ hotel?.price | currency: 'BRL' }} x 3 nights</span>

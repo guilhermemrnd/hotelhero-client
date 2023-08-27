@@ -1,7 +1,7 @@
-import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { HotelService } from './../../services/hotel.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
@@ -9,24 +9,28 @@ import { HotelService } from './../../services/hotel.service';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
+  reservationDetails = {
+    checkIn: '2023-04-26',
+    checkOut: '2023-04-29',
+    numberOfGuests: 2,
+    hotelID: 1
+  };
+
   hotel: any;
 
   editingField: string = null;
   fields = { dates: 'July 17 - 21', guests: '2 guests' };
 
-  constructor(
-    private route: ActivatedRoute,
-    private hotelService: HotelService
-  ) {}
+  constructor(private location: Location, private hotelService: HotelService) {}
 
   ngOnInit() {
-    const hotelId = this.route.snapshot.paramMap.get('id');
+    this.hotelService.getHotelById(this.reservationDetails.hotelID).subscribe((data) => {
+      this.hotel = data;
+    });
+  }
 
-    if (hotelId) {
-      this.hotelService.getHotelById(+hotelId).subscribe((data) => {
-        this.hotel = data;
-      });
-    }
+  goBack(): void {
+    this.location.back();
   }
 
   toggleEdit(fieldName: string): void {
