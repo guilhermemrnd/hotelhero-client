@@ -1,32 +1,143 @@
-<div class="container mt-4">
-  <div class="row">
-    <!-- Resumo da Reserva -->
+<div class="container">
+  <button class="btn-back"><i class="bi bi-arrow-left-short"></i> Back</button>
+  <h4 class="mb-5">Confirm and Pay</h4>
+  <div class="row g-5">
     <div class="col-md-6">
-      <h3>Resumo da Reserva</h3>
-      <p>Quarto selecionado: Nome do Quarto</p>
-      <p>Data de entrada: [Data]</p>
-      <p>Data de saída: [Data]</p>
-      <p>Total: [Valor]</p>
-    </div>
+      <h5 class="mb-3">Your trip</h5>
+      <div class="trip-info d-flex mb-4">
+        <div class="col-md-6 pe-2">
+          <div class="bg-light p-2 px-3 rounded-2">
+            <span class="d-flex justify-content-between align-items-center">
+              <span class="fw-bold mb-1">Dates</span>
+              <div *ngIf="editingField === 'dates'">
+                <i class="bi bi-check" (click)="updateField($event, 'dates')"></i>
+                <i class="bi bi-x" (click)="cancelEdit()"></i>
+              </div>
+            </span>
+            <span class="d-flex justify-content-between">
+              <ng-container *ngIf="editingField !== 'dates'">{{ fields.dates }}</ng-container>
+              <input
+                *ngIf="editingField === 'dates'"
+                [value]="fields.dates"
+                class="form-control"
+                type="text"
+              />
+              <ng-container *ngIf="editingField !== 'dates'">
+                <i class="bi bi-pencil-square" (click)="toggleEdit('dates')" title="Edit"></i>
+              </ng-container>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-6 ps-2">
+          <div class="bg-light py-2 px-3 rounded-2">
+            <span class="d-flex justify-content-between align-content-center">
+              <span class="fw-bold mb-1">Guests</span>
+              <div *ngIf="editingField === 'guests'">
+                <i class="bi bi-check" (click)="updateField($event, 'guests')"></i>
+                <i class="bi bi-x" (click)="cancelEdit()"></i>
+              </div>
+            </span>
+            <span class="d-flex justify-content-between">
+              <ng-container *ngIf="editingField !== 'guests'"> {{ fields.guests }} </ng-container>
+              <input
+                *ngIf="editingField === 'guests'"
+                [value]="fields.guests"
+                class="form-control"
+                type="text"
+              />
+              <ng-container *ngIf="editingField !== 'guests'">
+                <i class="bi bi-pencil-square" (click)="toggleEdit('guests')" title="Edit"></i>
+              </ng-container>
+            </span>
+          </div>
+        </div>
+      </div>
 
-    <!-- Detalhes do Pagamento -->
+      <h5 class="mb-3">Pay with</h5>
+      <form class="payment-form" action="">
+        <div class="col-md-12 mb-3">
+          <input type="text" class="form-control" placeholder="Card number" />
+        </div>
+        <div class="col-md-12 mb-3">
+          <input type="text" class="form-control" placeholder="Card holder" />
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Expiration date" />
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="CVV" />
+          </div>
+        </div>
+        <div class="col-md-12 d-flex align-items-center">
+          <input type="checkbox" class="check-input" id="save-card" />
+          <label class="check-label" for="save-card">Save card for future payments</label>
+        </div>
+
+        <div class="separator my-3"></div>
+
+        <p style="font-size: 11px">
+          By selecting the button below, I agree to the <a href="#">Property Rules</a>,
+          <a href="#">Terms and Conditions</a>, <a href="#">Privacy Policy</a>.
+        </p>
+
+        <div class="d-grid">
+          <button class="btn" [routerLink]="" type="submit">Confirm and pay</button>
+        </div>
+      </form>
+    </div>
     <div class="col-md-6">
-      <h3>Detalhes do Pagamento</h3>
-      <!-- Campos de detalhes do pagamento -->
-      <input
-        type="text"
-        class="form-control mb-2"
-        placeholder="Nome do Cartão"
-      />
-      <input
-        type="text"
-        class="form-control mb-2"
-        placeholder="Número do Cartão"
-      />
-      <!-- Outros campos necessários -->
-      <button class="btn btn-success mt-2 float-right">
-        Finalizar Reserva
-      </button>
+      <div class="hotel-info">
+        <div class="d-flex pb-4">
+          <div class="col-md-6 pe-2">
+            <img src="{{ hotel.images[0] }}" alt="" class="img-fluid w-100" />
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex flex-column h-100 mb-3">
+              <h5>{{ hotel.name }}</h5>
+
+              <div class="mini-separator mb-2"></div>
+
+              <span class="d-block light-text">
+                {{ hotel.max_guests }} guests • {{ hotel.beds }} beds • {{ hotel.bathrooms }} private bath
+              </span>
+
+              <div class="mt-auto">
+                <i class="fas fa-star me-1" style="color: orange"></i>
+                <span class="neutral-text fw-bold me-1">{{ hotel.rating }}</span>
+                <span class="light-text">(324 reviews)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column">
+          <h5 class="mb-3">Price details</h5>
+          <div class="d-flex mb-1">
+            <span class="">{{ hotel?.price | currency: 'BRL' }} x 3 nights</span>
+            <span class="ms-auto fw-semibold">$450,00</span>
+          </div>
+          <div class="d-flex mb-1">
+            <span class="">New user discount</span>
+            <span class="ms-auto fw-semibold disccount">-$50,00</span>
+          </div>
+          <div class="d-flex">
+            <span class="">Service fee</span>
+            <span class="ms-auto fw-semibold">$24,50</span>
+          </div>
+
+          <div class="separator my-3"></div>
+
+          <div class="d-flex mb-3 fw-bold">
+            <span class="neutral-text">Total (USD)</span>
+            <span class="neutral-text ms-auto">$424,50</span>
+          </div>
+
+          <span class="text-center" style="font-size: 12px"
+            >Free cancellation until 3:00 PM on July 26, 2023
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
