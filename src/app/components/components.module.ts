@@ -4,10 +4,11 @@ import { RouterModule } from '@angular/router';
 
 import { HotelCardComponent } from './hotel-card/hotel-card.component';
 import { HotelSummaryComponent } from './hotel-summary/hotel-summary.component';
+import { FloatingFormComponent } from './floating-form/floating-form.component';
 
 @NgModule({
-  declarations: [HotelCardComponent, HotelSummaryComponent],
+  declarations: [HotelCardComponent, HotelSummaryComponent, FloatingFormComponent],
   imports: [CommonModule, RouterModule],
-  exports: [HotelCardComponent, HotelSummaryComponent]
+  exports: [HotelCardComponent, HotelSummaryComponent, FloatingFormComponent]
 })
 export class ComponentsModule {}

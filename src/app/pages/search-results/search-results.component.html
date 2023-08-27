@@ -1,37 +1,5 @@
 <div class="container">
-  <div class="floating-form">
-    <form class="d-flex flex-row" action="">
-      <div class="ms-2">
-        <input
-          #expandingInput
-          class="form-control"
-          placeholder="Qual seu destino?"
-          maxlength="45"
-          type="text"
-        />
-      </div>
-
-      <div class="vertical-line"></div>
-
-      <div class="">
-        <input class="form-control" type="date" />
-      </div>
-
-      <div class="vertical-line"></div>
-
-      <div class="">
-        <input class="form-control" type="date" />
-      </div>
-
-      <div class="vertical-line"></div>
-
-      <div class="">
-        <input class="form-control" type="number" placeholder="Quantos hóspedes?" />
-      </div>
-
-      <button class="btn ms-2" [routerLink]="'/search'"><i class="bi bi-search"></i></button>
-    </form>
-  </div>
+  <app-floating-form></app-floating-form>
 
   <div class="row">
     <div class="col-md-3">

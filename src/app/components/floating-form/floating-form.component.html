@@ -1,0 +1,65 @@
+<div class="floating-form">
+  <form class="d-flex flex-row align-items-center" action="">
+    <div class="ms-3">
+      <span class="fw-bold" *ngIf="editingField !== 'destination'" (click)="toggleEdit('destination')">
+        {{ formData['destination'] }}
+      </span>
+      <input
+        #inputElement
+        *ngIf="editingField === 'destination'"
+        [value]="formData['destination']"
+        (input)="updateWidth('destination')"
+        (blur)="updateField($event, 'destination')"
+        style="min-width: 50px"
+        class="form-control"
+        maxlength="45"
+        type="text"
+        autofocus
+      />
+    </div>
+
+    <div class="vertical-line"></div>
+
+    <div class="">
+      <span class="fw-bold" *ngIf="editingField !== 'dates'" (click)="toggleEdit('dates')">
+        {{ getFormattedDates() }}
+      </span>
+      <input
+        #inputElement
+        *ngIf="editingField === 'dates'"
+        [value]="formData['checkIn']"
+        (blur)="updateField($event, 'dates')"
+        style="min-width: 124px"
+        class="form-control"
+        type="date"
+        autofocus
+      />
+    </div>
+
+    <div class="vertical-line"></div>
+
+    <!-- <div class="">
+      <input class="form-control" type="date" />
+    </div>
+
+    <div class="vertical-line"></div> -->
+
+    <div class="">
+      <span class="fw-bold" *ngIf="editingField !== 'guests'" (click)="toggleEdit('guests')">
+        {{ formData['guests'] }} hóspede<span *ngIf="formData['guests'] > 1">s</span>
+      </span>
+      <input
+        #inputElement
+        *ngIf="editingField === 'guests'"
+        [value]="formData['guests']"
+        (blur)="updateField($event, 'guests')"
+        style="min-width: 44px"
+        class="form-control"
+        type="number"
+        autofocus
+      />
+    </div>
+
+    <button class="btn ms-3 me-2"><i class="bi bi-search"></i></button>
+  </form>
+</div>
