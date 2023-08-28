@@ -1,18 +1,17 @@
 <div class="floating-form">
-  <form class="d-flex flex-row align-items-center" action="">
+  <form [formGroup]="searchForm" class="d-flex flex-row align-items-center">
     <div class="ms-3">
       <span class="fw-bold" *ngIf="editingField !== 'destination'" (click)="toggleEdit('destination')">
-        {{ formData['destination'] }}
+        {{ getFieldValue('destination') }}
       </span>
       <input
         #inputElement
+        formControlName="destination"
         *ngIf="editingField === 'destination'"
-        [value]="formData['destination']"
         (input)="updateWidth('destination')"
-        (blur)="updateField($event, 'destination')"
+        (blur)="updateField('destination')"
         style="min-width: 50px"
         class="form-control"
-        maxlength="45"
         type="text"
         autofocus
       />
@@ -26,9 +25,9 @@
       </span>
       <input
         #inputElement
+        formControlName="checkIn"
         *ngIf="editingField === 'dates'"
-        [value]="formData['checkIn']"
-        (blur)="updateField($event, 'dates')"
+        (blur)="updateField('dates')"
         style="min-width: 124px"
         class="form-control"
         type="date"
@@ -46,13 +45,13 @@
 
     <div class="">
       <span class="fw-bold" *ngIf="editingField !== 'guests'" (click)="toggleEdit('guests')">
-        {{ formData['guests'] }} hóspede<span *ngIf="formData['guests'] > 1">s</span>
+        {{ getFieldValue('guests') }} hóspede<span *ngIf="getFieldValue('guests') > 1">s</span>
       </span>
       <input
         #inputElement
+        formControlName="guests"
         *ngIf="editingField === 'guests'"
-        [value]="formData['guests']"
-        (blur)="updateField($event, 'guests')"
+        (blur)="updateField('guests')"
         style="min-width: 44px"
         class="form-control"
         type="number"
@@ -60,6 +59,6 @@
       />
     </div>
 
-    <button class="btn ms-3 me-2"><i class="bi bi-search"></i></button>
+    <button class="btn ms-3 me-2" (click)="searchHotels()"><i class="bi bi-search"></i></button>
   </form>
 </div>

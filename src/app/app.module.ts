@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,7 +22,14 @@ import { PaymentSuccessComponent } from './pages/payment-success/payment-success
     CheckoutComponent,
     PaymentSuccessComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgxSliderModule, ComponentsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgxSliderModule,
+    ComponentsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { Hotel } from './../../interfaces/hotel';
+import { ReservationDetails } from '../../interfaces/reservation-details';
 import { HotelService } from '../../services/hotel.service';
 
 @Component({
@@ -8,14 +11,9 @@ import { HotelService } from '../../services/hotel.service';
   styleUrls: ['./hotel-details.component.scss']
 })
 export class HotelDetailsComponent implements OnInit {
-  reservationDetails = {
-    checkIn: '2023-04-26',
-    checkOut: '2023-04-29',
-    numberOfGuests: 2,
-    hotelID: 1
-  };
+  searchForm: ReservationDetails;
 
-  hotel: any;
+  hotel: Hotel;
 
   mainFacilities = [
     { key: 'wifi', label: 'Wi-Fi gratuito', icon: 'fa-wifi' },
@@ -29,19 +27,31 @@ export class HotelDetailsComponent implements OnInit {
     { key: 'airport_transfer', label: 'Transfer (aeroporto)', icon: 'fa-shuttle-van' }
   ];
 
-  constructor(private hotelService: HotelService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private hotelService: HotelService
+  ) {}
 
   ngOnInit(): void {
-    this.hotelService.getHotelById(this.reservationDetails.hotelID).subscribe((data) => {
+    this.searchForm = this.hotelService.getFormData();
+
+    const hotelID = this.route.snapshot.paramMap.get('id');
+    this.hotelService.getHotelById(+hotelID).subscribe((data) => {
       this.hotel = data;
     });
   }
 
-  toggleFavorite(): void {
-    this.hotel.isFavorite = !this.hotel.isFavorite;
+  public onSearch(event: ReservationDetails): void {
+    this.hotelService.setFormData(event);
+    this.router.navigate(['/search'], { queryParams: event });
   }
 
-  hasFacility(key: string): boolean {
+  public toggleFavorite(): void {
+    // this.hotel.isFavorite = !this.hotel.isFavorite;
+  }
+
+  public hasFacility(key: string): boolean {
     return this.hotel.main_facilities.some((facility: any) => facility[key]);
   }
 }

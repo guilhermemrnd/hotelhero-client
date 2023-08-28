@@ -1,5 +1,5 @@
 <div class="container">
-  <app-floating-form></app-floating-form>
+  <app-floating-form [formData]="searchForm" (searchEvent)="onSearch($event)"></app-floating-form>
 
   <div class="row">
     <div class="col-md-3">
@@ -103,7 +103,9 @@
       </div>
     </div>
     <div class="col-md-9">
-      <span class="d-block mb-3" style="color: #171a1fff">Maceió: 4 acomodações encontradas</span>
+      <span class="d-block mb-3" style="color: #171a1fff">
+        {{ searchForm.destination }}: {{ hotels?.length }} acomodações encontradas
+      </span>
 
       <div class="hotel-card" *ngFor="let hotel of hotels">
         <app-hotel-card [hotel]="hotel"></app-hotel-card>

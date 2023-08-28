@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Options, LabelType } from '@angular-slider/ngx-slider';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { HotelService } from './../../services/hotel.service';
+import { ReservationDetails } from '../../interfaces/reservation-details';
 
 @Component({
   selector: 'app-home',
@@ -7,27 +11,32 @@ import { Options, LabelType } from '@angular-slider/ngx-slider';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  hotels: any[] = [];
+  searchForm: FormGroup;
 
-  minValue: number = 50;
-  maxValue: number = 1000;
-  options: Options = {
-    floor: 50,
-    ceil: 1000,
-    step: 10,
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return 'R$' + value;
-        case LabelType.High:
-          return 'R$' + value;
-        default:
-          return 'R$' + value;
-      }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private hotelService: HotelService
+  ) {}
+
+  ngOnInit(): void {
+    const formData = this.hotelService.getFormData();
+    this.searchForm = formData ? this.buildForm(formData) : this.buildForm();
+  }
+
+  public navigate(): void {
+    if (this.searchForm.valid) {
+      this.hotelService.setFormData(this.searchForm.value);
+      this.router.navigate(['/search'], { queryParams: this.searchForm.value });
     }
-  };
+  }
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  private buildForm(formData?: ReservationDetails): FormGroup {
+    return this.formBuilder.group({
+      destination: [formData?.destination ?? '', Validators.required],
+      checkIn: [formData?.checkIn ?? '', Validators.required],
+      checkOut: [formData?.checkOut ?? '', Validators.required],
+      guests: [formData?.guests ?? '', [Validators.required, Validators.min(1)]]
+    });
+  }
 }

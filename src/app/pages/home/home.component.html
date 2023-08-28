@@ -2,28 +2,52 @@
   <div class="row">
     <div class="background-image position-relative">
       <div class="form-section position-absolute">
-        <form class="d-flex">
+        <form class="d-flex" [formGroup]="searchForm">
           <div class="me-3 ms-2">
-            <label for="">Destino</label>
-            <input class="form-control" type="text" placeholder="Qual seu destino?" />
+            <label for="destination">Destino</label>
+            <input
+              formControlName="destination"
+              class="form-control"
+              type="text"
+              placeholder="Qual seu destino?"
+            />
           </div>
 
           <div class="me-3">
-            <label for="">Check-in</label>
-            <input class="form-control" type="date" placeholder="Escolha uma data" />
+            <label for="checkIn">Check-in</label>
+            <input
+              formControlName="checkIn"
+              class="form-control"
+              onfocus="this.type='date'"
+              onblur="this.type='text'"
+              placeholder="Escolha uma data"
+            />
           </div>
 
           <div class="me-3">
-            <label for="">Check-out</label>
-            <input class="form-control" type="date" placeholder="Escolha uma data" />
+            <label for="checkOut">Check-out</label>
+            <input
+              formControlName="checkOut"
+              class="form-control"
+              onfocus="this.type='date'"
+              onblur="this.type='text'"
+              placeholder="Escolha uma data"
+            />
           </div>
 
           <div class="me-3">
-            <label for="">Hóspedes</label>
-            <input class="form-control" type="number" placeholder="Quantos hóspedes?" />
+            <label for="guests">Hóspedes</label>
+            <input
+              formControlName="guests"
+              class="form-control"
+              type="number"
+              placeholder="Quantos hóspedes?"
+            />
           </div>
 
-          <button class="btn ms-2" [routerLink]="'/search'"><i class="bi bi-search"></i></button>
+          <button class="btn ms-2" (click)="navigate()">
+            <i class="bi bi-search"></i>
+          </button>
         </form>
       </div>
     </div>

@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'search', component: SearchResultsComponent },
-  { path: 'hotel-details', component: HotelDetailsComponent },
+  { path: 'hotel-details/:id', component: HotelDetailsComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'payment-success', component: PaymentSuccessComponent }
 ];

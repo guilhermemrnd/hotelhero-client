@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 
+import { Hotel } from './../../interfaces/hotel';
+import { ReservationDetails } from '../../interfaces/reservation-details';
 import { HotelService } from './../../services/hotel.service';
 
 @Component({
@@ -9,13 +12,14 @@ import { HotelService } from './../../services/hotel.service';
   styleUrls: ['./search-results.component.scss']
 })
 export class SearchResultsComponent implements OnInit {
-  hotels: any[] = [];
+  searchForm: ReservationDetails;
+  hotels: Hotel[] = null;
 
   minValue: number = 50;
   maxValue: number = 1000;
   options: Options = {
-    floor: 50,
-    ceil: 1000,
+    floor: this.minValue,
+    ceil: this.maxValue,
     step: 10,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
@@ -29,11 +33,34 @@ export class SearchResultsComponent implements OnInit {
     }
   };
 
-  constructor(private hotelService: HotelService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private hotelService: HotelService
+  ) {}
 
   ngOnInit() {
-    this.hotelService.getHotelList().subscribe((data) => {
-      this.hotels = data;
+    this.route.queryParams.subscribe((params: ReservationDetails) => {
+      this.getHotelList(params);
+      this.searchForm = params;
     });
   }
+
+  public onSearch(event: ReservationDetails): void {
+    this.hotelService.setFormData(event);
+    this.getHotelList(event);
+  }
+
+  private getHotelList(params: ReservationDetails): void {
+    this.hotelService.getHotelList(params).subscribe({
+      next: (data: Hotel[]) => {
+        this.hotels = data;
+        this.getMinAndMaxPrice();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  private getMinAndMaxPrice(): void {}
 }

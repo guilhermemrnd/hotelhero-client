@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { Hotel } from '../interfaces/hotel';
+import { ReservationDetails } from '../interfaces/reservation-details';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,11 +13,19 @@ export class HotelService {
 
   constructor(private http: HttpClient) {}
 
-  getHotelList(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.API}/hotels`);
+  public setFormData(data: ReservationDetails): void {
+    localStorage.setItem('searchForm', JSON.stringify(data));
   }
 
-  getHotelById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.API}/hotels/${id}`);
+  public getFormData(): ReservationDetails {
+    return JSON.parse(localStorage.getItem('searchForm'));
+  }
+
+  public getHotelList(params: any): Observable<Hotel[]> {
+    return this.http.get<Hotel[]>(`${this.API}/hotels`, { params });
+  }
+
+  public getHotelById(id: number): Observable<Hotel> {
+    return this.http.get<Hotel>(`${this.API}/hotels/${id}`);
   }
 }

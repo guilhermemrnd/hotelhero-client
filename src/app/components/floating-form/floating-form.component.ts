@@ -1,5 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
+
+import { ReservationDetails } from '../../interfaces/reservation-details';
 
 @Component({
   selector: 'app-floating-form',
@@ -7,22 +10,34 @@ import * as moment from 'moment';
   styleUrls: ['./floating-form.component.scss']
 })
 export class FloatingFormComponent implements OnInit {
-  formData: { [key: string]: any } = {
-    destination: 'Maceió',
-    checkIn: new Date('2023-04-26'),
-    checkOut: new Date('2023-04-29'),
-    guests: 2
-  };
-
-  editingField: string = null;
+  @Input() formData: ReservationDetails;
+  searchForm: FormGroup;
 
   @ViewChild('inputElement', { read: ElementRef }) inputElement: ElementRef;
+  editingField: string = null;
 
-  constructor() {}
+  @Output() searchEvent = new EventEmitter<ReservationDetails>();
 
-  ngOnInit() {}
+  constructor(private formBuilder: FormBuilder) {}
 
-  toggleEdit(fieldName: string): void {
+  ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      destination: [this.formData.destination, [Validators.required, Validators.maxLength(45)]],
+      checkIn: [this.formData.checkIn, Validators.required],
+      checkOut: [this.formData.checkOut, Validators.required],
+      guests: [this.formData.guests, [Validators.required, Validators.min(1)]]
+    });
+  }
+
+  public searchHotels(): void {
+    this.searchEvent.emit(this.searchForm.value);
+  }
+
+  public getFieldValue(fieldName: string): any {
+    return this.searchForm.get(fieldName).value;
+  }
+
+  public toggleEdit(fieldName: string): void {
     this.editingField = this.editingField === fieldName ? null : fieldName;
     if (this.editingField === fieldName) {
       setTimeout(() => {
@@ -32,20 +47,19 @@ export class FloatingFormComponent implements OnInit {
     }
   }
 
-  updateField(event: Event, fieldName: string): void {
-    const input = event.target as HTMLInputElement;
+  public updateField(fieldName: string): void {
+    let inputValue = this.searchForm.get(fieldName)?.value;
 
-    if (!input.value.replace(/\s/g, '').length) {
-      input.value = this.formData[fieldName];
+    if (isNaN(inputValue) && !inputValue?.trim()) {
+      inputValue = this.formData[fieldName];
     }
 
-    this.formData[fieldName] = input.value;
     this.editingField = null;
   }
 
-  updateWidth(field: string): void {
+  public updateWidth(fieldName: string): void {
     const input = this.inputElement.nativeElement;
-    const text = input.value || this.formData[field];
+    const text = input.value || this.searchForm.get(fieldName).value;
     const style = getComputedStyle(input);
     const font = `${style.fontSize} ${style.fontFamily}`;
 
@@ -57,9 +71,9 @@ export class FloatingFormComponent implements OnInit {
     input.style.width = `${width + 10}px`;
   }
 
-  getFormattedDates() {
-    const checkIn = moment(this.formData['checkIn']);
-    const checkOut = moment(this.formData['checkOut']);
+  public getFormattedDates() {
+    const checkIn = moment(this.searchForm.get('checkIn').value);
+    const checkOut = moment(this.searchForm.get('checkOut').value);
 
     const sameMonth = checkIn.isSame(checkOut, 'month');
     const sameYear = checkIn.isSame(checkOut, 'year');

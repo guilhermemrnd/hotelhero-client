@@ -1,5 +1,5 @@
 <div class="container">
-  <app-floating-form></app-floating-form>
+  <app-floating-form [formData]="searchForm" (searchEvent)="onSearch($event)"></app-floating-form>
 
   <div class="row">
     <h4 class="pb-1">{{ hotel?.name }}</h4>
