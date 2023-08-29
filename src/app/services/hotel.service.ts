@@ -21,8 +21,8 @@ export class HotelService {
     return JSON.parse(localStorage.getItem('searchForm'));
   }
 
-  public getHotelList(params: any): Observable<Hotel[]> {
-    return this.http.get<Hotel[]>(`${this.API}/hotels`, { params });
+  public getHotelList(formData: any): Observable<Hotel[]> {
+    return this.http.get<Hotel[]>(`${this.API}/hotels`, { params: formData });
   }
 
   public getHotelById(id: number): Observable<Hotel> {

@@ -52,6 +52,6 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   public hasFacility(key: string): boolean {
-    return this.hotel.main_facilities.some((facility: any) => facility[key]);
+    return this.hotel?.mainFacilities[key];
   }
 }

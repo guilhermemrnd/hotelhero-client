@@ -13,92 +13,16 @@
             aria-expanded="true"
             aria-controls="priceRange"
           >
-            Preço <i class="bi bi-caret-right"></i>
+            Price <i class="bi bi-caret-right"></i>
           </button>
           <div class="collapse show mt-2" id="priceRange">
             <div class="px-3">
-              <label class="mb-2" for="priceRange">Faixa de preço (por noite):</label>
+              <label class="mb-2" for="priceRange">Your budget (per night):</label>
               <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
             </div>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <button
-            type="button"
-            class="collapser-link"
-            data-bs-toggle="collapse"
-            data-bs-target="#mostUsed"
-            aria-expanded="true"
-            aria-controls="mostUsed"
-          >
-            Filtros mais usados <i class="bi bi-caret-right"></i>
-          </button>
-          <div class="collapse show mt-2" id="mostUsed">
-            <div class="px-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">Café da manhã incluso</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">Estacionamento gratuito</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">Casa de hóspedes</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">Hotel</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">Apartamento</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">Ar-condicionado</label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <button
-            type="button"
-            class="collapser-link"
-            data-bs-toggle="collapse"
-            data-bs-target="#minRating"
-            aria-expanded="true"
-            aria-controls="minRating"
-          >
-            Avaliação <i class="bi bi-caret-right"></i>
-          </button>
-          <div class="collapse show mt-2" id="minRating">
-            <div class="px-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">2 estrelas</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">3 estrelas</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">4 estrelas</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">5 estrelas</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="" id="" />
-                <label class="form-check-label" for="">Sem classificação</label>
-              </div>
-            </div>
-          </div>
+          <app-hotel-filter (filterChanged)="filterHotelList($event)"></app-hotel-filter>
         </div>
       </div>
     </div>
@@ -111,16 +35,25 @@
         <app-hotel-card [hotel]="hotel"></app-hotel-card>
       </div>
 
-      <nav aria-label="Navegação">
+      <nav aria-label="Navegação" *ngIf="totalPages > 1">
         <ul class="pagination justify-content-center">
-          <li class="page-item"><a href="#" class="page-link"><</a></li>
-          <li class="page-item active" aria-current="page"><a href="#" class="page-link">1</a></li>
-          <li class="page-item"><a href="#" class="page-link">2</a></li>
-          <li class="page-item"><a href="#" class="page-link">3</a></li>
-          <li class="page-item"><a href="#" class="page-link">4</a></li>
-          <li class="page-item"><span class="page-link">...</span></li>
-          <li class="page-item"><a href="#" class="page-link">10</a></li>
-          <li class="page-item"><a href="#" class="page-link">></a></li>
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="changePage(currentPage - 1)"><</a>
+          </li>
+
+          <li
+            *ngFor="let page of getDisplayedPages()"
+            [class.active]="page + 1 === currentPage"
+            [class.disabled]="page === -1"
+            class="page-item"
+          >
+            <a *ngIf="page !== -1" class="page-link" (click)="changePage(page)">{{ page }}</a>
+            <span *ngIf="page === -1" class="page-link">...</span>
+          </li>
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" (click)="changePage(currentPage + 1)">></a>
+          </li>
         </ul>
       </nav>
     </div>

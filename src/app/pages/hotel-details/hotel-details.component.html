@@ -41,10 +41,10 @@
         <div class="d-block mb-3">
           <p class="fw-bold">
             <i class="fas fa-home fa-lg me-1"></i>
-            {{ hotel.max_guests }} pessoas • {{ hotel.beds }} camas • {{ hotel.bathrooms }} banheiros
+            {{ hotel?.maxGuests }} pessoas • {{ hotel?.beds }} camas • {{ hotel?.bathrooms }} banheiros
           </p>
         </div>
-        <span [innerHTML]="hotel?.long_description"></span>
+        <span [innerHTML]="hotel?.longDescription"></span>
       </div>
 
       <div class="separator my-4"></div>
