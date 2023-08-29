@@ -27,7 +27,7 @@
         #inputElement
         formControlName="checkIn"
         *ngIf="editingField === 'dates'"
-        (blur)="updateField('dates')"
+        (blur)="updateField('checkIn')"
         style="min-width: 124px"
         class="form-control"
         type="date"
@@ -59,6 +59,8 @@
       />
     </div>
 
-    <button class="btn ms-3 me-2" (click)="searchHotels()"><i class="bi bi-search"></i></button>
+    <button class="btn ms-3 me-2" (click)="searchHotels()" [disabled]="searchForm.invalid">
+      <i class="bi bi-search"></i>
+    </button>
   </form>
 </div>

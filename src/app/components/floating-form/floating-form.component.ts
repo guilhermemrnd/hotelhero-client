@@ -50,8 +50,12 @@ export class FloatingFormComponent implements OnInit {
   public updateField(fieldName: string): void {
     let inputValue = this.searchForm.get(fieldName)?.value;
 
-    if (isNaN(inputValue) && !inputValue?.trim()) {
-      inputValue = this.formData[fieldName];
+    if (isNaN(inputValue) && inputValue?.trim()) {
+      this.formData = { ...this.formData, [fieldName]: inputValue };
+    } else if (!isNaN(inputValue) && +inputValue !== 0) {
+      this.formData = { ...this.formData, [fieldName]: +inputValue };
+    } else {
+      this.searchForm.get(fieldName).setValue(this.formData[fieldName]);
     }
 
     this.editingField = null;
