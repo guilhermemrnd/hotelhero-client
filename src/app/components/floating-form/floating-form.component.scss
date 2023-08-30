@@ -17,11 +17,12 @@
   }
 
   span {
-    color: #65676A;
+    color: #65676a;
     cursor: pointer;
   }
 
-  .form-control {
+  .form-control,
+  ::ng-deep .p-inputtext {
     width: auto;
     max-width: 200px;
     font-size: 14px;
@@ -33,6 +34,27 @@
     &:focus {
       border-bottom: 1px solid #9095a1;
       box-shadow: none;
+    }
+  }
+
+  ::ng-deep .p-calendar {
+    .p-inputtext {
+      width: auto;
+      max-width: 200px;
+      font-size: 14px;
+      padding: 0 0 1px 0;
+      border: none;
+      box-shadow: none;
+      border-radius: 0px;
+    }
+
+    .p-datepicker-trigger {
+      color: black;
+      width: auto;
+      padding: 0 0 0 10px;
+      margin-bottom: 3px;
+      background-color: transparent;
+      border: none;
     }
   }
 

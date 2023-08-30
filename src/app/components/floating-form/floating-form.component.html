@@ -21,31 +21,26 @@
 
     <div class="">
       <span class="fw-bold" *ngIf="editingField !== 'dates'" (click)="toggleEdit('dates')">
-        {{ getFormattedDates() }}
+        {{ getFormattedDates() | titlecase }}
       </span>
-      <input
+      <p-calendar
         #inputElement
-        formControlName="checkIn"
+        formControlName="dates"
+        selectionMode="range"
+        placeholder="Pick a period"
+        [showIcon]="true"
+        [required]="true"
+        [baseZIndex]="999"
+        (onClickOutside)="updateField('dates')"
         *ngIf="editingField === 'dates'"
-        (blur)="updateField('checkIn')"
-        style="min-width: 124px"
-        class="form-control"
-        type="date"
-        autofocus
-      />
+      ></p-calendar>
     </div>
 
     <div class="vertical-line"></div>
 
-    <!-- <div class="">
-      <input class="form-control" type="date" />
-    </div>
-
-    <div class="vertical-line"></div> -->
-
     <div class="">
       <span class="fw-bold" *ngIf="editingField !== 'guests'" (click)="toggleEdit('guests')">
-        {{ getFieldValue('guests') }} hóspede<span *ngIf="getFieldValue('guests') > 1">s</span>
+        {{ getFieldValue('guests') }} guest<span *ngIf="getFieldValue('guests') > 1">s</span>
       </span>
       <input
         #inputElement

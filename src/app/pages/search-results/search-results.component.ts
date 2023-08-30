@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 
 import { Hotel } from './../../interfaces/hotel';
@@ -25,6 +25,7 @@ export class SearchResultsComponent implements OnInit {
   options: Options = this.setSliderOptions();
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private hotelService: HotelService
   ) {}
@@ -38,6 +39,13 @@ export class SearchResultsComponent implements OnInit {
 
   public onSearch(event: ReservationDetails): void {
     this.hotelService.setFormData(event);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: event,
+      queryParamsHandling: 'merge'
+    });
+
     this.getHotelList(event);
   }
 
