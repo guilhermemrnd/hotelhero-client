@@ -71,7 +71,6 @@ export class HotelFilterComponent implements OnInit {
   ngOnInit() {}
 
   public applyFilter(): void {
-    console.log('Applying filters:', this.filters);
     const normalizedFilters = JSON.parse(JSON.stringify(this.filters));
 
     for (const category of Object.keys(normalizedFilters)) {

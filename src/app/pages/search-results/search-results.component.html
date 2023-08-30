@@ -18,7 +18,7 @@
           <div class="collapse show mt-2" id="priceRange">
             <div class="px-3">
               <label class="mb-2" for="priceRange">Your budget (per night):</label>
-              <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+              <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" (userChange)="filterPrice($event)"></ngx-slider>
             </div>
           </div>
 

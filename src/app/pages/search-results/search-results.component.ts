@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LabelType, Options } from '@angular-slider/ngx-slider';
+import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
+import { delay } from 'rxjs';
 
 import { Hotel } from './../../interfaces/hotel';
 import { Filters } from './../../interfaces/filters';
@@ -14,6 +15,7 @@ import { HotelService } from './../../services/hotel.service';
 })
 export class SearchResultsComponent implements OnInit {
   searchForm: ReservationDetails;
+  currentFilters: Filters;
 
   hotels: Hotel[] = null;
 
@@ -53,6 +55,13 @@ export class SearchResultsComponent implements OnInit {
     this.getHotelList(this.searchForm, filters);
   }
 
+  public filterPrice(event: ChangeContext): void {
+    const price = { min: event.value, max: event.highValue };
+    const filters = { ...this.currentFilters, price };
+
+    this.filterHotelList(filters);
+  }
+
   public changePage(newPage: number) {
     this.currentPage = newPage;
   }
@@ -86,28 +95,38 @@ export class SearchResultsComponent implements OnInit {
   }
 
   private getHotelList(formData: ReservationDetails, filters?: Filters): void {
-    this.hotelService.getHotelList(formData).subscribe({
-      next: (data: Hotel[]) => {
-        this.hotels = this.getFilteredData(data, filters);
-        this.getMinAndMaxPrice(this.hotels);
-        this.totalPages = Math.ceil(this.hotels?.length / 10);
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
+    this.hotelService
+      .getHotelList(formData)
+      .pipe(delay(1500))
+      .subscribe({
+        next: (hotels: Hotel[]) => {
+          this.hotels = this.getFilteredData(hotels, filters);
+          // this.getMinAndMaxPrice(this.hotels);
+          this.totalPages = Math.ceil(this.hotels?.length / 10);
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
   }
 
   private getFilteredData(hotels: Hotel[], filters: Filters): Hotel[] {
     if (!filters) return hotels;
 
-    return hotels.filter((hotel) => {
+    const filteredData = [...hotels];
+
+    return filteredData.filter((hotel) => {
       return (
+        this.filterByPrice(hotel.price, filters) &&
         this.filterByPropertyType(hotel.propertyType, filters) &&
         this.filterByAmenities(hotel.mainFacilities, filters) &&
         this.filterByReviews(hotel.rating, filters)
       );
     });
+  }
+
+  private filterByPrice(price: number, filters: Filters): boolean {
+    return !filters.price || (price >= filters.price.min && price <= filters.price.max);
   }
 
   private filterByPropertyType(propertyType: string, filters: Filters): boolean {
