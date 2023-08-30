@@ -18,11 +18,16 @@
           <div class="collapse show mt-2" id="priceRange">
             <div class="px-3">
               <label class="mb-2" for="priceRange">Your budget (per night):</label>
-              <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" (userChange)="filterPrice($event)"></ngx-slider>
+              <ngx-slider
+                [(value)]="minValue"
+                [(highValue)]="maxValue"
+                [options]="options"
+                (userChange)="onFilterPrice($event)"
+              ></ngx-slider>
             </div>
           </div>
 
-          <app-hotel-filter (filterChanged)="filterHotelList($event)"></app-hotel-filter>
+          <app-hotel-filter (filterChanged)="onFilterChanged($event)"></app-hotel-filter>
         </div>
       </div>
     </div>

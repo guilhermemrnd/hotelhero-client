@@ -31,7 +31,7 @@
       "beds": 2,
       "bathrooms": 1,
       "isFavorite": false,
-      "price": 150.0
+      "price": 150
     },
     {
       "id": 2,
@@ -39,13 +39,15 @@
       "shortDescription": "Uma estadia luxuosa esperando por você.",
       "longDescription": "",
       "rating": 5,
-      "images": ["./assets/images/hotels/2_1.jpg"],
+      "images": [
+        "./assets/images/hotels/2_1.jpg"
+      ],
       "mainFacilities": {},
       "maxGuests": 2,
       "beds": 1,
       "bathrooms": 1,
       "isFavorite": true,
-      "price": 250.0
+      "price": 250
     },
     {
       "id": 3,
@@ -53,13 +55,15 @@
       "shortDescription": "Um paraíso tropical no coração da cidade.",
       "longDescription": "",
       "rating": 3,
-      "images": ["./assets/images/hotels/3_1.jpg"],
+      "images": [
+        "./assets/images/hotels/3_1.jpg"
+      ],
       "mainFacilities": {},
       "maxGuests": 4,
       "beds": 2,
       "bathrooms": 2,
       "isFavorite": false,
-      "price": 100.0
+      "price": 100
     },
     {
       "id": 4,
@@ -67,13 +71,15 @@
       "shortDescription": "Desfrute de uma estadia tranquila e relaxante.",
       "longDescription": "",
       "rating": 4,
-      "images": ["./assets/images/hotels/4_1.jpg"],
+      "images": [
+        "./assets/images/hotels/4_1.jpg"
+      ],
       "mainFacilities": {},
       "maxGuests": 2,
       "beds": 1,
       "bathrooms": 1,
       "isFavorite": true,
-      "price": 180.0
+      "price": 180
     }
   ]
 }

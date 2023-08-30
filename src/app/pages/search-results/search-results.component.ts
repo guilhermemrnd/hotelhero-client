@@ -51,15 +51,14 @@ export class SearchResultsComponent implements OnInit {
     this.getHotelList(event);
   }
 
-  public filterHotelList(filters: Filters): void {
+  public onFilterChanged(filters: Filters): void {
     this.getHotelList(this.searchForm, filters);
   }
 
-  public filterPrice(event: ChangeContext): void {
-    const price = { min: event.value, max: event.highValue };
-    const filters = { ...this.currentFilters, price };
-
-    this.filterHotelList(filters);
+  public onFilterPrice(event: ChangeContext): void {
+    const [min, max] = [event.value, event.highValue];
+    const filters = { ...this.currentFilters, price: { min, max } };
+    this.getHotelList(this.searchForm, filters);
   }
 
   public changePage(newPage: number) {

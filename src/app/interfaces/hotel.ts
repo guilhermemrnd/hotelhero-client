@@ -5,6 +5,7 @@ export interface Hotel {
   longDescription: string;
   address: string;
   propertyType: string;
+  reviews: number;
   rating: number;
   images: string;
   mainFacilities: { [key: string]: boolean };

@@ -8,7 +8,7 @@
         <a [routerLink]="['/hotel-details', hotel.id]">{{ hotel.name }}</a>
         <i
           [ngClass]="hotel.isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
-          (click)="toggleFavorite()"
+          (click)="toggleFavorite(hotel)"
           title="Salvar"
         ></i>
       </h5>
@@ -16,23 +16,24 @@
       <div class="separator mt-2 mb-3"></div>
 
       <span class="d-block light-text"
-        >{{ hotel.maxGuests }} hóspedes • {{ hotel.beds }} cama • {{ hotel.bathrooms }} banheiro
-        privado</span
+        >{{ hotel.maxGuests }} guests • {{ hotel.beds }} beds • {{ hotel.bathrooms }} private bath</span
       >
-      <span class="d-block light-text">WiFi • Ar-condicionado</span>
+      <span class="d-block light-text">WiFi • Ar-conditioning</span>
 
       <div class="mt-auto">
         <div class="d-flex">
-          <span class="ms-auto light-text">R$450 total</span>
+          <span class="ms-auto light-text"
+            >{{ this.getTotalPrice(hotel.price) | currency: 'USD' }} total</span
+          >
         </div>
         <div class="d-flex align-items-center">
           <i class="fas fa-star me-1" style="color: orange"></i>
           <span class="fw-bold me-1">{{ hotel.rating }}</span>
-          <span class="light-text">(324 avaliações)</span>
+          <span class="light-text">({{ hotel.reviews }} reviews)</span>
           <div class="ms-auto" style="font-size: 18px">
             <span
-              ><strong>{{ hotel.price | currency: 'BRL' }}</strong
-              >/noite
+              ><strong>{{ hotel.price | currency: 'USD' }}</strong
+              >/night
             </span>
           </div>
         </div>

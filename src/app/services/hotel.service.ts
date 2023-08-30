@@ -28,4 +28,8 @@ export class HotelService {
   public getHotelById(id: number): Observable<Hotel> {
     return this.http.get<Hotel>(`${this.API}/hotels/${id}`);
   }
+
+  public toggleFavorite(hotel: Hotel): Observable<Hotel> {
+    return this.http.put<Hotel>(`${this.API}/hotels/${hotel.id}`, hotel);
+  }
 }
