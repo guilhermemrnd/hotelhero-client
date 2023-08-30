@@ -14,6 +14,8 @@ export class FloatingFormComponent implements OnInit {
   @Input() formData: ReservationDetails;
   searchForm: FormGroup;
 
+  minDate: Date;
+
   @ViewChild('inputElement', { read: ElementRef }) inputElement: ElementRef;
   editingField: string = null;
 
@@ -23,11 +25,16 @@ export class FloatingFormComponent implements OnInit {
 
   ngOnInit() {
     const [checkIn, checkOut] = this.getParsedDates();
+    this.minDate = new Date();
 
     this.searchForm = this.formBuilder.group({
       destination: [this.formData.destination, [Validators.required, Validators.maxLength(45)]],
       dates: [[checkIn, checkOut], Validators.required],
       guests: [this.formData.guests, [Validators.required, Validators.min(1)]]
+    });
+
+    this.searchForm.get('dates').valueChanges.subscribe((dates: Date[]) => {
+      this.validateDateRange(dates);
     });
   }
 
@@ -97,7 +104,18 @@ export class FloatingFormComponent implements OnInit {
     }
   }
 
-  private updateDestinationField(inputValue: any) {
+  private validateDateRange(selectedRange: Date[]): void {
+    if (!selectedRange) return;
+
+    const startDate = moment(selectedRange[0]);
+    const endDate = moment(selectedRange[1]);
+
+    if (endDate.isSame(startDate, 'day')) {
+      this.searchForm.get('dates').setValue(null, { emitEvent: false });
+    }
+  }
+
+  private updateDestinationField(inputValue: string) {
     if (!inputValue?.trim()) {
       this.searchForm.get('destination').setValue(this.formData.destination);
     } else {
@@ -105,17 +123,20 @@ export class FloatingFormComponent implements OnInit {
     }
   }
 
-  private updateDatesField(inputValue: any) {
-    if (!inputValue?.length) {
+  private updateDatesField(inputValue: Date[]) {
+    if (!inputValue[0] && !inputValue[1]) {
       const [checkIn, checkOut] = this.getParsedDates();
       this.searchForm.get('dates').setValue([checkIn, checkOut]);
+    } else if (!inputValue[1]) {
+      const dayAfter = moment(inputValue[0]).add(1, 'day').toDate();
+      this.searchForm.get('dates').setValue([inputValue[0], dayAfter], { emitEvent: false });
     } else {
       const [checkIn, checkOut] = inputValue.map((date: Date) => Library.dateToString(date));
       this.formData = { ...this.formData, checkIn, checkOut };
     }
   }
 
-  private updateGuestsField(inputValue: any) {
+  private updateGuestsField(inputValue: number) {
     if (!inputValue) {
       this.searchForm.get('guests').setValue(this.formData.guests);
     } else {
