@@ -8,6 +8,10 @@ export class Library {
     return moment().format(this.MOMENT_FORMAT);
   }
 
+  public static getNextDay(date: Date): string {
+    return moment(date).add(1, 'day').format(this.MOMENT_FORMAT);
+  }
+
   public static dateToString(date: Date): string {
     return moment(date).format(this.MOMENT_FORMAT);
   }

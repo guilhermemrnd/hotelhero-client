@@ -1,8 +1,11 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { CalendarModule } from 'primeng/calendar';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,10 +30,17 @@ import { PaymentSuccessComponent } from './pages/payment-success/payment-success
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    CalendarModule,
+    InputNumberModule,
     ComponentsModule,
     SearchResultsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'en-US'
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

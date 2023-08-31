@@ -11,14 +11,16 @@ import { ReservationDetails } from '../interfaces/reservation-details';
 export class HotelService {
   private readonly API = 'http://localhost:3000';
 
+  private bookingDetails: ReservationDetails;
+
   constructor(private http: HttpClient) {}
 
-  public setFormData(data: ReservationDetails): void {
-    localStorage.setItem('searchForm', JSON.stringify(data));
+  public setBookingDetails(details: ReservationDetails): void {
+    this.bookingDetails = details;
   }
 
-  public getFormData(): ReservationDetails {
-    return JSON.parse(localStorage.getItem('searchForm'));
+  public getBookingDetails(): ReservationDetails {
+    return this.bookingDetails;
   }
 
   public getHotelList(formData: any): Observable<Hotel[]> {

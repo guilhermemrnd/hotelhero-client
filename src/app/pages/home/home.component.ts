@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { HotelService } from './../../services/hotel.service';
 import { ReservationDetails } from '../../interfaces/reservation-details';
+import { UtilsService } from './../../services/utils.service';
 
 @Component({
   selector: 'app-home',
@@ -16,17 +16,17 @@ export class HomeComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private hotelService: HotelService
+    private utilService: UtilsService
   ) {}
 
   ngOnInit(): void {
-    const formData = this.hotelService.getFormData();
+    const formData = this.utilService.getFormData();
     this.searchForm = formData ? this.buildForm(formData) : this.buildForm();
   }
 
   public navigate(): void {
     if (this.searchForm.valid) {
-      this.hotelService.setFormData(this.searchForm.value);
+      this.utilService.setFormData(this.searchForm.value);
       this.router.navigate(['/search'], { queryParams: this.searchForm.value });
     }
   }

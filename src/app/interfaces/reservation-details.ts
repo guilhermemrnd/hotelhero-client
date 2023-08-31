@@ -1,5 +1,5 @@
 export interface ReservationDetails {
-  destination: string;
+  destination?: string;
   checkIn: string;
   checkOut: string;
   guests: number;

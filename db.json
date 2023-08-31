@@ -39,9 +39,7 @@
       "shortDescription": "Uma estadia luxuosa esperando por você.",
       "longDescription": "",
       "rating": 5,
-      "images": [
-        "./assets/images/hotels/2_1.jpg"
-      ],
+      "images": ["./assets/images/hotels/2_1.jpg"],
       "mainFacilities": {},
       "maxGuests": 2,
       "beds": 1,
@@ -55,9 +53,7 @@
       "shortDescription": "Um paraíso tropical no coração da cidade.",
       "longDescription": "",
       "rating": 3,
-      "images": [
-        "./assets/images/hotels/3_1.jpg"
-      ],
+      "images": ["./assets/images/hotels/3_1.jpg"],
       "mainFacilities": {},
       "maxGuests": 4,
       "beds": 2,
@@ -71,15 +67,33 @@
       "shortDescription": "Desfrute de uma estadia tranquila e relaxante.",
       "longDescription": "",
       "rating": 4,
-      "images": [
-        "./assets/images/hotels/4_1.jpg"
-      ],
+      "images": ["./assets/images/hotels/4_1.jpg"],
       "mainFacilities": {},
       "maxGuests": 2,
       "beds": 1,
       "bathrooms": 1,
       "isFavorite": true,
       "price": 180
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "userId": 1,
+      "hotelId": 1,
+      "checkIn": "2023-04-26",
+      "checkOut": "2023-04-29",
+      "guests": 2,
+      "totalPrice": 750,
+      "status": "Confirmed"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Guilherme Miranda",
+      "email": "guilhermemrnd@hotmail.com",
+      "password": "p@ssw0rd"
     }
   ]
 }

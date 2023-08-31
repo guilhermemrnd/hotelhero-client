@@ -7,6 +7,7 @@ import { Hotel } from './../../interfaces/hotel';
 import { Filters } from './../../interfaces/filters';
 import { ReservationDetails } from '../../interfaces/reservation-details';
 import { HotelService } from './../../services/hotel.service';
+import { UtilsService } from './../../services/utils.service';
 
 @Component({
   selector: 'app-search-results',
@@ -29,7 +30,8 @@ export class SearchResultsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private hotelService: HotelService
+    private hotelService: HotelService,
+    private utilService: UtilsService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   public onSearch(event: ReservationDetails): void {
-    this.hotelService.setFormData(event);
+    this.utilService.setFormData(event);
 
     this.router.navigate([], {
       relativeTo: this.route,

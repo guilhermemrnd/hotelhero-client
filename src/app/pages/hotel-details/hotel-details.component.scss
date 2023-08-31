@@ -40,6 +40,10 @@
 
     i {
       margin-right: 3px;
+
+      &.bi-suit-heart-fill {
+        color: #cf101d;
+      }
     }
   }
 }
@@ -85,9 +89,6 @@
   }
 }
 
-.description-section {
-}
-
 .facilities-section {
   .facility-item {
     display: flex;
@@ -126,30 +127,32 @@
     }
   }
 
-  .form {
+  ::ng-deep .form {
     label {
       font-size: 13px;
       font-weight: bold;
     }
 
-    input,
-    select {
-      font-size: 14px;
-      padding-left: 0px;
-      padding-bottom: 2px;
+    .p-inputtext {
+      width: 100%;
+      padding: 2px 2px;
       border-radius: 0px;
-      box-shadow: 0 1px 0 #9095a1;
+      font-size: 14px;
       border: none;
+      box-shadow: none;
+      border-bottom: 1px solid #9095a1;
+    }
+
+    .p-calendar,
+    p-inputnumber,
+    .p-inputnumber {
+      display: block !important;
     }
   }
 
-  .price {
-    margin-left: auto;
-
-    &.disccount {
-      font-weight: bold;
-      color: #17a948ff;
-    }
+  .disccount {
+    font-weight: bold;
+    color: #17a948ff;
   }
 
   .booking-btn {

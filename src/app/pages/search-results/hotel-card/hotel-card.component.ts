@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as moment from 'moment';
 
 import { Hotel } from './../../../interfaces/hotel';
 import { HotelService } from './../../../services/hotel.service';
+import { UtilsService } from './../../../services/utils.service';
+import { Library } from './../../../shared/library';
 
 @Component({
   selector: 'app-hotel-card',
@@ -12,7 +13,10 @@ import { HotelService } from './../../../services/hotel.service';
 export class HotelCardComponent implements OnInit {
   @Input() hotel: Hotel;
 
-  constructor(private hotelService: HotelService) {}
+  constructor(
+    private hotelService: HotelService,
+    private utilService: UtilsService
+  ) {}
 
   ngOnInit() {}
 
@@ -23,16 +27,9 @@ export class HotelCardComponent implements OnInit {
     });
   }
 
-  public getTotalPrice(price: number): number {
-    const formData = this.hotelService.getFormData();
-    const checkIn = moment(formData.checkIn);
-    const checkOut = moment(formData.checkOut);
-    const nights = checkOut.diff(checkIn, 'days');
-
-    if (nights <= 1) {
-      return price;
-    }
-
-    return price * nights;
+  public getTotalStayPrice(price: number): number {
+    const { checkIn, checkOut } = this.utilService.getFormData();
+    const nights = this.utilService.calcTotalNights(checkIn, checkOut);
+    return this.utilService.calcDailyPrices(nights, price);
   }
 }
