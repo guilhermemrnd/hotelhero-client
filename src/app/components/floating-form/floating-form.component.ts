@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 import { Library } from './../../shared/library';
-import { ReservationDetails } from '../../interfaces/reservation-details';
+import { SearchForm } from '../../interfaces/search-form';
+import { UtilsService } from './../../services/utils.service';
 
 @Component({
   selector: 'app-floating-form',
@@ -11,7 +12,7 @@ import { ReservationDetails } from '../../interfaces/reservation-details';
   styleUrls: ['./floating-form.component.scss']
 })
 export class FloatingFormComponent implements OnInit {
-  @Input() formData: ReservationDetails;
+  @Input() formData: SearchForm;
   searchForm: FormGroup;
 
   minDate: Date;
@@ -19,9 +20,9 @@ export class FloatingFormComponent implements OnInit {
   @ViewChild('inputElement', { read: ElementRef }) inputElement: ElementRef;
   editingField: string = null;
 
-  @Output() searchEvent = new EventEmitter<ReservationDetails>();
+  @Output() searchEvent = new EventEmitter<SearchForm>();
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private utilService: UtilsService) {}
 
   ngOnInit() {
     const [checkIn, checkOut] = this.getParsedDates();
@@ -89,19 +90,8 @@ export class FloatingFormComponent implements OnInit {
   }
 
   public getFormattedDates() {
-    const checkIn = moment(this.searchForm.get('dates')?.value[0]);
-    const checkOut = moment(this.searchForm.get('dates')?.value[1]);
-
-    const sameMonth = checkIn.isSame(checkOut, 'month');
-    const sameYear = checkIn.isSame(checkOut, 'year');
-
-    if (sameYear && sameMonth) {
-      return `${checkIn.format('MMM D')} - ${checkOut.format('D')}`;
-    } else if (sameYear && !sameMonth) {
-      return `${checkIn.format('MMM D')} - ${checkOut.format('MMM D')}`;
-    } else {
-      return `${checkIn.format('MMM D, YYYY')} - ${checkOut.format('MMM D, YYYY')}`;
-    }
+    const [checkIn, checkOut] = this.searchForm.get('dates')?.value;
+    return this.utilService.formatDates(checkIn, checkOut, true);
   }
 
   private validateDateRange(selectedRange: Date[]): void {
@@ -131,7 +121,7 @@ export class FloatingFormComponent implements OnInit {
       const dayAfter = moment(inputValue[0]).add(1, 'day').toDate();
       this.searchForm.get('dates').setValue([inputValue[0], dayAfter], { emitEvent: false });
     } else {
-      const [checkIn, checkOut] = inputValue.map((date: Date) => Library.dateToString(date));
+      const [checkIn, checkOut] = inputValue.map((date: Date) => Library.convertDate(date));
       this.formData = { ...this.formData, checkIn, checkOut };
     }
   }

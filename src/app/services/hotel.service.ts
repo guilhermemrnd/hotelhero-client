@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Hotel } from '../interfaces/hotel';
-import { ReservationDetails } from '../interfaces/reservation-details';
+import { BookingDetails } from '../interfaces/booking-details';
+import { PaymentForm } from '../interfaces/payment-form';
+import { Library } from '../shared/library';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +14,14 @@ import { ReservationDetails } from '../interfaces/reservation-details';
 export class HotelService {
   private readonly API = 'http://localhost:3000';
 
-  private bookingDetails: ReservationDetails;
-
   constructor(private http: HttpClient) {}
 
-  public setBookingDetails(details: ReservationDetails): void {
-    this.bookingDetails = details;
+  public setBookingDetails(details: BookingDetails): void {
+    localStorage.setItem('bookingDetails', JSON.stringify(details));
   }
 
-  public getBookingDetails(): ReservationDetails {
-    return this.bookingDetails;
+  public getBookingDetails(): BookingDetails {
+    return JSON.parse(localStorage.getItem('bookingDetails'));
   }
 
   public getHotelList(formData: any): Observable<Hotel[]> {
@@ -33,5 +34,16 @@ export class HotelService {
 
   public toggleFavorite(hotel: Hotel): Observable<Hotel> {
     return this.http.put<Hotel>(`${this.API}/hotels/${hotel.id}`, hotel);
+  }
+
+  public processPayment(payment: PaymentForm): Observable<any> {
+    return payment ? of({ success: true }) : of({ success: false });
+  }
+
+  public createReservation(booking: BookingDetails): Observable<BookingDetails> {
+    const createdAt = Library.getToday();
+    const reservation = { ...booking, id: uuidv4(), createdAt, status: 'Confirmed' };
+
+    return this.http.post<any>(`${this.API}/bookings`, reservation);
   }
 }

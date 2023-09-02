@@ -39,7 +39,9 @@
       "shortDescription": "Uma estadia luxuosa esperando por você.",
       "longDescription": "",
       "rating": 5,
-      "images": ["./assets/images/hotels/2_1.jpg"],
+      "images": [
+        "./assets/images/hotels/2_1.jpg"
+      ],
       "mainFacilities": {},
       "maxGuests": 2,
       "beds": 1,
@@ -53,7 +55,9 @@
       "shortDescription": "Um paraíso tropical no coração da cidade.",
       "longDescription": "",
       "rating": 3,
-      "images": ["./assets/images/hotels/3_1.jpg"],
+      "images": [
+        "./assets/images/hotels/3_1.jpg"
+      ],
       "mainFacilities": {},
       "maxGuests": 4,
       "beds": 2,
@@ -67,7 +71,9 @@
       "shortDescription": "Desfrute de uma estadia tranquila e relaxante.",
       "longDescription": "",
       "rating": 4,
-      "images": ["./assets/images/hotels/4_1.jpg"],
+      "images": [
+        "./assets/images/hotels/4_1.jpg"
+      ],
       "mainFacilities": {},
       "maxGuests": 2,
       "beds": 1,
@@ -85,6 +91,16 @@
       "checkOut": "2023-04-29",
       "guests": 2,
       "totalPrice": 750,
+      "status": "Confirmed"
+    },
+    {
+      "checkIn": "2023-08-22T03:00:00.000Z",
+      "checkOut": "2023-08-24T03:00:00.000Z",
+      "guests": "2",
+      "hotelID": 1,
+      "totalPrice": 274.99,
+      "id": "1d7928a7-e312-4fdd-a140-15474ee72471",
+      "createdAt": "2023-09-01",
       "status": "Confirmed"
     }
   ],

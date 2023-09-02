@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ReservationDetails } from '../../interfaces/reservation-details';
+import { SearchForm } from '../../interfaces/search-form';
 import { UtilsService } from './../../services/utils.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private buildForm(formData?: ReservationDetails): FormGroup {
+  private buildForm(formData?: SearchForm): FormGroup {
     return this.formBuilder.group({
       destination: [formData?.destination ?? '', Validators.required],
       checkIn: [formData?.checkIn ?? '', Validators.required],

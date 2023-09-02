@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Hotel } from './../../interfaces/hotel';
-import { ReservationDetails } from '../../interfaces/reservation-details';
+import { SearchForm } from '../../interfaces/search-form';
 import { HotelService } from '../../services/hotel.service';
 import { UtilsService } from './../../services/utils.service';
 import { Library } from './../../shared/library';
@@ -17,7 +17,7 @@ export class HotelDetailsComponent implements OnInit {
   readonly NEW_USER_DISCOUNT = 50;
   readonly HOTEL_FEE = 24.99;
 
-  searchForm: ReservationDetails;
+  searchForm: SearchForm;
 
   bookingForm: FormGroup;
 
@@ -35,7 +35,7 @@ export class HotelDetailsComponent implements OnInit {
     { key: 'airport_transfer', label: 'Transfer (aeroporto)', icon: 'fa-shuttle-van' }
   ];
 
-  currentDay: Date = new Date();
+  currentDate: Date = new Date();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,7 +60,7 @@ export class HotelDetailsComponent implements OnInit {
     });
   }
 
-  public onSearch(event: ReservationDetails): void {
+  public onSearch(event: SearchForm): void {
     this.utilService.setFormData(event);
     this.router.navigate(['/search'], { queryParams: event });
   }
@@ -101,8 +101,7 @@ export class HotelDetailsComponent implements OnInit {
 
   public getTotalPrice(price: number): number {
     const dailyPrices = this.getDailyPrices(price);
-    const totalPrice = dailyPrices + this.HOTEL_FEE - this.NEW_USER_DISCOUNT;
-    return totalPrice;
+    return dailyPrices + this.HOTEL_FEE - this.NEW_USER_DISCOUNT;
   }
 
   public hasFacility(key: string): boolean {
@@ -111,7 +110,8 @@ export class HotelDetailsComponent implements OnInit {
 
   public navigateToCheckout(): void {
     if (this.bookingForm.valid) {
-      this.hotelService.setBookingDetails(this.bookingForm.value);
+      const bookingDetails = { ...this.bookingForm.value, hotelID: this.hotel.id };
+      this.hotelService.setBookingDetails(bookingDetails);
       this.router.navigate(['/checkout']);
     }
   }

@@ -5,7 +5,7 @@ import { delay } from 'rxjs';
 
 import { Hotel } from './../../interfaces/hotel';
 import { Filters } from './../../interfaces/filters';
-import { ReservationDetails } from '../../interfaces/reservation-details';
+import { SearchForm } from '../../interfaces/search-form';
 import { HotelService } from './../../services/hotel.service';
 import { UtilsService } from './../../services/utils.service';
 
@@ -15,7 +15,7 @@ import { UtilsService } from './../../services/utils.service';
   styleUrls: ['./search-results.component.scss']
 })
 export class SearchResultsComponent implements OnInit {
-  searchForm: ReservationDetails;
+  searchForm: SearchForm;
   currentFilters: Filters;
 
   hotels: Hotel[] = null;
@@ -35,13 +35,13 @@ export class SearchResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params: ReservationDetails) => {
+    this.route.queryParams.subscribe((params: SearchForm) => {
       this.getHotelList(params);
       this.searchForm = params;
     });
   }
 
-  public onSearch(event: ReservationDetails): void {
+  public onSearch(event: SearchForm): void {
     this.utilService.setFormData(event);
 
     this.router.navigate([], {
@@ -95,7 +95,7 @@ export class SearchResultsComponent implements OnInit {
     return pages;
   }
 
-  private getHotelList(formData: ReservationDetails, filters?: Filters): void {
+  private getHotelList(formData: SearchForm, filters?: Filters): void {
     this.hotelService
       .getHotelList(formData)
       .pipe(delay(1500))

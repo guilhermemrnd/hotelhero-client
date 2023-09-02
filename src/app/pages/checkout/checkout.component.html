@@ -9,19 +9,21 @@
           <div class="bg-light p-2 px-3 rounded-2">
             <span class="d-flex justify-content-between align-items-center">
               <span class="fw-bold mb-1">Dates</span>
-              <div *ngIf="editingField === 'dates'">
-                <i class="bi bi-check" (click)="updateField($event, 'dates')"></i>
-                <i class="bi bi-x" (click)="cancelEdit()"></i>
-              </div>
             </span>
             <span class="d-flex justify-content-between">
-              <ng-container *ngIf="editingField !== 'dates'">{{ fields.dates }}</ng-container>
-              <input
+              <ng-container *ngIf="editingField !== 'dates'">{{
+                getFormattedDates() | titlecase
+              }}</ng-container>
+              <p-calendar
+                [(ngModel)]="dates"
+                selectionMode="range"
+                placeholder="Pick a period"
+                [required]="true"
+                [baseZIndex]="999"
+                [minDate]="currentDate"
+                (onClickOutside)="updateDates()"
                 *ngIf="editingField === 'dates'"
-                [value]="fields.dates"
-                class="form-control"
-                type="text"
-              />
+              ></p-calendar>
               <ng-container *ngIf="editingField !== 'dates'">
                 <i class="bi bi-pencil-square" (click)="toggleEdit('dates')" title="Edit"></i>
               </ng-container>
@@ -32,19 +34,20 @@
           <div class="bg-light py-2 px-3 rounded-2">
             <span class="d-flex justify-content-between align-content-center">
               <span class="fw-bold mb-1">Guests</span>
-              <div *ngIf="editingField === 'guests'">
-                <i class="bi bi-check" (click)="updateField($event, 'guests')"></i>
-                <i class="bi bi-x" (click)="cancelEdit()"></i>
-              </div>
             </span>
             <span class="d-flex justify-content-between">
-              <ng-container *ngIf="editingField !== 'guests'"> {{ fields.guests }} </ng-container>
-              <input
+              <ng-container *ngIf="editingField !== 'guests'">
+                {{ bookingDetails.guests }} {{ bookingDetails.guests > 1 ? 'guests' : 'guest' }}
+              </ng-container>
+              <p-inputNumber
                 *ngIf="editingField === 'guests'"
-                [value]="fields.guests"
-                class="form-control"
-                type="text"
-              />
+                [(ngModel)]="bookingDetails.guests"
+                [suffix]="bookingDetails.guests > 1 ? ' guests' : ' guest'"
+                (onBlur)="editingField = null"
+                [max]="hotel?.maxGuests"
+                [min]="1"
+              >
+              </p-inputNumber>
               <ng-container *ngIf="editingField !== 'guests'">
                 <i class="bi bi-pencil-square" (click)="toggleEdit('guests')" title="Edit"></i>
               </ng-container>
@@ -54,19 +57,48 @@
       </div>
 
       <h5 class="mb-3">Pay with</h5>
-      <form class="payment-form" action="">
+      <form [formGroup]="paymentForm" class="payment-form">
         <div class="col-md-12 mb-3">
-          <input type="text" class="form-control" placeholder="Card number" />
+          <p-inputMask
+            formControlName="cardNumber"
+            mask="9999 9999 9999 9999"
+            placeholder="Card number"
+            slotChar=" "
+          ></p-inputMask>
+          <small class="p-error" *ngIf="hasError('cardNumber', 'required')"> Card number is required </small>
+          <small class="p-error" *ngIf="hasError('cardNumber', 'length')">
+            Card number must be 16 digits
+          </small>
+          <small class="p-error" *ngIf="hasError('cardNumber', 'nonNumeric')">
+            Card number can only contain numbers
+          </small>
         </div>
         <div class="col-md-12 mb-3">
-          <input type="text" class="form-control" placeholder="Card holder" />
+          <input type="text" formControlName="cardHolder" class="form-control" placeholder="Card holder" />
+          <small class="p-error" *ngIf="hasError('cardHolder', 'required')">Card holder is required</small>
+          <small class="p-error" *ngIf="hasError('cardHolder', 'pattern')">Card holder is invalid</small>
         </div>
         <div class="row mb-3">
           <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Expiration date" />
+            <p-inputMask
+              formControlName="expirationDate"
+              placeholder="Expiration date"
+              mask="99/99"
+            ></p-inputMask>
+            <small class="p-error" *ngIf="hasError('expirationDate', 'required')">
+              Expiration date is required
+            </small>
+            <small class="p-error" *ngIf="hasError('expirationDate', 'expired')">
+              Expiration date must be a future date
+            </small>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="CVV" />
+            <input type="text" formControlName="CVV" class="form-control" placeholder="CVV" />
+            <small class="p-error" *ngIf="hasError('CVV', 'required')">CVV is required</small>
+            <small class="p-error" *ngIf="hasError('CVV', 'invalidLength')"
+              >CVV must be exactly 3 digits</small
+            >
+            <small class="p-error" *ngIf="hasError('CVV', 'nonNumeric')">CVV can only contain numbers</small>
           </div>
         </div>
         <div class="col-md-12 d-flex align-items-center">
@@ -82,7 +114,7 @@
         </p>
 
         <div class="d-grid">
-          <button class="btn" [routerLink]="'/payment-success'" type="submit">Confirm and pay</button>
+          <button class="btn" (click)="submitPayment()">Confirm and pay</button>
         </div>
       </form>
     </div>
@@ -93,27 +125,30 @@
         <div class="d-flex flex-column pt-4">
           <h5 class="mb-3">Price details</h5>
           <div class="d-flex mb-1">
-            <span class="">{{ hotel?.price | currency: 'BRL' }} x 3 nights</span>
-            <span class="ms-auto fw-semibold">$450,00</span>
+            <span class="">
+              {{ hotel?.price | currency }} x {{ getTotalNights() }}
+              {{ getTotalNights() > 1 ? 'nights' : 'night' }}
+            </span>
+            <span class="ms-auto fw-semibold">{{ getDailyPrices(hotel?.price) | currency }}</span>
           </div>
           <div class="d-flex mb-1">
             <span class="">New user discount</span>
-            <span class="ms-auto fw-semibold disccount">-$50,00</span>
+            <span class="ms-auto fw-semibold disccount">-{{ NEW_USER_DISCOUNT | currency }}</span>
           </div>
           <div class="d-flex">
             <span class="">Service fee</span>
-            <span class="ms-auto fw-semibold">$24,50</span>
+            <span class="ms-auto fw-semibold">{{ HOTEL_FEE | currency }}</span>
           </div>
 
           <div class="separator my-3"></div>
 
           <div class="d-flex mb-3 fw-bold">
             <span class="neutral-text">Total (USD)</span>
-            <span class="neutral-text ms-auto">$424,50</span>
+            <span class="neutral-text ms-auto">{{ getTotalPrice(hotel?.price) | currency }}</span>
           </div>
 
-          <span class="text-center" style="font-size: 12px"
-            >Free cancellation until 3:00 PM on July 26, 2023
+          <span class="text-center" style="font-size: 12px">
+            Free cancellation until 3:00 PM on {{ getCancellationDate() | date: 'MMMM d, y' }}
           </span>
         </div>
       </div>

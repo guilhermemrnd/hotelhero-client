@@ -1,5 +1,4 @@
 import * as moment from 'moment';
-import 'moment/locale/pt-br';
 
 export class Library {
   private static readonly MOMENT_FORMAT = 'YYYY-MM-DD';
@@ -8,11 +7,19 @@ export class Library {
     return moment().format(this.MOMENT_FORMAT);
   }
 
-  public static getNextDay(date: Date): string {
-    return moment(date).add(1, 'day').format(this.MOMENT_FORMAT);
+  public static getDateAhead(date: Date, days: number): string {
+    return moment(date).add(days, 'day').format(this.MOMENT_FORMAT);
   }
 
-  public static dateToString(date: Date): string {
+  public static getDateBefore(date: Date, days: number): string {
+    return moment(date).subtract(days, 'day').format(this.MOMENT_FORMAT);
+  }
+
+  public static momentDate(date: string, format?: string): moment.Moment {
+    return moment(date, format);
+  }
+
+  public static convertDate(date: Date): string {
     return moment(date).format(this.MOMENT_FORMAT);
   }
 
