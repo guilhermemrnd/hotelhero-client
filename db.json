@@ -102,6 +102,16 @@
       "id": "1d7928a7-e312-4fdd-a140-15474ee72471",
       "createdAt": "2023-09-01",
       "status": "Confirmed"
+    },
+    {
+      "checkIn": "2023-09-06",
+      "checkOut": "2023-09-09",
+      "guests": "2",
+      "hotelID": 1,
+      "totalPrice": 424.99,
+      "id": "5be7bfe9-77c2-4561-a65b-18b5f2caebf9",
+      "createdAt": "2023-09-02",
+      "status": "Confirmed"
     }
   ],
   "users": [

@@ -94,7 +94,8 @@ export class CheckoutComponent implements OnInit {
       this.hotelService.processPayment(payment).subscribe({
         next: (response) => {
           if (response.success) {
-            this.hotelService.createReservation(booking).subscribe(() => {
+            this.hotelService.createReservation(booking).subscribe((reservation) => {
+              this.hotelService.setBookingDetails(reservation);
               this.router.navigate(['/payment-success']);
             });
           } else {
