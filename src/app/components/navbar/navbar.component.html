@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg px-5 mb-4">
+  <a [routerLink]="'/home'" class="navbar-brand">HotelHero</a>
+  <ul class="navbar-nav align-items-center">
+    <li class="nav-item currency">BRL</li>
+    <li class="nav-item">
+      <i class="fas fa-globe fa-lg"></i>
+    </li>
+    <li class="nav-item">
+      <i class="far fa-bell fa-lg"></i>
+    </li>
+    <li class="nav-item" *ngIf="!isLoggedIn">
+      <a href="#" class="nav-link">Login/Signup</a>
+    </li>
+    <li class="nav-item" *ngIf="isLoggedIn">
+      <a
+        class="nav-link dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+        id="profileDropdown"
+      >
+        <img src="../../assets/images/selfie.jpg" width="35" class="rounded-circle" />
+      </a>
+      <div class="dropdown-menu" aria-labelledby="profileDropdown">
+        <a href="#" class="dropdown-item"> <i class="fas fa-user-circle mr-2"></i> Meu Perfil</a>
+        <a href="#" class="dropdown-item"> <i class="fas fa-sign-out-alt mr-2"></i> Sair</a>
+      </div>
+    </li>
+  </ul>
+</nav>

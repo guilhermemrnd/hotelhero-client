@@ -1,0 +1,26 @@
+.navbar {
+  background-color: white;
+  color: #171a1fff;
+
+  .navbar-brand {
+    color: #171a1fff;
+  }
+
+  .navbar-nav {
+    margin-left: auto;
+  }
+
+  .nav-item {
+    padding: 0 8px;
+    cursor: pointer;
+
+    &.currency {
+      font-size: 13px;
+      font-weight: bold;
+    }
+  }
+
+  .nav-link {
+    color: #171a1fff;
+  }
+}

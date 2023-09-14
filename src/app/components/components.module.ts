@@ -4,12 +4,13 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 
+import { NavbarComponent } from './navbar/navbar.component';
 import { HotelSummaryComponent } from './hotel-summary/hotel-summary.component';
 import { FloatingFormComponent } from './floating-form/floating-form.component';
 
 @NgModule({
-  declarations: [HotelSummaryComponent, FloatingFormComponent],
+  declarations: [NavbarComponent, HotelSummaryComponent, FloatingFormComponent],
   imports: [CommonModule, RouterModule, ReactiveFormsModule, CalendarModule],
-  exports: [HotelSummaryComponent, FloatingFormComponent]
+  exports: [NavbarComponent, HotelSummaryComponent, FloatingFormComponent]
 })
 export class ComponentsModule {}
