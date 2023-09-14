@@ -21,16 +21,18 @@ export class AuthService {
   }
 
   public login(email: string, password: string) {
-    return this.http.post<{ access_token: string }>(`${environment.apiURL}/login`, { email, password }).pipe(
-      tap((res) => {
-        localStorage.setItem('access_token', res.access_token);
-        this._isLoggedIn.next(true);
-      }),
-      catchError((err) => {
-        this._isLoggedIn.next(false);
-        return throwError(() => new Error(err));
-      })
-    );
+    return this.http
+      .post<{ access_token: string }>(`${environment.apiURL}/login`, { email, password })
+      .pipe(
+        tap((res) => {
+          localStorage.setItem('access_token', res.access_token);
+          this._isLoggedIn.next(true);
+        }),
+        catchError((err) => {
+          this._isLoggedIn.next(false);
+          return throwError(() => new Error(err));
+        })
+      );
   }
 
   public logout(): void {
@@ -39,15 +41,18 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  refreshToken() {
-    return this.http.post<{ access_token: string }>(`${environment.apiURL}/refresh`, {}).pipe(
-      tap((res) => {
-        localStorage.setItem('access_token', res.access_token);
-      }),
-      catchError((err) => {
-        this.logout();
-        return throwError(() => new Error(err));
-      })
-    );
+  public refreshToken() {
+    const oldToken = localStorage.getItem('access_token');
+    return this.http
+      .post<{ access_token: string }>(`${environment.apiURL}/refresh`, { oldToken })
+      .pipe(
+        tap((res) => {
+          localStorage.setItem('access_token', res.access_token);
+        }),
+        catchError((err) => {
+          this.logout();
+          return throwError(() => new Error(err));
+        })
+      );
   }
 }
