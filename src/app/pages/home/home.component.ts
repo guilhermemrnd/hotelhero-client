@@ -3,7 +3,6 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { SearchForm } from '../../interfaces/search-form';
-import { UtilsService } from './../../services/utils.service';
 
 @Component({
   selector: 'app-home',
@@ -15,18 +14,17 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
-    private utilService: UtilsService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    const formData = this.utilService.getFormData();
+    const formData = JSON.parse(sessionStorage.getItem('searchForm'));
     this.searchForm = formData ? this.buildForm(formData) : this.buildForm();
   }
 
   public navigate(): void {
     if (this.searchForm.valid) {
-      this.utilService.setFormData(this.searchForm.value);
+      sessionStorage.setItem('searchForm', JSON.stringify(this.searchForm.value));
       this.router.navigate(['/search'], { queryParams: this.searchForm.value });
     }
   }

@@ -8,23 +8,27 @@
     <li class="nav-item">
       <i class="far fa-bell fa-lg"></i>
     </li>
-    <li class="nav-item" *ngIf="!isLoggedIn">
-      <a href="#" class="nav-link">Login/Signup</a>
-    </li>
-    <li class="nav-item" *ngIf="isLoggedIn">
+    <li class="nav-item dropdown" *ngIf="loggedIn; else notLoggedIn">
       <a
         class="nav-link dropdown-toggle"
-        data-toggle="dropdown"
-        aria-haspopup="true"
+        data-bs-toggle="dropdown"
         aria-expanded="false"
-        id="profileDropdown"
+        role="button"
+        href="#"
       >
-        <img src="../../assets/images/selfie.jpg" width="35" class="rounded-circle" />
+        <i class="bi bi-person-circle me-1" style="font-size: 21px"></i>
       </a>
-      <div class="dropdown-menu" aria-labelledby="profileDropdown">
-        <a href="#" class="dropdown-item"> <i class="fas fa-user-circle mr-2"></i> Meu Perfil</a>
-        <a href="#" class="dropdown-item"> <i class="fas fa-sign-out-alt mr-2"></i> Sair</a>
+      <div class="dropdown-menu dropdown-menu-end">
+        <a class="dropdown-item" href="#"><i class="fas fa-user-circle mr-2"></i> Meu Perfil</a>
+        <a class="dropdown-item" (click)="logout()">
+          <i class="fas fa-sign-out-alt mr-2"></i> Sair
+        </a>
       </div>
     </li>
+    <ng-template #notLoggedIn>
+      <li class="nav-item">
+        <a [routerLink]="'/login'" class="nav-link">Login/Signup</a>
+      </li>
+    </ng-template>
   </ul>
 </nav>

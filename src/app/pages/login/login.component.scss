@@ -1,0 +1,164 @@
+::ng-deep .navbar,
+::ng-deep .footer {
+  display: none;
+}
+
+::ng-deep .content {
+  padding-bottom: 0 !important;
+  overflow-x: hidden;
+}
+
+.full-height {
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.image-col {
+  padding: 0;
+}
+
+.full-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+a.toggleForm {
+  color: #4c1fa7;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-section {
+  vertical-align: middle;
+  max-width: 486px;
+
+  .signup-form {
+    .social-buttons .btn {
+      font-size: 15px;
+      padding: 9px 16px;
+      color: white;
+
+      &.btn-google {
+        background-color: #de3b40ff;
+
+        &:hover {
+          background-color: #c12126ff;
+        }
+
+        &.active {
+          background-color: #aa1d22ff;
+        }
+      }
+
+      &.btn-facebook {
+        background-color: #335ca6ff;
+
+        &:hover {
+          background-color: #2a4c89ff;
+        }
+
+        &.active {
+          background-color: #213b6bff;
+        }
+      }
+
+      &.btn-apple {
+        background-color: #9095a0ff;
+
+        &:hover {
+          background-color: #6e7787ff;
+        }
+
+        &.active {
+          background-color: #565e6cff;
+        }
+      }
+    }
+  }
+
+  form {
+    label:not(.check-label) {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .form-control {
+      font-family: 'Poppins', sans-serif;
+      padding: 10px 14px;
+      font-size: 14px;
+      background-color: #f3f4f6ff;
+      border-radius: 4px;
+      border: none;
+
+      &::placeholder {
+        color: #bcc1ca;
+      }
+    }
+
+    .form-btn {
+      padding: 10px 20px;
+      background-color: #00bdd6ff;
+      border-radius: 4px;
+      font-size: 16px;
+      color: white;
+
+      &:hover {
+        background-color: #00a9c0ff;
+      }
+
+      &:active {
+        background-color: #0095a9ff;
+      }
+    }
+  }
+
+  .login-form {
+    .social-buttons .btn {
+      padding: 6px 32px;
+      border-radius: 18px;
+      margin: 0 5px;
+      border: none;
+
+      &.btn-google {
+        color: #c71610ff;
+        background-color: #fef1f1ff;
+
+        &:hover {
+          background-color: #fbd2d0ff;
+        }
+
+        &:active {
+          background-color: #f9b2b0ff;
+        }
+      }
+
+      &.btn-facebook {
+        color: #335ca6ff;
+        background-color: #f3f6fbff;
+
+        &:hover {
+          background-color: #d9e2f3ff;
+        }
+
+        &:active {
+          background-color: #bfceebff;
+        }
+      }
+
+      &.btn-apple {
+        color: #565e6cff;
+        background-color: #f3f4f6ff;
+
+        &:hover {
+          background-color: #dee1e6ff;
+        }
+
+        &:active {
+          background-color: #cfd2daff;
+        }
+      }
+    }
+  }
+}
