@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Hotel } from './../../interfaces/hotel';
 import { BookingDetails } from './../../interfaces/booking-details';
-import { HotelService } from './../../services/hotel.service';
+import { JSONService } from '../../services/json.service';
 import { Library } from './../../shared/library';
 
 @Component({
@@ -15,12 +15,12 @@ export class PaymentSuccessComponent implements OnInit {
 
   hotel: Hotel;
 
-  constructor(private hotelService: HotelService) {}
+  constructor(private jsonService: JSONService) {}
 
   ngOnInit() {
-    this.reservation = this.hotelService.getBookingDetails();
+    this.reservation = this.jsonService.getBookingDetails();
 
-    this.hotelService.getHotelById(this.reservation.hotelID).subscribe((data) => {
+    this.jsonService.getHotelById(this.reservation.hotelID).subscribe((data) => {
       this.hotel = data;
     });
   }

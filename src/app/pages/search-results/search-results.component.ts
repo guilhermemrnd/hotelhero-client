@@ -6,7 +6,7 @@ import { delay } from 'rxjs';
 import { Hotel } from './../../interfaces/hotel';
 import { Filters } from './../../interfaces/filters';
 import { SearchForm } from '../../interfaces/search-form';
-import { HotelService } from './../../services/hotel.service';
+import { JSONService } from '../../services/json.service';
 import { UtilsService } from './../../services/utils.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class SearchResultsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private hotelService: HotelService,
+    private jsonService: JSONService,
     private utilService: UtilsService
   ) {}
 
@@ -42,7 +42,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   public onSearch(event: SearchForm): void {
-    this.utilService.setFormData(event);
+    sessionStorage.setItem('searchForm', JSON.stringify(event));
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -96,7 +96,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   private getHotelList(formData: SearchForm, filters?: Filters): void {
-    this.hotelService
+    this.jsonService
       .getHotelList(formData)
       .pipe(delay(1500))
       .subscribe({

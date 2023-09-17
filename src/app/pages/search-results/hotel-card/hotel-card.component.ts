@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Hotel } from './../../../interfaces/hotel';
-import { HotelService } from './../../../services/hotel.service';
+import { JSONService } from '../../../services/json.service';
 import { UtilsService } from './../../../services/utils.service';
 import { Library } from './../../../shared/library';
 
@@ -14,7 +14,7 @@ export class HotelCardComponent implements OnInit {
   @Input() hotel: Hotel;
 
   constructor(
-    private hotelService: HotelService,
+    private jsonService: JSONService,
     private utilService: UtilsService
   ) {}
 
@@ -22,13 +22,13 @@ export class HotelCardComponent implements OnInit {
 
   public toggleFavorite(hotel: Hotel) {
     hotel.isFavorite = !hotel.isFavorite;
-    this.hotelService.toggleFavorite(hotel).subscribe({
+    this.jsonService.toggleFavorite(hotel).subscribe({
       error: (e) => console.error('Error updating favorite status', e)
     });
   }
 
   public getTotalStayPrice(price: number): number {
-    const { checkIn, checkOut } = this.utilService.getFormData();
+    const { checkIn, checkOut } = JSON.parse(sessionStorage.getItem('searchForm'));
     const nights = this.utilService.calcTotalNights(checkIn, checkOut);
     return this.utilService.calcDailyPrices(nights, price);
   }

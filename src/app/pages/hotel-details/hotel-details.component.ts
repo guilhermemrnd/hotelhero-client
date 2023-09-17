@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Hotel } from './../../interfaces/hotel';
 import { SearchForm } from '../../interfaces/search-form';
-import { HotelService } from '../../services/hotel.service';
+import { JSONService } from '../../services/json.service';
 import { UtilsService } from './../../services/utils.service';
 import { Library } from './../../shared/library';
 
@@ -41,12 +41,12 @@ export class HotelDetailsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private hotelService: HotelService,
+    private jsonService: JSONService,
     private utilService: UtilsService
   ) {}
 
   ngOnInit(): void {
-    this.searchForm = this.utilService.getFormData();
+    this.searchForm = JSON.parse(sessionStorage.getItem('searchForm'));
 
     this.bookingForm = this.formBuilder.group({
       checkIn: [Library.parseDate(this.searchForm.checkIn), Validators.required],
@@ -55,13 +55,13 @@ export class HotelDetailsComponent implements OnInit {
     });
 
     const hotelID = this.route.snapshot.paramMap.get('id');
-    this.hotelService.getHotelById(+hotelID).subscribe((data) => {
+    this.jsonService.getHotelById(+hotelID).subscribe((data) => {
       this.hotel = data;
     });
   }
 
   public onSearch(event: SearchForm): void {
-    this.utilService.setFormData(event);
+    sessionStorage.setItem('searchForm', JSON.stringify(event));
     this.router.navigate(['/search'], { queryParams: event });
   }
 
@@ -80,7 +80,7 @@ export class HotelDetailsComponent implements OnInit {
 
   public toggleFavorite(hotel: Hotel): void {
     hotel.isFavorite = !hotel.isFavorite;
-    this.hotelService.toggleFavorite(hotel).subscribe({
+    this.jsonService.toggleFavorite(hotel).subscribe({
       error: (e) => console.error('Error updating favorite status', e)
     });
   }
@@ -111,7 +111,7 @@ export class HotelDetailsComponent implements OnInit {
   public navigateToCheckout(): void {
     if (this.bookingForm.valid) {
       const bookingDetails = { ...this.bookingForm.value, hotelID: this.hotel.id };
-      this.hotelService.setBookingDetails(bookingDetails);
+      this.jsonService.setBookingDetails(bookingDetails);
       this.router.navigate(['/checkout']);
     }
   }

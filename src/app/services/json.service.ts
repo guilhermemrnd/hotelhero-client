@@ -11,7 +11,7 @@ import { Library } from '../shared/library';
 @Injectable({
   providedIn: 'root'
 })
-export class HotelService {
+export class JSONService {
   private readonly API = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}

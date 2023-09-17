@@ -1,21 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 
-import { SearchForm } from '../interfaces/search-form';
-
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
   constructor() {}
-
-  public getFormData(): SearchForm {
-    return JSON.parse(localStorage.getItem('searchForm'));
-  }
-
-  public setFormData(data: SearchForm): void {
-    localStorage.setItem('searchForm', JSON.stringify(data));
-  }
 
   public formatDates(dateOne: Date | string, dateTwo: Date | string, abbreviated: boolean): string {
     const [checkIn, checkOut] = [moment(dateOne), moment(dateTwo)];

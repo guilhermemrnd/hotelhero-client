@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Hotel } from './../../interfaces/hotel';
 import { PaymentForm } from './../../interfaces/payment-form';
 import { BookingDetails } from './../../interfaces/booking-details';
-import { HotelService } from './../../services/hotel.service';
+import { JSONService } from '../../services/json.service';
 import { UtilsService } from './../../services/utils.service';
 import { Library } from './../../shared/library';
 
@@ -34,17 +34,17 @@ export class CheckoutComponent implements OnInit {
     private formBuilder: FormBuilder,
     private location: Location,
     private router: Router,
-    private hotelService: HotelService,
+    private jsonService: JSONService,
     private utilService: UtilsService
   ) {}
 
   ngOnInit() {
-    this.bookingDetails = this.hotelService.getBookingDetails();
+    this.bookingDetails = this.jsonService.getBookingDetails();
 
     const { checkIn, checkOut } = this.bookingDetails;
     this.dates = [Library.parseDate(checkIn), Library.parseDate(checkOut)];
 
-    this.hotelService.getHotelById(this.bookingDetails.hotelID).subscribe({
+    this.jsonService.getHotelById(this.bookingDetails.hotelID).subscribe({
       next: (data) => (this.hotel = data),
       error: (err) => console.error('Failed to get hotel', err)
     });
@@ -91,11 +91,11 @@ export class CheckoutComponent implements OnInit {
       const booking: BookingDetails = { ...this.bookingDetails, totalPrice };
       const payment: PaymentForm = { ...this.paymentForm.value };
 
-      this.hotelService.processPayment(payment).subscribe({
+      this.jsonService.processPayment(payment).subscribe({
         next: (response) => {
           if (response.success) {
-            this.hotelService.createReservation(booking).subscribe((reservation) => {
-              this.hotelService.setBookingDetails(reservation);
+            this.jsonService.createReservation(booking).subscribe((reservation) => {
+              this.jsonService.setBookingDetails(reservation);
               this.router.navigate(['/payment-success']);
             });
           } else {
