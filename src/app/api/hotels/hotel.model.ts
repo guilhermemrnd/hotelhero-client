@@ -1,6 +1,6 @@
-import { APIRegion } from './region.interface';
-import { APIAmenity } from './amenity.interface';
-import { APIBooking } from '../bookings/booking.interface';
+import { APIRegion } from './region.model';
+import { APIAmenity } from './amenity.model';
+import { APIBooking } from '../bookings/booking.model';
 
 export interface APIHotel {
   id: number;

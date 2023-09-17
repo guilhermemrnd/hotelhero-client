@@ -1,4 +1,4 @@
-import { APIHotel } from "./hotel.interface";
+import { APIHotel } from "./hotel.model";
 
 export interface APIRegion {
   id: number;

@@ -1,4 +1,4 @@
-import { APIBooking } from "../bookings/booking.interface";
+import { APIBooking } from "../bookings/booking.model";
 
 export interface APIUser {
   id: number;

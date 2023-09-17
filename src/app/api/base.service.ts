@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 export class BaseService {
@@ -35,5 +35,13 @@ export class BaseService {
     const url = id ? `${this.API}/${path}/${id}` : `${this.API}/${path}`;
     const options = useCredentials ? { withCredentials: true } : {};
     return { url, options };
+  }
+
+  protected createQueryParams(item: any) {
+    let params = new HttpParams();
+    Object.keys(item).forEach((key) => {
+      params = params.set(key, item[key]);
+    });
+    return params;
   }
 }

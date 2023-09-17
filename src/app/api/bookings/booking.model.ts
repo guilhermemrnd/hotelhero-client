@@ -1,5 +1,5 @@
-import { APIUser } from "../users/user.interface";
-import { APIHotel } from "../hotels/hotel.interface";
+import { APIUser } from "../users/user.model";
+import { APIHotel } from "../hotels/hotel.model";
 
 export interface APIBooking {
   id: string;

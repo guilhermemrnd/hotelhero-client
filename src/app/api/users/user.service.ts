@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { BaseService } from '../base.service';
-import { APIUser } from './user.interface';
-import { APIBooking } from '../bookings/booking.interface';
+import { APIUser } from './user.model';
+import { APIBooking } from '../bookings/booking.model';
 import { APIResponse } from '../api-response';
-import { UserInput } from './user-input.interface';
+import { UserInput } from '../interfaces/user-input';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,7 @@ export class UserService extends BaseService {
   }
 
   public getUserBookings(id: string): Observable<APIBooking[]> {
-    const { url, options } = this.getUrlAndOptions('users', true, id);
+    const { url, options } = this.getUrlAndOptions(`users/${id}/bookings`, true);
     return this.httpClient.get<APIBooking[]>(url, options);
   }
 
