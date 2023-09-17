@@ -78,6 +78,11 @@
               <div *ngIf="isFieldInvalid('signupForm', 'email')">
                 <small class="text-danger">Please enter a valid email.</small>
               </div>
+              <div *ngIf="emailExists">
+                <small class="text-danger">
+                  This email is already in use. Please use another email.
+                </small>
+              </div>
             </div>
             <div class="col-md-12 pb-3">
               <label for="password">Password</label>
@@ -105,6 +110,11 @@
               <button class="btn form-btn" type="submit" [disabled]="signupForm.invalid">
                 Create an account
               </button>
+              <div class="mt-1" *ngIf="errorMessage">
+                <small class="text-danger">
+                  Something went wrong. Reload the page and try again.
+                </small>
+              </div>
             </div>
           </form>
         </div>
@@ -154,6 +164,9 @@
               <button class="btn form-btn" type="submit" [disabled]="loginForm.invalid">
                 Log In
               </button>
+              <div class="mt-1" *ngIf="errorMessage">
+                <small class="text-danger">Email or password invalid. Try again</small>
+              </div>
             </div>
           </form>
 
@@ -167,6 +180,8 @@
           </div>
         </div>
       </div>
+
+      <p-toast position="bottom-right"></p-toast>
     </div>
   </div>
 </div>

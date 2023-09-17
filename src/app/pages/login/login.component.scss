@@ -162,3 +162,21 @@ a.toggleForm {
     }
   }
 }
+
+::ng-deep {
+  .p-toast-message-content {
+    padding: 12px 14px;
+
+    .p-toast-message-icon {
+      margin: auto 0;
+    }
+
+    .p-toast-message-text {
+      margin: auto 0 auto 1rem !important;
+    }
+
+    .p-toast-detail {
+      margin: 0 !important;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap, throwError } from 'rxjs';
 
 import { environment } from './../../environments/environment';
 
@@ -10,17 +10,29 @@ import { environment } from './../../environments/environment';
 export class AuthService {
   private readonly API = environment.apiURL;
 
-  constructor(private http: HttpClient) {}
+  private _isLoggedIn = new BehaviorSubject<boolean>(false);
+  public isLoggedIn$ = this._isLoggedIn.asObservable();
+
+  constructor(private http: HttpClient) {
+    this.isAuthenticated().subscribe((loggedIn) => {
+      if (loggedIn) this._isLoggedIn.next(true);
+    });
+  }
 
   public login(email: string, password: string, rememberMe: boolean) {
     const { url, options } = this.getUrlAndOptions('auth/login', true);
     const credentials = { email, password, rememberMe };
-    return this.http.post(url, credentials, options).pipe(this.handleError('Failed to login.'));
+    return this.http.post(url, credentials, options).pipe(tap(() => this._isLoggedIn.next(true)));
   }
 
-  public logout(): Observable<unknown> {
+  public logout(): void {
     const { url, options } = this.getUrlAndOptions('auth/logout', true);
-    return this.http.post(url, {}, options).pipe(this.handleError('Failed to logout.'));
+    this.http
+      .post(url, {}, options)
+      .pipe(tap(() => this._isLoggedIn.next(false)))
+      .subscribe(() => {
+        window.location.href = '/login';
+      });
   }
 
   public isAuthenticated(): Observable<boolean> {
@@ -35,12 +47,5 @@ export class AuthService {
     const url = id ? `${this.API}/${path}/${id}` : `${this.API}/${path}`;
     const options = useCredentials ? { withCredentials: true } : {};
     return { url, options };
-  }
-
-  private handleError(message: string) {
-    return catchError((err) => {
-      console.error(message, err);
-      return throwError(() => new Error(err));
-    });
   }
 }

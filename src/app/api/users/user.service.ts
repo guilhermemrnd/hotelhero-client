@@ -20,6 +20,11 @@ export class UserService extends BaseService {
     return this.create(item, 'users', false);
   }
 
+  public checkEmail(email: string): Observable<{ exists: boolean }> {
+    const { url, options } = this.getUrlAndOptions('users/check-email', false);
+    return this.httpClient.post<{ exists: boolean }>(url, { email }, options);
+  }
+
   public getUser(id: string): Observable<APIUser> {
     return this.getOne(id, 'users', true);
   }
