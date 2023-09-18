@@ -1,12 +1,11 @@
-import { Library } from './../../shared/moment-utils';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { HotelService } from './../../api/hotels/hotel.service';
+import { Utils } from './../../services/utils.service';
 import { APIRegion } from './../../api/hotels/region.model';
 import { SearchForm } from '../../interfaces/search-form';
-import { HotelService } from './../../api/hotels/hotel.service';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -45,8 +44,8 @@ export class HomeComponent implements OnInit {
 
   public navigate(): void {
     if (this.searchForm.valid) {
-      const queryParams = this.formatQueryParams(this.searchForm.value);
-      sessionStorage.setItem('searchForm', JSON.stringify(this.searchForm.value));
+      Utils.persistSearchForm(this.searchForm.value);
+      const queryParams = Utils.formatQueryParams(this.searchForm.value);
       this.router.navigate(['/search'], { queryParams });
     }
   }
@@ -69,12 +68,5 @@ export class HomeComponent implements OnInit {
         this.searchForm.patchValue({ checkOut: this.minCheckOutDate });
       }
     });
-  }
-
-  private formatQueryParams(formData: SearchForm) {
-    const destination = formData.destination.name;
-    const checkIn = Library.convertDate(formData.checkIn);
-    const checkOut = Library.convertDate(formData.checkOut);
-    return { destination, checkIn, checkOut, guests: formData.guests };
   }
 }

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 
 import { environment } from './../../environments/environment';
+import { IsAuthenticatedRes } from '../api/interfaces/is-authenticated-res';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,15 @@ export class AuthService {
   private _isLoggedIn = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this._isLoggedIn.asObservable();
 
+  private _userId = new BehaviorSubject<string>(null);
+  public userId$ = this._userId.asObservable();
+
   constructor(private http: HttpClient) {
-    this.isAuthenticated().subscribe((loggedIn) => {
-      if (loggedIn) this._isLoggedIn.next(true);
+    this.isAuthenticated().subscribe((res) => {
+      if (res.authenticated) {
+        this._userId.next(res.userId);
+        this._isLoggedIn.next(true);
+      }
     });
   }
 
@@ -35,12 +42,9 @@ export class AuthService {
       });
   }
 
-  public isAuthenticated(): Observable<boolean> {
+  public isAuthenticated(): Observable<IsAuthenticatedRes> {
     const { url, options } = this.getUrlAndOptions('auth/check', true);
-    return this.http.get<any>(url, options).pipe(
-      map((res) => (res.authenticated ? true : false)),
-      catchError((err) => of(false))
-    );
+    return this.http.get<IsAuthenticatedRes>(url, options);
   }
 
   private getUrlAndOptions(path: string, useCredentials: boolean, id?: string) {

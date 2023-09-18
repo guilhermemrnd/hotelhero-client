@@ -1,13 +1,28 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 
+import { Library } from '../shared/moment-utils';
+import { SearchForm } from '../interfaces/search-form';
+
 @Injectable({
   providedIn: 'root'
 })
-export class UtilsService {
+export class Utils {
   constructor() {}
 
-  public formatDates(dateOne: Date | string, dateTwo: Date | string, abbreviated: boolean): string {
+  public static persistSearchForm(formData: SearchForm) {
+    sessionStorage.setItem('searchForm', JSON.stringify(formData));
+  }
+
+  public static fetchSearchForm(): SearchForm {
+    return JSON.parse(sessionStorage.getItem('searchForm'));
+  }
+
+  public static formatDates(
+    dateOne: Date | string,
+    dateTwo: Date | string,
+    abbreviated: boolean
+  ): string {
     const [checkIn, checkOut] = [moment(dateOne), moment(dateTwo)];
 
     const sameMonth = checkIn.isSame(checkOut, 'month');
@@ -24,13 +39,20 @@ export class UtilsService {
     }
   }
 
-  public calcTotalNights(dateOne: Date | string, dateTwo: Date | string): number {
+  public static calcTotalNights(dateOne: Date | string, dateTwo: Date | string): number {
     const [checkIn, checkOut] = [moment(dateOne), moment(dateTwo)];
     const nights = checkOut.diff(checkIn, 'days');
     return nights;
   }
 
-  public calcDailyPrices(nights: number, price: number): number {
+  public static calcDailyPrices(nights: number, price: number): number {
     return nights <= 1 ? price : price * nights;
+  }
+
+  public static formatQueryParams(formData: SearchForm): any {
+    const destination = formData.destination.name;
+    const checkIn = Library.convertDate(formData.checkIn);
+    const checkOut = Library.convertDate(formData.checkOut);
+    return { destination, checkIn, checkOut, guests: formData.guests };
   }
 }

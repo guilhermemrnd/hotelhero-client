@@ -7,7 +7,7 @@ import { Hotel } from './../../interfaces/hotel';
 import { PaymentForm } from './../../interfaces/payment-form';
 import { BookingDetails } from './../../interfaces/booking-details';
 import { JSONService } from '../../services/json.service';
-import { UtilsService } from './../../services/utils.service';
+import { Utils } from './../../services/utils.service';
 import { Library } from '../../shared/moment-utils';
 
 @Component({
@@ -34,8 +34,7 @@ export class CheckoutComponent implements OnInit {
     private formBuilder: FormBuilder,
     private location: Location,
     private router: Router,
-    private jsonService: JSONService,
-    private utilService: UtilsService
+    private jsonService: JSONService
   ) {}
 
   ngOnInit() {
@@ -68,7 +67,7 @@ export class CheckoutComponent implements OnInit {
 
   public getFormattedDates() {
     const { checkIn, checkOut } = this.bookingDetails;
-    return this.utilService.formatDates(checkIn, checkOut, false);
+    return Utils.formatDates(checkIn, checkOut, false);
   }
 
   public updateDates(): void {
@@ -112,12 +111,12 @@ export class CheckoutComponent implements OnInit {
   // Booking details methods
   public getTotalNights(): number {
     const { checkIn, checkOut } = this.bookingDetails;
-    return this.utilService.calcTotalNights(checkIn, checkOut);
+    return Utils.calcTotalNights(checkIn, checkOut);
   }
 
   public getDailyPrices(price: number): number {
     const nights = this.getTotalNights();
-    return this.utilService.calcDailyPrices(nights, price);
+    return Utils.calcDailyPrices(nights, price);
   }
 
   public getTotalPrice(price: number): number {

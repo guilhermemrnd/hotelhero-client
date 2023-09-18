@@ -1,12 +1,12 @@
 export interface SearchHotelsReq {
-  destination: string;
+  destination: number;
   checkIn: string;
   checkOut: string;
   guests: number;
   limit?: number;
   page: number;
-  minPrice?: string;
-  maxPrice?: string;
+  minPrice?: number;
+  maxPrice?: number;
   amenities?: string[];
   ratings?: string[];
 }

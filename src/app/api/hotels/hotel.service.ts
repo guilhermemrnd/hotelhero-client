@@ -30,7 +30,7 @@ export class HotelService extends BaseService {
 
   public getRegions(search: string): Observable<APIRegion[]> {
     const url = `${this.API}/regions?search=${search}`;
-    return this.httpClient.get<APIRegion[]>(url).pipe(distinctUntilChanged(), debounceTime(300));
+    return this.httpClient.get<APIRegion[]>(url);
   }
 
   public getHotels(searchParams: SearchHotelsReq): Observable<APIGetResponse<APIHotel[]>> {

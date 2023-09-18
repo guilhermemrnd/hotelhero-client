@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hotel } from './../../interfaces/hotel';
 import { SearchForm } from '../../interfaces/search-form';
 import { JSONService } from '../../services/json.service';
-import { UtilsService } from './../../services/utils.service';
+import { Utils } from './../../services/utils.service';
 import { Library } from '../../shared/moment-utils';
 
 @Component({
@@ -41,8 +41,7 @@ export class HotelDetailsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private jsonService: JSONService,
-    private utilService: UtilsService
+    private jsonService: JSONService
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +61,6 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   public onSearch(event: SearchForm): void {
-    sessionStorage.setItem('searchForm', JSON.stringify(event));
     this.router.navigate(['/search'], { queryParams: event });
   }
 
@@ -92,12 +90,12 @@ export class HotelDetailsComponent implements OnInit {
 
   public getTotalNights(): number {
     const { checkIn, checkOut } = this.bookingForm.value;
-    return this.utilService.calcTotalNights(checkIn, checkOut);
+    return Utils.calcTotalNights(checkIn, checkOut);
   }
 
   public getDailyPrices(price: number): number {
     const nights = this.getTotalNights();
-    return this.utilService.calcDailyPrices(nights, price);
+    return Utils.calcDailyPrices(nights, price);
   }
 
   public getTotalPrice(price: number): number {

@@ -6,11 +6,11 @@
     <div class="hotel-info">
       <h5>
         <a [routerLink]="['/hotel-details', hotel.id]">{{ hotel.name }}</a>
-        <!-- <i
-          [ngClass]="hotel.isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
-          [title]="hotel?.isFavorite ? 'Unsave' : 'Save'"
-          (click)="toggleFavorite(hotel)"
-        ></i> -->
+        <i
+          [ngClass]="isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
+          [title]="isFavorite ? 'Unsave' : 'Save'"
+          (click)="toggleFavorite()"
+        ></i>
       </h5>
 
       <div class="separator mt-2 mb-3"></div>

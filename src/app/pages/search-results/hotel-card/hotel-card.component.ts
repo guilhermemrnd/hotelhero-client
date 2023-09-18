@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Library } from '../../../shared/moment-utils';
-import { JSONService } from '../../../services/json.service';
-import { UtilsService } from './../../../services/utils.service';
+import { AuthService } from './../../../auth/auth.service';
+import { UserService } from 'src/app/api/users/user.service';
+import { Utils } from './../../../services/utils.service';
+
 import { APIHotel } from './../../../api/hotels/hotel.model';
 import { Hotel } from './../../../interfaces/hotel';
-
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',
@@ -14,23 +14,38 @@ import { Hotel } from './../../../interfaces/hotel';
 export class HotelCardComponent implements OnInit {
   @Input() hotel: APIHotel;
 
+  public loggedIn: boolean;
+  public userId: string;
+
+  public isFavorite = false;
+
   constructor(
-    private jsonService: JSONService,
-    private utilService: UtilsService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
+      if (isLoggedIn) this.loggedIn = isLoggedIn;
+    });
 
-  public toggleFavorite(hotel: Hotel) {
-    hotel.isFavorite = !hotel.isFavorite;
-    this.jsonService.toggleFavorite(hotel).subscribe({
-      error: (e) => console.error('Error updating favorite status', e)
+    this.authService.userId$.subscribe((userId) => {
+      if (userId) this.userId = userId;
+    });
+  }
+
+  public toggleFavorite() {
+    if (!this.loggedIn) return alert('You must be logged in to favorite hotels');
+
+    this.isFavorite = !this.isFavorite;
+    this.userService.toggleFavorite(this.userId, this.hotel.id, this.isFavorite).subscribe({
+      error: (err) => console.error('Failed to favorite hotel', err)
     });
   }
 
   public getTotalStayPrice(price: number): number {
     const { checkIn, checkOut } = JSON.parse(sessionStorage.getItem('searchForm'));
-    const nights = this.utilService.calcTotalNights(checkIn, checkOut);
-    return this.utilService.calcDailyPrices(nights, price);
+    const nights = Utils.calcTotalNights(checkIn, checkOut);
+    return Utils.calcDailyPrices(nights, price);
   }
 }

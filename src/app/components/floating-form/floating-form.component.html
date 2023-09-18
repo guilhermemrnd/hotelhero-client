@@ -9,12 +9,11 @@
         {{ getFieldValue('destination').name }}
       </span>
       <p-autoComplete
+        #inputElement
         formControlName="destination"
         field="name"
         [suggestions]="regions"
-        (completeMethod)="searchRegions($event)"
-        (onKeyUp)="updateWidth('destination')"
-        (onBlur)="updateField('destination')"
+        (onBlur)="updateDestinationField()"
         *ngIf="editingField === 'destination'"
         [autofocus]="true"
       ></p-autoComplete>
@@ -27,6 +26,7 @@
         {{ getFormattedDates() | titlecase }}
       </span>
       <p-calendar
+        #inputElement
         formControlName="dates"
         selectionMode="range"
         placeholder="Pick a period"
@@ -34,7 +34,7 @@
         [required]="true"
         [baseZIndex]="999"
         [minDate]="currentDate"
-        (onBlur)="updateField('dates')"
+        (onBlur)="updateDatesField()"
         *ngIf="editingField === 'dates'"
       ></p-calendar>
     </div>
@@ -49,7 +49,7 @@
         #inputElement
         formControlName="guests"
         *ngIf="editingField === 'guests'"
-        (blur)="updateField('guests')"
+        (blur)="updateGuestsField()"
         style="min-width: 44px"
         class="form-control"
         type="number"

@@ -3,8 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
 import { BehaviorSubject, debounceTime, switchMap } from 'rxjs';
 
-import { Library } from './../../shared/moment-utils';
 import { HotelService } from './../../api/hotels/hotel.service';
+import { Utils } from './../../services/utils.service';
+import { Library } from './../../shared/moment-utils';
 
 import { APIHotel } from './../../api/hotels/hotel.model';
 import { SearchForm } from '../../interfaces/search-form';
@@ -24,6 +25,7 @@ export class SearchResultsComponent implements OnInit {
 
   hotels: APIHotel[] = null;
   totalItems: number = 0;
+
   totalPages: number = 0;
   currentPage: number = 1;
 
@@ -47,11 +49,11 @@ export class SearchResultsComponent implements OnInit {
   }
 
   public onSearch(event: SearchForm): void {
-    sessionStorage.setItem('searchForm', JSON.stringify(event));
+    const queryParams = Utils.formatQueryParams(event);
 
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: event,
+      queryParams: queryParams,
       queryParamsHandling: 'merge'
     });
 
@@ -66,8 +68,14 @@ export class SearchResultsComponent implements OnInit {
 
   public onFilterPrice(event: ChangeContext): void {
     const [min, max] = [event.value, event.highValue];
-    this.currentFilters = { ...this.currentFilters, price: { min, max } };
-    this.triggerSearch.next();
+
+    if (max === 1000) {
+      this.currentFilters = { ...this.currentFilters, price: { min } };
+      this.triggerSearch.next();
+    } else {
+      this.currentFilters = { ...this.currentFilters, price: { min, max } };
+      this.triggerSearch.next();
+    }
   }
 
   public changePage(newPage: number) {
@@ -126,8 +134,8 @@ export class SearchResultsComponent implements OnInit {
   private buildQueryParams(formData: SearchForm, filters?: Filters): SearchHotelsReq {
     const { destination, checkIn, checkOut, guests } = formData;
 
-    const searchParams = {
-      destination: destination.id.toString(),
+    const params = {
+      destination: destination.id,
       checkIn: Library.convertDate(checkIn),
       checkOut: Library.convertDate(checkOut),
       guests,
@@ -135,33 +143,35 @@ export class SearchResultsComponent implements OnInit {
       page: this.currentPage
     };
 
-    if (!filters) return searchParams;
+    if (!filters) return params;
 
-    console.log('filters', filters);
+    const {
+      price: { min, max },
+      amenities,
+      reviews
+    } = filters;
 
-    const filtersParams = {
-      minPrice: filters?.price?.min?.toString(),
-      maxPrice: filters?.price?.max?.toString()
-      // amenities: Object.keys(filters?.amenities).filter((key) => filters?.amenities[key]),
-      // ratings: Object.keys(filters?.reviews).filter((key) => filters?.reviews[key])
-    };
+    if (min) params['minPrice'] = min;
+    if (max) params['maxPrice'] = max;
+    if (amenities) params['amenities'] = Object.keys(amenities).filter((key) => amenities[key]);
+    if (reviews) params['ratings'] = Object.keys(reviews).filter((key) => reviews[key]);
 
-    return { ...searchParams, ...filtersParams };
+    return params;
   }
 
   private setSliderOptions(): Options {
     return {
       floor: this.minValue,
       ceil: this.maxValue,
-      step: 10,
+      step: 50,
       translate: (value: number, label: LabelType): string => {
         switch (label) {
           case LabelType.Low:
-            return 'R$' + value;
+            return '$' + value;
           case LabelType.High:
-            return 'R$' + value;
+            return value === 1000 ? `$1000+` : `$${value}`;
           default:
-            return 'R$' + value;
+            return '$' + value;
         }
       }
     };
