@@ -33,7 +33,7 @@
     </div>
     <div class="col-md-9">
       <span class="d-block mb-3" style="color: #171a1fff">
-        {{ searchForm.destination }}: {{ hotels?.length }} acomodações encontradas
+        {{ searchForm.destination.name }}: {{ totalItems }} acomodações encontradas
       </span>
 
       <div class="hotel-card" *ngFor="let hotel of hotels">

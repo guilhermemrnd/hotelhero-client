@@ -8,7 +8,7 @@ import { PaymentForm } from './../../interfaces/payment-form';
 import { BookingDetails } from './../../interfaces/booking-details';
 import { JSONService } from '../../services/json.service';
 import { UtilsService } from './../../services/utils.service';
-import { Library } from './../../shared/library';
+import { Library } from '../../shared/moment-utils';
 
 @Component({
   selector: 'app-checkout',

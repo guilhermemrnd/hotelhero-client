@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Hotel } from '../interfaces/hotel';
 import { BookingDetails } from '../interfaces/booking-details';
 import { PaymentForm } from '../interfaces/payment-form';
-import { Library } from '../shared/library';
+import { Library } from '../shared/moment-utils';
 
 @Injectable({
   providedIn: 'root'

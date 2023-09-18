@@ -1,10 +1,20 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
-import { Library } from './../../shared/library';
-import { SearchForm } from '../../interfaces/search-form';
+import { APIRegion } from './../../api/hotels/region.model';
+import { HotelService } from './../../api/hotels/hotel.service';
 import { UtilsService } from './../../services/utils.service';
+import { SearchForm } from '../../interfaces/search-form';
+import { Library } from '../../shared/moment-utils';
 
 @Component({
   selector: 'app-floating-form',
@@ -15,24 +25,31 @@ export class FloatingFormComponent implements OnInit {
   @Input() formData: SearchForm;
   searchForm: FormGroup;
 
-  minDate: Date;
+  regions: APIRegion[] = [];
+
+  currentDate = new Date();
 
   @ViewChild('inputElement', { read: ElementRef }) inputElement: ElementRef;
   editingField: string = null;
 
   @Output() searchEvent = new EventEmitter<SearchForm>();
 
-  constructor(private formBuilder: FormBuilder, private utilService: UtilsService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private hotelService: HotelService,
+    private utilService: UtilsService
+  ) {}
 
   ngOnInit() {
-    const [checkIn, checkOut] = this.getParsedDates();
-    this.minDate = new Date();
+    const { checkIn, checkOut } = this.formData;
 
     this.searchForm = this.formBuilder.group({
       destination: [this.formData.destination, [Validators.required, Validators.maxLength(45)]],
-      dates: [[checkIn, checkOut], Validators.required],
+      dates: [[new Date(checkIn), new Date(checkOut)], Validators.required],
       guests: [this.formData.guests, [Validators.required, Validators.min(1)]]
     });
+
+    console.log(this.searchForm.value);
 
     this.searchForm.get('dates').valueChanges.subscribe((dates: Date[]) => {
       this.validateDateRange(dates);
@@ -55,6 +72,12 @@ export class FloatingFormComponent implements OnInit {
         this.updateWidth(fieldName);
       }, 0);
     }
+  }
+
+  public searchRegions(event: any): void {
+    this.hotelService.getRegions(event.query).subscribe((regions: APIRegion[]) => {
+      this.regions = regions;
+    });
   }
 
   public updateField(fieldName: string): void {
@@ -105,9 +128,9 @@ export class FloatingFormComponent implements OnInit {
     }
   }
 
-  private updateDestinationField(inputValue: string) {
-    if (!inputValue?.trim()) {
-      this.searchForm.get('destination').setValue(this.formData.destination);
+  private updateDestinationField(inputValue: APIRegion) {
+    if (!inputValue?.name.trim()) {
+      this.searchForm.patchValue({ destination: this.formData.destination });
     } else {
       this.formData = { ...this.formData, destination: inputValue };
     }
@@ -115,13 +138,13 @@ export class FloatingFormComponent implements OnInit {
 
   private updateDatesField(inputValue: Date[]) {
     if (!inputValue[0] && !inputValue[1]) {
-      const [checkIn, checkOut] = this.getParsedDates();
-      this.searchForm.get('dates').setValue([checkIn, checkOut]);
+      const { checkIn, checkOut } = this.formData;
+      this.searchForm.patchValue({ dates: [checkIn, checkOut] });
     } else if (!inputValue[1]) {
       const dayAfter = moment(inputValue[0]).add(1, 'day').toDate();
       this.searchForm.get('dates').setValue([inputValue[0], dayAfter], { emitEvent: false });
     } else {
-      const [checkIn, checkOut] = inputValue.map((date: Date) => Library.convertDate(date));
+      const [checkIn, checkOut] = inputValue;
       this.formData = { ...this.formData, checkIn, checkOut };
     }
   }
@@ -132,14 +155,5 @@ export class FloatingFormComponent implements OnInit {
     } else {
       this.formData = { ...this.formData, guests: +inputValue };
     }
-  }
-
-  private getParsedDates(): Date[] {
-    const [checkIn, checkOut] = [
-      Library.parseDate(this.formData.checkIn),
-      Library.parseDate(this.formData.checkOut)
-    ];
-
-    return [checkIn, checkOut];
   }
 }

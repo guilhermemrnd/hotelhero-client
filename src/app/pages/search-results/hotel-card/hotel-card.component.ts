@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Hotel } from './../../../interfaces/hotel';
+import { Library } from '../../../shared/moment-utils';
 import { JSONService } from '../../../services/json.service';
 import { UtilsService } from './../../../services/utils.service';
-import { Library } from './../../../shared/library';
+import { APIHotel } from './../../../api/hotels/hotel.model';
+import { Hotel } from './../../../interfaces/hotel';
 
 @Component({
   selector: 'app-hotel-card',
@@ -11,7 +12,7 @@ import { Library } from './../../../shared/library';
   styleUrls: ['./hotel-card.component.scss']
 })
 export class HotelCardComponent implements OnInit {
-  @Input() hotel: Hotel;
+  @Input() hotel: APIHotel;
 
   constructor(
     private jsonService: JSONService,

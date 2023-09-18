@@ -1,20 +1,23 @@
 <div class="floating-form">
   <form [formGroup]="searchForm" class="d-flex flex-row align-items-center">
     <div class="ms-3">
-      <span class="fw-bold" *ngIf="editingField !== 'destination'" (click)="toggleEdit('destination')">
-        {{ getFieldValue('destination') }}
+      <span
+        class="fw-bold"
+        *ngIf="editingField !== 'destination'"
+        (click)="toggleEdit('destination')"
+      >
+        {{ getFieldValue('destination').name }}
       </span>
-      <input
-        #inputElement
+      <p-autoComplete
         formControlName="destination"
+        field="name"
+        [suggestions]="regions"
+        (completeMethod)="searchRegions($event)"
+        (onKeyUp)="updateWidth('destination')"
+        (onBlur)="updateField('destination')"
         *ngIf="editingField === 'destination'"
-        (input)="updateWidth('destination')"
-        (blur)="updateField('destination')"
-        style="min-width: 50px"
-        class="form-control"
-        type="text"
-        autofocus
-      />
+        [autofocus]="true"
+      ></p-autoComplete>
     </div>
 
     <div class="vertical-line"></div>
@@ -24,15 +27,14 @@
         {{ getFormattedDates() | titlecase }}
       </span>
       <p-calendar
-        #inputElement
         formControlName="dates"
         selectionMode="range"
         placeholder="Pick a period"
         [showIcon]="true"
         [required]="true"
         [baseZIndex]="999"
-        [minDate]="minDate"
-        (onClickOutside)="updateField('dates')"
+        [minDate]="currentDate"
+        (onBlur)="updateField('dates')"
         *ngIf="editingField === 'dates'"
       ></p-calendar>
     </div>

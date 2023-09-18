@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { BaseService } from '../base.service';
 import { APIUser } from './user.model';
 import { APIBooking } from '../bookings/booking.model';
-import { APIResponse } from '../api-response';
-import { UserInput } from '../interfaces/user-input';
+import { APIPostResponse } from '../api-post-response';
+import { UserInputReq } from '../interfaces/user-input-req';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +16,13 @@ export class UserService extends BaseService {
     super(httpClient);
   }
 
-  public createUser(item: UserInput): Observable<APIResponse<APIUser>> {
+  public createUser(item: UserInputReq): Observable<APIPostResponse<APIUser>> {
     return this.create(item, 'users', false);
   }
 
   public checkEmail(email: string): Observable<{ exists: boolean }> {
-    const { url, options } = this.getUrlAndOptions('users/check-email', false);
-    return this.httpClient.post<{ exists: boolean }>(url, { email }, options);
+    const url = `${this.API}/users/check-email`;
+    return this.httpClient.post<{ exists: boolean }>(url, { email });
   }
 
   public getUser(id: string): Observable<APIUser> {
@@ -38,7 +38,7 @@ export class UserService extends BaseService {
     return this.httpClient.get<APIBooking[]>(url, options);
   }
 
-  public updateUser(id: string, item: UserInput): Observable<APIResponse<APIUser>> {
+  public updateUser(id: string, item: UserInputReq): Observable<APIPostResponse<APIUser>> {
     return this.update(id, item, 'users', true);
   }
 

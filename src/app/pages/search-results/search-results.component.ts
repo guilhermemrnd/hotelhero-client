@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
-import { delay } from 'rxjs';
+import { BehaviorSubject, debounceTime, switchMap } from 'rxjs';
 
-import { Hotel } from './../../interfaces/hotel';
-import { Filters } from './../../interfaces/filters';
+import { Library } from './../../shared/moment-utils';
+import { HotelService } from './../../api/hotels/hotel.service';
+
+import { APIHotel } from './../../api/hotels/hotel.model';
 import { SearchForm } from '../../interfaces/search-form';
-import { JSONService } from '../../services/json.service';
-import { UtilsService } from './../../services/utils.service';
+import { Filters } from './../../interfaces/filters';
+import { SearchHotelsReq } from './../../api/interfaces/search-hotels-req';
 
 @Component({
   selector: 'app-search-results',
@@ -15,11 +17,13 @@ import { UtilsService } from './../../services/utils.service';
   styleUrls: ['./search-results.component.scss']
 })
 export class SearchResultsComponent implements OnInit {
+  private triggerSearch = new BehaviorSubject<void>(null);
+
   searchForm: SearchForm;
   currentFilters: Filters;
 
-  hotels: Hotel[] = null;
-
+  hotels: APIHotel[] = null;
+  totalItems: number = 0;
   totalPages: number = 0;
   currentPage: number = 1;
 
@@ -30,15 +34,16 @@ export class SearchResultsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private jsonService: JSONService,
-    private utilService: UtilsService
+    private hotelService: HotelService
   ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params: SearchForm) => {
-      this.getHotelList(params);
-      this.searchForm = params;
+      this.searchForm = JSON.parse(sessionStorage.getItem('searchForm'));
+      this.triggerSearch.next();
     });
+
+    this.setupDebouncedHotelSearch(); // Set up subscription for delayed hotel searc
   }
 
   public onSearch(event: SearchForm): void {
@@ -50,21 +55,24 @@ export class SearchResultsComponent implements OnInit {
       queryParamsHandling: 'merge'
     });
 
-    this.getHotelList(event);
+    this.searchForm = event;
+    this.triggerSearch.next();
   }
 
   public onFilterChanged(filters: Filters): void {
-    this.getHotelList(this.searchForm, filters);
+    this.currentFilters = filters;
+    this.triggerSearch.next();
   }
 
   public onFilterPrice(event: ChangeContext): void {
     const [min, max] = [event.value, event.highValue];
-    const filters = { ...this.currentFilters, price: { min, max } };
-    this.getHotelList(this.searchForm, filters);
+    this.currentFilters = { ...this.currentFilters, price: { min, max } };
+    this.triggerSearch.next();
   }
 
   public changePage(newPage: number) {
     this.currentPage = newPage;
+    this.triggerSearch.next();
   }
 
   public getDisplayedPages(): number[] {
@@ -95,79 +103,50 @@ export class SearchResultsComponent implements OnInit {
     return pages;
   }
 
-  private getHotelList(formData: SearchForm, filters?: Filters): void {
-    this.jsonService
-      .getHotelList(formData)
-      .pipe(delay(1500))
+  private setupDebouncedHotelSearch() {
+    this.triggerSearch
+      .pipe(
+        debounceTime(1500),
+        switchMap(() => {
+          const [formData, filters] = [this.searchForm, this.currentFilters];
+          const params = this.buildQueryParams(formData, filters);
+          return this.hotelService.getHotels(params);
+        })
+      )
       .subscribe({
-        next: (hotels: Hotel[]) => {
-          this.hotels = this.getFilteredData(hotels, filters);
-          // this.getMinAndMaxPrice(this.hotels);
-          this.totalPages = Math.ceil(this.hotels?.length / 10);
+        next: (res) => {
+          this.hotels = res.data;
+          this.totalItems = res.total;
+          this.totalPages = Math.ceil(res.total / 10);
         },
-        error: (error) => {
-          console.error(error);
-        }
+        error: (err) => console.error('Failed to get hotels', err)
       });
   }
 
-  private getFilteredData(hotels: Hotel[], filters: Filters): Hotel[] {
-    if (!filters) return hotels;
+  private buildQueryParams(formData: SearchForm, filters?: Filters): SearchHotelsReq {
+    const { destination, checkIn, checkOut, guests } = formData;
 
-    const filteredData = [...hotels];
+    const searchParams = {
+      destination: destination.id.toString(),
+      checkIn: Library.convertDate(checkIn),
+      checkOut: Library.convertDate(checkOut),
+      guests,
+      limit: 10,
+      page: this.currentPage
+    };
 
-    return filteredData.filter((hotel) => {
-      return (
-        this.filterByPrice(hotel.price, filters) &&
-        this.filterByPropertyType(hotel.propertyType, filters) &&
-        this.filterByAmenities(hotel.mainFacilities, filters) &&
-        this.filterByReviews(hotel.rating, filters)
-      );
-    });
-  }
+    if (!filters) return searchParams;
 
-  private filterByPrice(price: number, filters: Filters): boolean {
-    return !filters.price || (price >= filters.price.min && price <= filters.price.max);
-  }
+    console.log('filters', filters);
 
-  private filterByPropertyType(propertyType: string, filters: Filters): boolean {
-    return !filters.propertyType || filters.propertyType[propertyType];
-  }
+    const filtersParams = {
+      minPrice: filters?.price?.min?.toString(),
+      maxPrice: filters?.price?.max?.toString()
+      // amenities: Object.keys(filters?.amenities).filter((key) => filters?.amenities[key]),
+      // ratings: Object.keys(filters?.reviews).filter((key) => filters?.reviews[key])
+    };
 
-  private filterByAmenities(mainFacilities: { [key: string]: boolean }, filters: Filters): boolean {
-    return !filters.amenities || Object.keys(filters.amenities).every((key) => mainFacilities[key]);
-  }
-
-  private filterByReviews(rating: number, filters: Filters): boolean {
-    let ratingKey = '';
-
-    if (rating >= 2 && rating < 3) ratingKey = 'twoStars';
-    if (rating >= 3 && rating < 4) ratingKey = 'threeStars';
-    if (rating >= 4 && rating < 5) ratingKey = 'fourStars';
-    if (rating == 5) ratingKey = 'fiveStars';
-    if (!rating) ratingKey = 'unrated';
-
-    return !filters.reviews || filters.reviews[ratingKey];
-  }
-
-  private getMinAndMaxPrice(hotels: Hotel[]): void {
-    if (!hotels) {
-      this.minValue = 0;
-      this.maxValue = 0;
-      return;
-    }
-
-    const { min, max } = hotels.reduce(
-      (acc, hotel) => {
-        return { min: Math.min(acc.min, hotel.price), max: Math.max(acc.max, hotel.price) };
-      },
-      { min: Number.MAX_VALUE, max: Number.MIN_VALUE }
-    );
-
-    this.minValue = min;
-    this.maxValue = max;
-
-    this.options = this.setSliderOptions();
+    return { ...searchParams, ...filtersParams };
   }
 
   private setSliderOptions(): Options {

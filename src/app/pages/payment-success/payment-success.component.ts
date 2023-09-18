@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Hotel } from './../../interfaces/hotel';
 import { BookingDetails } from './../../interfaces/booking-details';
 import { JSONService } from '../../services/json.service';
-import { Library } from './../../shared/library';
+import { Library } from '../../shared/moment-utils';
 
 @Component({
   selector: 'app-payment-success',

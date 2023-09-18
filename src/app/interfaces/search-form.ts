@@ -1,6 +1,8 @@
+import { APIRegion } from "../api/hotels/region.model";
+
 export interface SearchForm {
-  destination?: string;
-  checkIn: string;
-  checkOut: string;
+  destination?: APIRegion;
+  checkIn: Date;
+  checkOut: Date;
   guests: number;
 }

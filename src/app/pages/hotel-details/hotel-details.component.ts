@@ -6,7 +6,7 @@ import { Hotel } from './../../interfaces/hotel';
 import { SearchForm } from '../../interfaces/search-form';
 import { JSONService } from '../../services/json.service';
 import { UtilsService } from './../../services/utils.service';
-import { Library } from './../../shared/library';
+import { Library } from '../../shared/moment-utils';
 
 @Component({
   selector: 'app-hotel-details',
@@ -47,10 +47,11 @@ export class HotelDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = JSON.parse(sessionStorage.getItem('searchForm'));
+    const { checkIn, checkOut } = this.searchForm;
 
     this.bookingForm = this.formBuilder.group({
-      checkIn: [Library.parseDate(this.searchForm.checkIn), Validators.required],
-      checkOut: [Library.parseDate(this.searchForm.checkOut), Validators.required],
+      checkIn: [checkIn, Validators.required],
+      checkOut: [checkOut, Validators.required],
       guests: [this.searchForm.guests, Validators.required]
     });
 

@@ -1,4 +1,4 @@
-export interface HotelDetailsRequest {
+export interface HotelDetailsReq {
   hotelId: string;
   checkIn: string;
   checkOut: string;
