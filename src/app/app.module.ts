@@ -10,6 +10,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -48,6 +49,7 @@ import { AuthGuard } from './auth/auth.guard';
     MessagesModule,
     MessageModule,
     ToastModule,
+    AutoCompleteModule,
     ComponentsModule,
     SearchResultsModule
   ],

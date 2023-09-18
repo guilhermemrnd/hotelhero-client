@@ -5,47 +5,46 @@
         <form class="d-flex" [formGroup]="searchForm">
           <div class="me-3 ms-2">
             <label for="destination">Destino</label>
-            <input
+            <p-autoComplete
               formControlName="destination"
-              class="form-control"
-              type="text"
-              placeholder="Qual seu destino?"
-            />
+              [suggestions]="regions"
+              (completeMethod)="searchRegions($event)"
+              placeholder="Where are you going?"
+              field="name"
+            ></p-autoComplete>
           </div>
 
           <div class="me-3">
             <label for="checkIn">Check-in</label>
-            <input
+            <p-calendar
               formControlName="checkIn"
-              class="form-control"
-              onfocus="this.type='date'"
-              onblur="this.type='text'"
-              placeholder="Escolha uma data"
-            />
+              placeholder="Pick a date"
+              [minDate]="currentDate"
+              dateFormat="dd/mm/yy"
+            ></p-calendar>
           </div>
 
           <div class="me-3">
             <label for="checkOut">Check-out</label>
-            <input
+            <p-calendar
               formControlName="checkOut"
-              class="form-control"
-              onfocus="this.type='date'"
-              onblur="this.type='text'"
-              placeholder="Escolha uma data"
-            />
+              placeholder="Pick a date"
+              [minDate]="minCheckOutDate"
+              dateFormat="dd/mm/yy"
+            ></p-calendar>
           </div>
 
           <div class="me-3">
             <label for="guests">Hóspedes</label>
-            <input
+            <p-inputNumber
               formControlName="guests"
-              class="form-control"
-              type="number"
-              placeholder="Quantos hóspedes?"
-            />
+              [suffix]="getFieldValue('guests') > 1 ? ' guests' : ' guest'"
+              placeholder="Add guests"
+              [min]="1"
+            ></p-inputNumber>
           </div>
 
-          <button class="btn ms-2" (click)="navigate()">
+          <button class="btn search-btn ms-2" type="submit" (click)="navigate()">
             <i class="bi bi-search"></i>
           </button>
         </form>
