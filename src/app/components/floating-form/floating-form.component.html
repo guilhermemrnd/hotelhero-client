@@ -10,12 +10,16 @@
       </span>
       <p-autoComplete
         #inputElement
-        formControlName="destination"
         field="name"
+        formControlName="destination"
         [suggestions]="regions"
-        (onBlur)="updateDestinationField()"
+        (onHide)="updateDestinationField()"
+        (completeMethod)="searchRegions($event.query)"
         *ngIf="editingField === 'destination'"
+        [forceSelection]="true"
         [autofocus]="true"
+        [minLength]="3"
+        [delay]="300"
       ></p-autoComplete>
     </div>
 
@@ -34,7 +38,7 @@
         [required]="true"
         [baseZIndex]="999"
         [minDate]="currentDate"
-        (onBlur)="updateDatesField()"
+        (onClickOutside)="updateDatesField()"
         *ngIf="editingField === 'dates'"
       ></p-calendar>
     </div>
@@ -45,19 +49,21 @@
       <span class="fw-bold" *ngIf="editingField !== 'guests'" (click)="toggleEdit('guests')">
         {{ getFieldValue('guests') }} guest<span *ngIf="getFieldValue('guests') > 1">s</span>
       </span>
-      <input
+      <p-inputNumber
         #inputElement
         formControlName="guests"
+        [suffix]="getFieldValue('guests') > 1 ? ' guests' : ' guest'"
         *ngIf="editingField === 'guests'"
-        (blur)="updateGuestsField()"
-        style="min-width: 44px"
-        class="form-control"
-        type="number"
-        autofocus
-      />
+        (onBlur)="updateGuestsField()"
+        [min]="1"
+      ></p-inputNumber>
     </div>
 
-    <button class="btn ms-3 me-2" (click)="searchHotels()" [disabled]="searchForm.invalid">
+    <button
+      class="btn btn-search ms-3 me-2"
+      (click)="searchHotels()"
+      [disabled]="searchForm.invalid"
+    >
       <i class="bi bi-search"></i>
     </button>
   </form>

@@ -38,11 +38,11 @@ import { AuthGuard } from './auth/auth.guard';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     CalendarModule,
     InputNumberModule,
     InputMaskModule,

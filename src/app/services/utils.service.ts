@@ -50,7 +50,7 @@ export class Utils {
   }
 
   public static formatQueryParams(formData: SearchForm): any {
-    const destination = formData.destination.name;
+    const destination = formData.destination.name.split(',')[0];
     const checkIn = Library.convertDate(formData.checkIn);
     const checkOut = Library.convertDate(formData.checkOut);
     return { destination, checkIn, checkOut, guests: formData.guests };

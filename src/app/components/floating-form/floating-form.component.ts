@@ -48,18 +48,6 @@ export class FloatingFormComponent implements OnInit {
       guests: [this.formData.guests, [Validators.required, Validators.min(1)]]
     });
 
-    this.searchForm
-      .get('destination')
-      .valueChanges.pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        filter((search) => search.length > 2),
-        switchMap((search) => this.hotelService.getRegions(search))
-      )
-      .subscribe((regions: APIRegion[]) => {
-        this.regions = regions;
-      });
-
     this.searchForm.get('dates').valueChanges.subscribe((dates: Date[]) => {
       this.validateDateRange(dates);
     });
@@ -68,6 +56,12 @@ export class FloatingFormComponent implements OnInit {
   public searchHotels(): void {
     Utils.persistSearchForm(this.formData);
     this.searchEvent.emit(this.formData);
+  }
+
+  public searchRegions(query: string): void {
+    this.hotelService.getRegions(query).subscribe((regions: APIRegion[]) => {
+      this.regions = regions;
+    });
   }
 
   public getFieldValue(fieldName: string): any {

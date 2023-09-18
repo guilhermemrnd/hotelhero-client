@@ -1,3 +1,13 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+  name="search-spinner"
+>
+  <p style="font-size: 16px; color: white; margin-top: 12px">Loading...</p>
+</ngx-spinner>
+
 <div class="container">
   <app-floating-form [formData]="searchForm" (searchEvent)="onSearch($event)"></app-floating-form>
 
@@ -31,9 +41,10 @@
         </div>
       </div>
     </div>
+
     <div class="col-md-9">
       <span class="d-block mb-3" style="color: #171a1fff">
-        {{ searchForm.destination.name }}: {{ totalItems }} acomodações encontradas
+        {{ searchForm.destination.name.split(',')[0] }}: {{ totalItems }} acomodações encontradas
       </span>
 
       <div class="hotel-card" *ngFor="let hotel of hotels">

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
 import { BehaviorSubject, debounceTime, switchMap } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { HotelService } from './../../api/hotels/hotel.service';
 import { Utils } from './../../services/utils.service';
@@ -34,9 +35,10 @@ export class SearchResultsComponent implements OnInit {
   options: Options = this.setSliderOptions();
 
   constructor(
-    private router: Router,
+    private hotelService: HotelService,
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
-    private hotelService: HotelService
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -116,6 +118,7 @@ export class SearchResultsComponent implements OnInit {
       .pipe(
         debounceTime(1500),
         switchMap(() => {
+          this.spinner.show('search-spinner');
           const [formData, filters] = [this.searchForm, this.currentFilters];
           const params = this.buildQueryParams(formData, filters);
           return this.hotelService.getHotels(params);
@@ -126,8 +129,12 @@ export class SearchResultsComponent implements OnInit {
           this.hotels = res.data;
           this.totalItems = res.total;
           this.totalPages = Math.ceil(res.total / 10);
+          this.spinner.hide('search-spinner');
         },
-        error: (err) => console.error('Failed to get hotels', err)
+        error: (err) => {
+          this.spinner.hide('search-spinner');
+          console.error('Failed to get hotels', err);
+        }
       });
   }
 
