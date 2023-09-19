@@ -7,8 +7,8 @@
       <h5>
         <a [routerLink]="['/hotel-details', hotel.id]">{{ hotel.name }}</a>
         <i
-          [ngClass]="isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
-          [title]="isFavorite ? 'Unsave' : 'Save'"
+          [ngClass]="hotel.isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
+          [title]="hotel.isFavorite ? 'Unsave' : 'Save'"
           (click)="toggleFavorite()"
         ></i>
       </h5>

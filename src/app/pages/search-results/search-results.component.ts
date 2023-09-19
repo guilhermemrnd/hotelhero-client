@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
-import { BehaviorSubject, debounceTime, switchMap } from 'rxjs';
+import { BehaviorSubject, debounceTime, switchMap, tap } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { Utils } from './../../services/utils.service';
 import { Library } from './../../shared/moment-utils';
@@ -20,6 +21,7 @@ import { SearchHotelsReq } from './../../api/interfaces/search-hotels-req';
 })
 export class SearchResultsComponent implements OnInit {
   private triggerSearch = new BehaviorSubject<void>(null);
+  private userId: string | null = null;
 
   searchForm: SearchForm;
   currentFilters: Filters;
@@ -35,6 +37,7 @@ export class SearchResultsComponent implements OnInit {
   options: Options = this.setSliderOptions();
 
   constructor(
+    private authService: AuthService,
     private hotelService: HotelService,
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
@@ -42,12 +45,15 @@ export class SearchResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params: SearchForm) => {
-      this.searchForm = JSON.parse(sessionStorage.getItem('searchForm'));
-      this.triggerSearch.next();
+    this.searchForm = Utils.fetchSearchForm();
+
+    this.authService.userId$.subscribe((userId) => {
+      if (userId) this.userId = userId;
     });
 
     this.setupDebouncedHotelSearch(); // Set up subscription for delayed hotel searc
+
+    this.triggerSearch.next();
   }
 
   public onSearch(event: SearchForm): void {
@@ -73,11 +79,11 @@ export class SearchResultsComponent implements OnInit {
 
     if (max === 1000) {
       this.currentFilters = { ...this.currentFilters, price: { min } };
-      this.triggerSearch.next();
     } else {
       this.currentFilters = { ...this.currentFilters, price: { min, max } };
-      this.triggerSearch.next();
     }
+
+    this.triggerSearch.next();
   }
 
   public changePage(newPage: number) {
@@ -116,9 +122,9 @@ export class SearchResultsComponent implements OnInit {
   private setupDebouncedHotelSearch() {
     this.triggerSearch
       .pipe(
+        tap(() => this.spinner.show('search-spinner')),
         debounceTime(1500),
         switchMap(() => {
-          this.spinner.show('search-spinner');
           const [formData, filters] = [this.searchForm, this.currentFilters];
           const params = this.buildQueryParams(formData, filters);
           return this.hotelService.getHotels(params);
@@ -149,6 +155,8 @@ export class SearchResultsComponent implements OnInit {
       limit: 10,
       page: this.currentPage
     };
+
+    if (this.userId) params.userId = this.userId;
 
     if (!filters) return params;
 

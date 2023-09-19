@@ -11,11 +11,11 @@ export class Utils {
   constructor() {}
 
   public static persistSearchForm(formData: SearchForm) {
-    sessionStorage.setItem('searchForm', JSON.stringify(formData));
+    localStorage.setItem('searchForm', JSON.stringify(formData));
   }
 
   public static fetchSearchForm(): SearchForm {
-    return JSON.parse(sessionStorage.getItem('searchForm'));
+    return JSON.parse(localStorage.getItem('searchForm'));
   }
 
   public static formatDates(

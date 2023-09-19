@@ -54,12 +54,14 @@
       <nav aria-label="Navegação" *ngIf="totalPages > 1">
         <ul class="pagination justify-content-center">
           <li class="page-item" [class.disabled]="currentPage === 1">
-            <a class="page-link" (click)="changePage(currentPage - 1)"><</a>
+            <a class="page-link" aria-label="Previous Page" (click)="changePage(currentPage - 1)">
+              <
+            </a>
           </li>
 
           <li
             *ngFor="let page of getDisplayedPages()"
-            [class.active]="page + 1 === currentPage"
+            [class.active]="page === currentPage"
             [class.disabled]="page === -1"
             class="page-item"
           >
@@ -68,7 +70,7 @@
           </li>
 
           <li class="page-item" [class.disabled]="currentPage === totalPages">
-            <a class="page-link" (click)="changePage(currentPage + 1)">></a>
+            <a class="page-link" aria-label="Next Page" (click)="changePage(currentPage + 1)">></a>
           </li>
         </ul>
       </nav>

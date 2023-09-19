@@ -14,6 +14,7 @@ export interface APIHotel {
   photos: string[];
   maxGuests: number;
   bathrooms: number;
+  isFavorite?: boolean;
   region?: APIRegion;
   ameneities?: APIAmenity[];
   bookings?: APIBooking[];

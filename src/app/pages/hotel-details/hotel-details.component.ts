@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Hotel } from './../../interfaces/hotel';
 import { SearchForm } from '../../interfaces/search-form';
 import { JSONService } from '../../services/json.service';
 import { Utils } from './../../services/utils.service';
-import { Library } from '../../shared/moment-utils';
+
+import { Hotel } from './../../interfaces/hotel';
 
 @Component({
   selector: 'app-hotel-details',
@@ -45,7 +45,7 @@ export class HotelDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.searchForm = JSON.parse(sessionStorage.getItem('searchForm'));
+    this.searchForm = Utils.fetchSearchForm();
     const { checkIn, checkOut } = this.searchForm;
 
     this.bookingForm = this.formBuilder.group({

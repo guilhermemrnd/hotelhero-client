@@ -44,7 +44,8 @@ export class UserService extends BaseService {
 
   public toggleFavorite(userId: string, hotelId: number, isFavorite: boolean) {
     const url = `${this.API}/users/${userId}/favorite-hotels/${hotelId}`;
-    return this.httpClient.put<{ message: string }>(url, { isFavorite });
+    const [params, options] = [{ isFavorite }, { withCredentials: true }];
+    return this.httpClient.patch<{ message: string }>(url, params, options);
   }
 
   public deleteUser(id: string): Observable<{ message: string }> {

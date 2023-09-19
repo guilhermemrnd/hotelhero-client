@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const formData = JSON.parse(sessionStorage.getItem('searchForm'));
+    const formData = Utils.fetchSearchForm();
     this.searchForm = formData ? this.buildForm(formData) : this.buildForm();
     this.handleCheckInChange();
   }
@@ -52,8 +52,8 @@ export class HomeComponent implements OnInit {
 
   private buildForm(formData?: SearchForm): FormGroup {
     const destination = formData?.destination ?? '';
-    const checkIn = new Date(formData?.checkIn) ?? null;
-    const checkOut = new Date(formData?.checkOut) ?? null;
+    const checkIn = formData?.checkIn ? new Date(formData?.checkIn) : '';
+    const checkOut = formData?.checkOut ? new Date(formData?.checkOut) : '';
     const guests = formData?.guests ?? null;
 
     return this.formBuilder.group({

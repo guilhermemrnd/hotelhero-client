@@ -1,4 +1,5 @@
 export interface SearchHotelsReq {
+  userId?: string;
   destination: number;
   checkIn: string;
   checkOut: string;
