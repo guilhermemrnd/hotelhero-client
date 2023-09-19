@@ -6,11 +6,14 @@
           <div class="me-3 ms-2">
             <label for="destination">Destino</label>
             <p-autoComplete
-              formControlName="destination"
-              [suggestions]="regions"
-              (completeMethod)="searchRegions($event)"
-              placeholder="Where are you going?"
               field="name"
+              [suggestions]="regions"
+              formControlName="destination"
+              (completeMethod)="searchRegions($event.query)"
+              placeholder="Where are you going?"
+              [forceSelection]="true"
+              [minLength]="3"
+              [delay]="300"
             ></p-autoComplete>
           </div>
 

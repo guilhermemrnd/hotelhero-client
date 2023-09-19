@@ -141,7 +141,7 @@ export class SearchResultsComponent implements OnInit {
   private buildQueryParams(formData: SearchForm, filters?: Filters): SearchHotelsReq {
     const { destination, checkIn, checkOut, guests } = formData;
 
-    const params = {
+    const params: SearchHotelsReq = {
       destination: destination.id,
       checkIn: Library.convertDate(checkIn),
       checkOut: Library.convertDate(checkOut),
@@ -152,18 +152,18 @@ export class SearchResultsComponent implements OnInit {
 
     if (!filters) return params;
 
-    const {
-      price: { min, max },
-      amenities,
-      reviews
-    } = filters;
+    const { price, amenities, reviews } = filters;
 
-    if (min) params['minPrice'] = min;
-    if (max) params['maxPrice'] = max;
-    if (amenities) params['amenities'] = Object.keys(amenities).filter((key) => amenities[key]);
-    if (reviews) params['ratings'] = Object.keys(reviews).filter((key) => reviews[key]);
+    if (price?.min) params.minPrice = price.min;
+    if (price?.max) params.maxPrice = price.max;
+    if (amenities) params.amenities = this.getSelectedKeys(amenities);
+    if (reviews) params.ratings = this.getSelectedKeys(reviews);
 
     return params;
+  }
+
+  private getSelectedKeys(obj: { [key: string]: boolean }): string[] {
+    return Object.keys(obj).filter((key) => obj[key]);
   }
 
   private setSliderOptions(): Options {

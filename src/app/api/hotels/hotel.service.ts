@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { APIHotel } from './hotel.model';
 import { APIBooking } from '../bookings/booking.model';

@@ -32,8 +32,8 @@ export class HomeComponent implements OnInit {
     this.handleCheckInChange();
   }
 
-  public searchRegions(event: any): void {
-    this.hotelService.getRegions(event.query).subscribe((regions: APIRegion[]) => {
+  public searchRegions(query: string): void {
+    this.hotelService.getRegions(query).subscribe((regions: APIRegion[]) => {
       this.regions = regions;
     });
   }
@@ -51,15 +51,20 @@ export class HomeComponent implements OnInit {
   }
 
   private buildForm(formData?: SearchForm): FormGroup {
+    const destination = formData?.destination ?? '';
+    const checkIn = new Date(formData?.checkIn) ?? null;
+    const checkOut = new Date(formData?.checkOut) ?? null;
+    const guests = formData?.guests ?? null;
+
     return this.formBuilder.group({
-      destination: [formData?.destination ?? '', Validators.required],
-      checkIn: [formData?.checkIn ?? '', Validators.required],
-      checkOut: [formData?.checkOut ?? '', Validators.required],
-      guests: [formData?.guests ?? null, [Validators.required, Validators.min(1)]]
+      destination: [destination, Validators.required],
+      checkIn: [checkIn, Validators.required],
+      checkOut: [checkOut, Validators.required],
+      guests: [guests, [Validators.required, Validators.min(1)]]
     });
   }
 
-  private handleCheckInChange() {
+  private handleCheckInChange(): void {
     this.searchForm.get('checkIn').valueChanges.subscribe((selectedDate: Date) => {
       this.minCheckOutDate = new Date(selectedDate);
       this.minCheckOutDate.setDate(this.minCheckOutDate.getDate() + 1);
