@@ -20,7 +20,7 @@ export class PaymentSuccessComponent implements OnInit {
   ngOnInit() {
     this.reservation = this.jsonService.getBookingDetails();
 
-    this.jsonService.getHotelById(this.reservation.hotelID).subscribe((data) => {
+    this.jsonService.getHotelById(this.reservation.hotelId).subscribe((data) => {
       this.hotel = data;
     });
   }

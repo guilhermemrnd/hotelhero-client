@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
+import { Utils } from './../services/utils.service';
 import { environment } from './../../environments/environment';
 import { IsAuthenticatedRes } from '../api/interfaces/is-authenticated-res';
 
@@ -11,35 +12,28 @@ import { IsAuthenticatedRes } from '../api/interfaces/is-authenticated-res';
 export class AuthService {
   private readonly API = environment.apiURL;
 
-  private _isLoggedIn = new BehaviorSubject<boolean>(false);
-  public isLoggedIn$ = this._isLoggedIn.asObservable();
-
-  private _userId = new BehaviorSubject<string>(null);
-  public userId$ = this._userId.asObservable();
-
   constructor(private http: HttpClient) {
-    this.isAuthenticated().subscribe((res) => {
-      if (res.authenticated) {
-        this._userId.next(res.userId);
-        this._isLoggedIn.next(true);
-      }
-    });
+    if (!Utils.checkLoggedIn()) {
+      this.isAuthenticated().subscribe((res) => {
+        if (res.authenticated) {
+          Utils.saveToLocalStorage(Utils.USER_ID_KEY, res.userId);
+          Utils.saveToLocalStorage(Utils.LOGGED_IN_KEY, true);
+        }
+      });
+    }
   }
 
   public login(email: string, password: string, rememberMe: boolean) {
     const { url, options } = this.getUrlAndOptions('auth/login', true);
     const credentials = { email, password, rememberMe };
-    return this.http.post(url, credentials, options).pipe(tap(() => this._isLoggedIn.next(true)));
+    return this.http.post(url, credentials, options);
   }
 
   public logout(): void {
     const { url, options } = this.getUrlAndOptions('auth/logout', true);
-    this.http
-      .post(url, {}, options)
-      .pipe(tap(() => this._isLoggedIn.next(false)))
-      .subscribe(() => {
-        window.location.href = '/login';
-      });
+    this.http.post(url, {}, options).subscribe(() => {
+      window.location.href = '/login';
+    });
   }
 
   public isAuthenticated(): Observable<IsAuthenticatedRes> {

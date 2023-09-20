@@ -14,7 +14,6 @@ import { HotelService } from './../../api/hotels/hotel.service';
 import { Utils } from './../../services/utils.service';
 import { APIRegion } from './../../api/hotels/region.model';
 import { SearchForm } from '../../interfaces/search-form';
-import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-floating-form',
@@ -54,7 +53,7 @@ export class FloatingFormComponent implements OnInit {
   }
 
   public searchHotels(): void {
-    Utils.persistSearchForm(this.formData);
+    Utils.saveToLocalStorage(Utils.SEARCH_FORM_KEY, this.formData);
     this.searchEvent.emit(this.formData);
   }
 

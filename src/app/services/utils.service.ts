@@ -8,14 +8,28 @@ import { SearchForm } from '../interfaces/search-form';
   providedIn: 'root'
 })
 export class Utils {
+  static readonly LOGGED_IN_KEY = 'loggedIn';
+  static readonly USER_ID_KEY = 'userId';
+  static readonly SEARCH_FORM_KEY = 'searchForm';
+  static readonly BOOKING_DETAILS_KEY = 'bookingDetails';
+
   constructor() {}
 
-  public static persistSearchForm(formData: SearchForm) {
-    localStorage.setItem('searchForm', JSON.stringify(formData));
+  public static saveToLocalStorage<T>(key: string, value: T): void {
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  public static fetchSearchForm(): SearchForm {
-    return JSON.parse(localStorage.getItem('searchForm'));
+  public static getFromLocalStorage<T>(key: string): T {
+    return JSON.parse(localStorage.getItem(key));
+  }
+
+  public static checkLoggedIn(): boolean {
+    const loggedIn = this.getFromLocalStorage<boolean>(this.LOGGED_IN_KEY);
+    return loggedIn === true;
+  }
+
+  public static getLoggedInUserId(): string | null {
+    return this.getFromLocalStorage<string>(this.USER_ID_KEY);
   }
 
   public static formatDates(
@@ -49,7 +63,7 @@ export class Utils {
     return nights <= 1 ? price : price * nights;
   }
 
-  public static formatQueryParams(formData: SearchForm): any {
+  public static formatSearchFormForURL(formData: SearchForm): any {
     const destination = formData.destination.name.split(',')[0];
     const checkIn = Library.convertDate(formData.checkIn);
     const checkOut = Library.convertDate(formData.checkOut);

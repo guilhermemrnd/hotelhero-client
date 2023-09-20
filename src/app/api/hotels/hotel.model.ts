@@ -16,6 +16,6 @@ export interface APIHotel {
   bathrooms: number;
   isFavorite?: boolean;
   region?: APIRegion;
-  ameneities?: APIAmenity[];
+  amenities?: APIAmenity[];
   bookings?: APIBooking[];
 }

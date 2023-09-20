@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { SearchForm } from '../../interfaces/search-form';
-import { JSONService } from '../../services/json.service';
+import { HotelService } from './../../api/hotels/hotel.service';
+import { UserService } from './../../api/users/user.service';
+import { Library } from './../../shared/moment-utils';
 import { Utils } from './../../services/utils.service';
 
-import { Hotel } from './../../interfaces/hotel';
+import { APIHotel } from './../../api/hotels/hotel.model';
+import { SearchForm } from '../../interfaces/search-form';
+import { BookingDetails } from './../../interfaces/booking-details';
+import { HotelDetailsReq } from './../../api/interfaces/hotel-details-req';
 
 @Component({
   selector: 'app-hotel-details',
@@ -17,51 +21,65 @@ export class HotelDetailsComponent implements OnInit {
   readonly NEW_USER_DISCOUNT = 50;
   readonly HOTEL_FEE = 24.99;
 
-  searchForm: SearchForm;
+  public searchForm: SearchForm;
 
-  bookingForm: FormGroup;
+  public bookingForm: FormGroup;
 
-  hotel: Hotel;
+  public hotel: APIHotel;
 
-  mainFacilities = [
-    { key: 'wifi', label: 'Wi-Fi gratuito', icon: 'fa-wifi' },
-    { key: 'parking', label: 'Estacionamento gratuto', icon: 'fa-parking' },
-    { key: 'reception_24h', label: 'Recepção 24 horas', icon: 'fa-concierge-bell' },
-    { key: 'access_card', label: 'Cartão de acesso', icon: 'fa-key' },
-    { key: 'air_conditioning', label: 'Ar-condicionado', icon: 'fa-snowflake' },
-    { key: 'outdoor_pool', label: 'Piscina ao ar livre', icon: 'fa-swimming-pool' },
-    { key: 'room_service', label: 'Serviço de quarto', icon: 'fa-broom' },
-    { key: 'breakfast', label: 'Café da manhã', icon: 'fa-coffee' },
-    { key: 'airport_transfer', label: 'Transfer (aeroporto)', icon: 'fa-shuttle-van' }
+  public filteredAmenities = [];
+  public mainFacilities = [
+    { label: 'Free WiFi', icon: 'fas fa-wifi' },
+    { label: 'Free parking', icon: 'fas fa-parking' },
+    { label: 'Room service', icon: 'fas fa-concierge-bell' },
+    { label: '24-hour front desk', icon: 'bi bi-alarm' },
+    { label: 'Air conditioning', icon: 'fas fa-snowflake' },
+    { label: 'Swimming pool', icon: 'fas fa-swimming-pool' },
+    { label: 'Minibar', icon: 'fas fa-glass-martini-alt' },
+    { label: 'Non-smoking rooms', icon: 'bi bi-slash-circle' },
+    { label: 'Airport shuttle', icon: 'fas fa-shuttle-van' },
+    { label: 'Fitness center', icon: 'fas fa-dumbbell' },
+    { label: 'Spa/Wellness packages', icon: 'fas fa-spa' },
+    { label: 'Ocean view', icon: 'fas fa-eye' }
   ];
 
-  currentDate: Date = new Date();
+  public currentDate = new Date();
+  public minCheckOutDate = new Date();
 
   constructor(
+    private hotelService: HotelService,
+    private userService: UserService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
-    private jsonService: JSONService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.searchForm = Utils.fetchSearchForm();
+    this.searchForm = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
+    if (!this.searchForm) window.location.href = '/';
+
     const { checkIn, checkOut } = this.searchForm;
 
     this.bookingForm = this.formBuilder.group({
-      checkIn: [checkIn, Validators.required],
-      checkOut: [checkOut, Validators.required],
+      checkIn: [new Date(checkIn), Validators.required],
+      checkOut: [new Date(checkOut), Validators.required],
       guests: [this.searchForm.guests, Validators.required]
     });
 
-    const hotelID = this.route.snapshot.paramMap.get('id');
-    this.jsonService.getHotelById(+hotelID).subscribe((data) => {
-      this.hotel = data;
+    const hotelId = this.route.snapshot.paramMap.get('id');
+
+    const params = this.buildQueryParams(this.bookingForm.value, hotelId);
+    this.hotelService.getHotelDetails(params).subscribe((hotel) => {
+      this.hotel = hotel;
+      this.setupHotelAmenities(hotel);
     });
+
+    this.handleCheckInChange();
   }
 
   public onSearch(event: SearchForm): void {
-    this.router.navigate(['/search'], { queryParams: event });
+    const queryParams = Utils.formatSearchFormForURL(event);
+    this.router.navigate(['/search'], { queryParams });
   }
 
   public shareProperty(): void {
@@ -69,7 +87,7 @@ export class HotelDetailsComponent implements OnInit {
       navigator
         .share({
           title: this.hotel.name,
-          text: this.hotel.shortDescription,
+          text: this.hotel.description,
           url: window.location.href
         })
         .then(() => console.log('Successful share'))
@@ -77,9 +95,14 @@ export class HotelDetailsComponent implements OnInit {
     }
   }
 
-  public toggleFavorite(hotel: Hotel): void {
+  public toggleFavorite(hotel: APIHotel): void {
+    if (!Utils.checkLoggedIn()) {
+      return alert('You must be logged in to favorite hotels');
+    }
+
+    const userId = Utils.getLoggedInUserId();
     hotel.isFavorite = !hotel.isFavorite;
-    this.jsonService.toggleFavorite(hotel).subscribe({
+    this.userService.toggleFavorite(userId, hotel.id, hotel.isFavorite).subscribe({
       error: (e) => console.error('Error updating favorite status', e)
     });
   }
@@ -103,15 +126,51 @@ export class HotelDetailsComponent implements OnInit {
     return dailyPrices + this.HOTEL_FEE - this.NEW_USER_DISCOUNT;
   }
 
-  public hasFacility(key: string): boolean {
-    return this.hotel?.mainFacilities[key];
+  public setupHotelAmenities(hotel: APIHotel): void {
+    this.filteredAmenities = hotel?.amenities
+      .filter((amenity) => this.mainFacilities.some((f) => f.label === amenity.name))
+      .slice(0, 9);
+  }
+
+  public findIconByLabel(amenityName: string): string {
+    const facility = this.mainFacilities.find((f) => f.label === amenityName);
+    return facility ? facility.icon : '';
   }
 
   public navigateToCheckout(): void {
+    if (!Utils.checkLoggedIn()) {
+      return alert('You must be logged in to book hotels');
+    }
+
     if (this.bookingForm.valid) {
-      const bookingDetails = { ...this.bookingForm.value, hotelID: this.hotel.id };
-      this.jsonService.setBookingDetails(bookingDetails);
+      const bookingDetails = { ...this.bookingForm.value, hotelId: this.hotel.id };
+      Utils.saveToLocalStorage<BookingDetails>(Utils.BOOKING_DETAILS_KEY, bookingDetails);
+      // this.jsonService.setBookingDetails(bookingDetails);
       this.router.navigate(['/checkout']);
     }
+  }
+
+  private buildQueryParams(formData: SearchForm, hotelId: string): HotelDetailsReq {
+    const userId = Utils.getLoggedInUserId();
+
+    const params = {
+      hotelId: Number(hotelId),
+      checkIn: Library.convertDate(formData.checkIn),
+      checkOut: Library.convertDate(formData.checkOut),
+      guests: formData.guests
+    };
+
+    return userId ? { ...params, userId } : params;
+  }
+
+  private handleCheckInChange(): void {
+    this.bookingForm.get('checkIn').valueChanges.subscribe((selectedDate: Date) => {
+      this.minCheckOutDate = new Date(selectedDate);
+      this.minCheckOutDate.setDate(this.minCheckOutDate.getDate() + 1);
+
+      if (this.getFieldValue('checkOut') < this.minCheckOutDate) {
+        this.bookingForm.patchValue({ checkOut: this.minCheckOutDate });
+      }
+    });
   }
 }

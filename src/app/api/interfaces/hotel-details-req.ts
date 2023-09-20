@@ -1,6 +1,7 @@
 export interface HotelDetailsReq {
-  hotelId: string;
+  userId?: string;
+  hotelId: number;
   checkIn: string;
   checkOut: string;
-  guests: string;
+  guests: number;
 }

@@ -7,7 +7,7 @@
       <div class="title-section align-items-center">
         <i class="fas fa-star"></i>
         <span class="rating">{{ hotel?.rating }}</span>
-        <span class="reviews">({{ hotel?.reviews }} reviews)</span>
+        <span class="reviews">({{ hotel?.numberOfReviews }} reviews)</span>
         <span class="point">•</span>
         <span class="address">{{ hotel?.address }}</span>
       </div>
@@ -29,14 +29,14 @@
 
   <div class="gallery-section row pt-3">
     <div class="col-md-9 px-2">
-      <img [src]="hotel?.images[1]" class="img-fluid main-image w-100" />
+      <img [src]="hotel?.photos[1]" class="img-fluid main-image w-100" />
     </div>
     <div class="col-md-3 px-0">
       <div class="d-flex flex-column">
         <div class="position-relative">
-          <img [src]="hotel?.images[2]" class="img-fluid side-image" />
-          <img [src]="hotel?.images[3]" class="img-fluid side-image" />
-          <img [src]="hotel?.images[4]" class="img-fluid side-image" />
+          <img [src]="hotel?.photos[2]" class="img-fluid side-image" />
+          <img [src]="hotel?.photos[3]" class="img-fluid side-image" />
+          <img [src]="hotel?.photos[4]" class="img-fluid side-image" />
           <button class="btn-show-all"><i class="far fa-images"></i> See all photos</button>
         </div>
       </div>
@@ -48,12 +48,14 @@
       <div class="description-section">
         <h5 class="mb-3">Overview</h5>
         <div class="d-block mb-3">
-          <p class="fw-bold">
+          <!-- <p class="fw-bold" *ngIf="hotel?.roomDetails">
             <i class="fas fa-home fa-lg me-1"></i>
-            {{ hotel?.maxGuests }} guests • {{ hotel?.beds }} beds • {{ hotel?.bathrooms }} private baths
-          </p>
+            <span *ngIf="hotel?.maxGuests">{{ hotel.maxGuests }} guests</span>
+            <span *ngIf="hotel?.bathrooms">• {{ hotel.bathrooms }} private baths</span>
+            <span *ngIf="hotel?.beds">• {{ hotel.beds }} beds</span>
+          </p> -->
         </div>
-        <span [innerHTML]="hotel?.longDescription"></span>
+        <span style="white-space: pre-line">{{ hotel?.description }}</span>
       </div>
 
       <div class="separator my-4"></div>
@@ -61,10 +63,10 @@
       <div class="facilities-section">
         <h5 class="mb-4">Main Facilities</h5>
         <div class="d-flex flex-wrap">
-          <ng-container *ngFor="let facility of mainFacilities">
-            <div class="facility-item" *ngIf="hasFacility(facility.key)">
-              <i class="fas {{ facility.icon }} fa-lg"></i>
-              <span> {{ facility.label }} </span>
+          <ng-container *ngFor="let amenity of filteredAmenities">
+            <div class="facility-item">
+              <i class="{{ findIconByLabel(amenity.name) }}"></i>
+              <span> {{ amenity.name }} </span>
             </div>
           </ng-container>
         </div>
@@ -75,7 +77,7 @@
       <form [formGroup]="bookingForm" class="booking-section">
         <div class="d-flex mb-4">
           <span class="daily-price">
-            <strong>{{ hotel?.price | currency }}</strong
+            <strong>{{ hotel?.dailyPrice | currency }}</strong
             >/night
           </span>
           <div class="rating">
@@ -120,10 +122,10 @@
 
         <div class="d-flex mb-2">
           <span class="">
-            {{ hotel?.price | currency }} x {{ getTotalNights() }}
+            {{ hotel?.dailyPrice | currency }} x {{ getTotalNights() }}
             {{ getTotalNights() > 1 ? 'nights' : 'night' }}
           </span>
-          <span class="ms-auto">{{ getDailyPrices(hotel?.price) | currency }}</span>
+          <span class="ms-auto">{{ getDailyPrices(hotel?.dailyPrice) | currency }}</span>
         </div>
         <div class="d-flex mb-2">
           <span class="">New user discount</span>
@@ -138,7 +140,7 @@
 
         <div class="d-flex mb-3 fw-bold">
           <span class="">Total (USD)</span>
-          <span class="ms-auto">{{ getTotalPrice(hotel?.price) | currency }}</span>
+          <span class="ms-auto">{{ getTotalPrice(hotel?.dailyPrice) | currency }}</span>
         </div>
 
         <div class="d-grid">

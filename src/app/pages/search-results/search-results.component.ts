@@ -4,7 +4,6 @@ import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
 import { BehaviorSubject, debounceTime, switchMap, tap } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 
-import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { Utils } from './../../services/utils.service';
 import { Library } from './../../shared/moment-utils';
@@ -21,7 +20,6 @@ import { SearchHotelsReq } from './../../api/interfaces/search-hotels-req';
 })
 export class SearchResultsComponent implements OnInit {
   private triggerSearch = new BehaviorSubject<void>(null);
-  private userId: string | null = null;
 
   searchForm: SearchForm;
   currentFilters: Filters;
@@ -37,7 +35,6 @@ export class SearchResultsComponent implements OnInit {
   options: Options = this.setSliderOptions();
 
   constructor(
-    private authService: AuthService,
     private hotelService: HotelService,
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
@@ -45,11 +42,7 @@ export class SearchResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.searchForm = Utils.fetchSearchForm();
-
-    this.authService.userId$.subscribe((userId) => {
-      if (userId) this.userId = userId;
-    });
+    this.searchForm = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
 
     this.setupDebouncedHotelSearch(); // Set up subscription for delayed hotel searc
 
@@ -57,7 +50,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   public onSearch(event: SearchForm): void {
-    const queryParams = Utils.formatQueryParams(event);
+    const queryParams = Utils.formatSearchFormForURL(event);
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -156,7 +149,8 @@ export class SearchResultsComponent implements OnInit {
       page: this.currentPage
     };
 
-    if (this.userId) params.userId = this.userId;
+    const userId = Utils.getLoggedInUserId();
+    if (userId) params.userId = userId;
 
     if (!filters) return params;
 

@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const formData = Utils.fetchSearchForm();
+    const formData = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
     this.searchForm = formData ? this.buildForm(formData) : this.buildForm();
     this.handleCheckInChange();
   }
@@ -44,8 +44,9 @@ export class HomeComponent implements OnInit {
 
   public navigate(): void {
     if (this.searchForm.valid) {
-      Utils.persistSearchForm(this.searchForm.value);
-      const queryParams = Utils.formatQueryParams(this.searchForm.value);
+      const formData = this.searchForm.value as SearchForm;
+      Utils.saveToLocalStorage(Utils.SEARCH_FORM_KEY, formData);
+      const queryParams = Utils.formatSearchFormForURL(formData);
       this.router.navigate(['/search'], { queryParams });
     }
   }

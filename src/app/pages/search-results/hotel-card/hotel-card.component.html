@@ -9,7 +9,7 @@
         <i
           [ngClass]="hotel.isFavorite ? 'bi bi-suit-heart-fill' : 'bi bi-suit-heart'"
           [title]="hotel.isFavorite ? 'Unsave' : 'Save'"
-          (click)="toggleFavorite()"
+          (click)="toggleFavorite(hotel)"
         ></i>
       </h5>
 

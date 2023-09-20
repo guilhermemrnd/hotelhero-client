@@ -1,14 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { JSONService } from '../../services/json.service';
+import { Library } from '../../shared/moment-utils';
+import { Utils } from './../../services/utils.service';
 
 import { Hotel } from './../../interfaces/hotel';
 import { PaymentForm } from './../../interfaces/payment-form';
 import { BookingDetails } from './../../interfaces/booking-details';
-import { JSONService } from '../../services/json.service';
-import { Utils } from './../../services/utils.service';
-import { Library } from '../../shared/moment-utils';
 
 @Component({
   selector: 'app-checkout',
@@ -31,19 +38,19 @@ export class CheckoutComponent implements OnInit {
   editingField: string = null;
 
   constructor(
+    private jsonService: JSONService,
     private formBuilder: FormBuilder,
     private location: Location,
-    private router: Router,
-    private jsonService: JSONService
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.bookingDetails = this.jsonService.getBookingDetails();
+    this.bookingDetails = Utils.getFromLocalStorage<BookingDetails>(Utils.BOOKING_DETAILS_KEY);
 
     const { checkIn, checkOut } = this.bookingDetails;
     this.dates = [Library.parseDate(checkIn), Library.parseDate(checkOut)];
 
-    this.jsonService.getHotelById(this.bookingDetails.hotelID).subscribe({
+    this.jsonService.getHotelById(this.bookingDetails.hotelId).subscribe({
       next: (data) => (this.hotel = data),
       error: (err) => console.error('Failed to get hotel', err)
     });

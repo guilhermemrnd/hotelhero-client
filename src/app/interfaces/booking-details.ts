@@ -1,7 +1,7 @@
 export interface BookingDetails {
   id: number;
-  userID: number;
-  hotelID: number;
+  userId: number;
+  hotelId: number;
   checkIn: string;
   checkOut: string;
   guests: number;
