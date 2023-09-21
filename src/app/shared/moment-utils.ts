@@ -26,4 +26,8 @@ export class Library {
   public static parseDate(date: string): Date {
     return moment(date).toDate();
   }
+
+  public static formatStringDate(date: string): string {
+    return moment(date).format(this.MOMENT_FORMAT);
+  }
 }

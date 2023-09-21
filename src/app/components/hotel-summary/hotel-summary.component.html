@@ -1,21 +1,25 @@
 <div class="d-flex">
   <div class="col-md-6 pe-2">
-    <img src="{{ hotel?.images[0] }}" alt="" class="img-fluid rounded-1 w-100" />
+    <img
+      src="{{ hotel?.photos[0] }}"
+      class="img-fluid rounded-1 w-100"
+      style="max-height: 160px"
+    />
   </div>
   <div class="col-md-6">
     <div class="d-flex flex-column h-100 mb-3">
       <h5>{{ hotel?.name }}</h5>
 
-      <div class="mini-separator mb-2"></div>
+      <!-- <div class="mini-separator mb-2"></div> -->
 
-      <span class="d-block light-text">
-        {{ hotel?.maxGuests }} guests • {{ hotel?.beds }} beds • {{ hotel?.bathrooms }} private bath
-      </span>
+      <!-- <span class="d-block light-text"> {{ hotel?.maxGuests }} guests </span> -->
+      <!-- <span class="d-block light-text"> {{ hotel?.beds }} beds </span> -->
+      <!-- <span class="d-block light-text"> {{ hotel?.bathrooms }} private bath </span> -->
 
       <div class="mt-auto">
         <i class="fas fa-star me-1" style="color: orange"></i>
         <span class="fw-bold me-1">{{ hotel?.rating }}</span>
-        <span class="light-text">({{ hotel?.reviews }} reviews)</span>
+        <span class="light-text">({{ hotel?.numberOfReviews }} reviews)</span>
       </div>
     </div>
   </div>

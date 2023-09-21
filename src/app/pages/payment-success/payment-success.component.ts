@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Hotel } from './../../interfaces/hotel';
-import { BookingDetails } from './../../interfaces/booking-details';
 import { JSONService } from '../../services/json.service';
 import { Library } from '../../shared/moment-utils';
+
+import { APIHotel } from './../../api/hotels/hotel.model';
+import { BookingDetails } from './../../interfaces/booking-details';
 
 @Component({
   selector: 'app-payment-success',
@@ -13,16 +14,16 @@ import { Library } from '../../shared/moment-utils';
 export class PaymentSuccessComponent implements OnInit {
   reservation: BookingDetails;
 
-  hotel: Hotel;
+  hotel: APIHotel;
 
   constructor(private jsonService: JSONService) {}
 
   ngOnInit() {
     this.reservation = this.jsonService.getBookingDetails();
 
-    this.jsonService.getHotelById(this.reservation.hotelId).subscribe((data) => {
-      this.hotel = data;
-    });
+    // this.jsonService.getHotelById(this.reservation.hotelId).subscribe((data) => {
+    //   this.hotel = data;
+    // });
   }
 
   public getFormattedDates(): string {

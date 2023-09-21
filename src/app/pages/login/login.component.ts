@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 
-import { AuthService } from './../../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { UserService } from './../../api/users/user.service';
 
 @Component({

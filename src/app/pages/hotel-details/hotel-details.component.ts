@@ -145,7 +145,6 @@ export class HotelDetailsComponent implements OnInit {
     if (this.bookingForm.valid) {
       const bookingDetails = { ...this.bookingForm.value, hotelId: this.hotel.id };
       Utils.saveToLocalStorage<BookingDetails>(Utils.BOOKING_DETAILS_KEY, bookingDetails);
-      // this.jsonService.setBookingDetails(bookingDetails);
       this.router.navigate(['/checkout']);
     }
   }

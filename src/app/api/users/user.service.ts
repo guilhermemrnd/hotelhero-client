@@ -11,12 +11,12 @@ import { UserInputReq } from '../interfaces/user-input-req';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService extends BaseService {
+export class UserService extends BaseService<APIUser> {
   constructor(httpClient: HttpClient) {
     super(httpClient);
   }
 
-  public createUser(item: UserInputReq): Observable<APIPostResponse<APIUser>> {
+  public createUser(item: UserInputReq) {
     return this.create(item, 'users', false);
   }
 
@@ -38,7 +38,7 @@ export class UserService extends BaseService {
     return this.httpClient.get<APIBooking[]>(url, options);
   }
 
-  public updateUser(id: string, item: UserInputReq): Observable<APIPostResponse<APIUser>> {
+  public updateUser(id: string, item: UserInputReq) {
     return this.update(id, item, 'users', true);
   }
 

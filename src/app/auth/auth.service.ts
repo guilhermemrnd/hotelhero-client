@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { Utils } from './../services/utils.service';
-import { environment } from './../../environments/environment';
+import { Utils } from '../services/utils.service';
+import { environment } from '../../environments/environment';
 import { IsAuthenticatedRes } from '../api/interfaces/is-authenticated-res';
 
 @Injectable({
@@ -13,14 +13,10 @@ export class AuthService {
   private readonly API = environment.apiURL;
 
   constructor(private http: HttpClient) {
-    if (!Utils.checkLoggedIn()) {
-      this.isAuthenticated().subscribe((res) => {
-        if (res.authenticated) {
-          Utils.saveToLocalStorage(Utils.USER_ID_KEY, res.userId);
-          Utils.saveToLocalStorage(Utils.LOGGED_IN_KEY, true);
-        }
-      });
-    }
+    this.isAuthenticated().subscribe((res) => {
+      Utils.saveToLocalStorage(Utils.USER_ID_KEY, res.userId);
+      Utils.saveToLocalStorage(Utils.LOGGED_IN_KEY, res.authenticated);
+    });
   }
 
   public login(email: string, password: string, rememberMe: boolean) {

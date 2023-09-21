@@ -8,14 +8,17 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
 
-import { JSONService } from '../../services/json.service';
+import { HotelService } from './../../api/hotels/hotel.service';
+import { BookingService } from './../../api/bookings/booking.service';
 import { Library } from '../../shared/moment-utils';
 import { Utils } from './../../services/utils.service';
 
-import { Hotel } from './../../interfaces/hotel';
+import { APIHotel } from './../../api/hotels/hotel.model';
 import { PaymentForm } from './../../interfaces/payment-form';
 import { BookingDetails } from './../../interfaces/booking-details';
+import { CreateBookingReq } from './../../api/interfaces/create-booking-req';
 
 @Component({
   selector: 'app-checkout',
@@ -28,17 +31,18 @@ export class CheckoutComponent implements OnInit {
 
   bookingDetails: BookingDetails;
 
-  hotel: Hotel;
+  hotel: APIHotel;
 
   paymentForm: FormGroup;
 
   dates: Date[] = [];
-  currentDate: Date = new Date();
+  currentDate = new Date();
 
   editingField: string = null;
 
   constructor(
-    private jsonService: JSONService,
+    private bookingService: BookingService,
+    private hotelService: HotelService,
     private formBuilder: FormBuilder,
     private location: Location,
     private router: Router
@@ -46,11 +50,13 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit() {
     this.bookingDetails = Utils.getFromLocalStorage<BookingDetails>(Utils.BOOKING_DETAILS_KEY);
+    if (!this.bookingDetails) window.location.href = '/';
 
     const { checkIn, checkOut } = this.bookingDetails;
     this.dates = [Library.parseDate(checkIn), Library.parseDate(checkOut)];
 
-    this.jsonService.getHotelById(this.bookingDetails.hotelId).subscribe({
+    const hotelId = this.bookingDetails.hotelId.toString();
+    this.hotelService.getHotelById(hotelId).subscribe({
       next: (data) => (this.hotel = data),
       error: (err) => console.error('Failed to get hotel', err)
     });
@@ -92,26 +98,23 @@ export class CheckoutComponent implements OnInit {
 
   public submitPayment(): void {
     if (this.paymentForm.valid) {
-      const totalPrice = this.getTotalPrice(this.hotel.price);
+      const params = this.buildBookingParams();
 
-      const booking: BookingDetails = { ...this.bookingDetails, totalPrice };
-      const payment: PaymentForm = { ...this.paymentForm.value };
+      // const payment: PaymentForm = { ...this.paymentForm.value };
 
-      this.jsonService.processPayment(payment).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.jsonService.createReservation(booking).subscribe((reservation) => {
-              this.jsonService.setBookingDetails(reservation);
-              this.router.navigate(['/payment-success']);
-            });
-          } else {
-            console.error('Failed to process payment');
-          }
+      this.bookingService.createBooking(params).subscribe({
+        next: (res) => {
+          const paymentId = uuidv4();
+          const bookingId = res.data.id;
+          this.bookingService.finalizeBooking(bookingId, paymentId).subscribe({
+            next: (res) => this.router.navigate(['/payment-success']),
+            error: (err) => console.error('Failed to finalize booking', err)
+          });
         },
-        error: (err) => console.error('Failed to process payment', err)
+        error: (err) => console.error('Failed to create booking', err)
       });
     } else {
-      console.error('Form is invalid');
+      alert('Please fill out the payment form');
     }
   }
 
@@ -181,5 +184,19 @@ export class CheckoutComponent implements OnInit {
     } else {
       return { invalidLength: true };
     }
+  }
+
+  private buildBookingParams(): CreateBookingReq {
+    const totalCost = this.getTotalPrice(this.hotel.dailyPrice);
+    const { checkIn, checkOut } = this.bookingDetails;
+
+    return {
+      userId: Utils.getLoggedInUserId(),
+      hotelId: this.bookingDetails.hotelId.toString(),
+      checkIn: Library.formatStringDate(checkIn),
+      checkOut: Library.formatStringDate(checkOut),
+      numberOfGuests: this.bookingDetails.guests,
+      totalCost: Math.round(totalCost)
+    };
   }
 }

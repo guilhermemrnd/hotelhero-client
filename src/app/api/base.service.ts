@@ -1,14 +1,15 @@
+import { APIPostResponse } from './api-post-response';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-export class BaseService {
+export class BaseService<D> {
   protected readonly API = environment.apiURL;
 
   constructor(protected httpClient: HttpClient) {}
 
-  protected create<T, D>(item: T, path: string, useCredentials: boolean) {
+  protected create<T>(item: T, path: string, useCredentials: boolean) {
     const { url, options } = this.getUrlAndOptions(path, useCredentials);
-    return this.httpClient.post<D>(url, item, options);
+    return this.httpClient.post<APIPostResponse<D>>(url, item, options);
   }
 
   protected getOne<T>(id: string, path: string, useCredentials: boolean) {
@@ -21,9 +22,9 @@ export class BaseService {
     return this.httpClient.get<T>(url, options);
   }
 
-  protected update<T, D>(id: string, item: T, path: string, useCredentials: boolean) {
+  protected update<T>(id: string, item: T, path: string, useCredentials: boolean) {
     const { url, options } = this.getUrlAndOptions(path, useCredentials, id);
-    return this.httpClient.put<D>(url, item, options);
+    return this.httpClient.put<APIPostResponse<D>>(url, item, options);
   }
 
   protected delete<T>(id: string, path: string, useCredentials: boolean) {
