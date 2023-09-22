@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
-import { ComponentsModule } from './../../components/components.module';
+import { ComponentsModule } from './../../shared/components/components.module';
 import { SearchResultsComponent } from './search-results.component';
 import { HotelCardComponent } from './hotel-card/hotel-card.component';
 import { HotelFilterComponent } from './hotel-filter/hotel-filter.component';

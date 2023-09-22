@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { APIHotel } from './../../api/hotels/hotel.model';
+import { APIHotel } from './../../../api/hotels/hotel.model';
 
 @Component({
   selector: 'app-hotel-summary',

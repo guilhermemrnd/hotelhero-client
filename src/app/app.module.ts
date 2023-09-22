@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxsModule } from '@ngxs/store';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { AuthState } from './core/store/auth.state';
 
 import { CalendarModule } from 'primeng/calendar';
@@ -23,13 +24,12 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { PaymentSuccessComponent } from './pages/payment-success/payment-success.component';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ComponentsModule } from './components/components.module';
-import { SearchResultsModule } from './pages/search-results/search-results.module';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth.guard';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { ComponentsModule } from './shared/components/components.module';
+import { SearchResultsModule } from './pages/search-results/search-results.module';
 
 @NgModule({
   declarations: [

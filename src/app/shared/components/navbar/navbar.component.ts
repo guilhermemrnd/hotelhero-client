@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Select, Store } from '@ngxs/store';
-import { AuthState, Logout } from './../../core/store/auth.state';
+import { AuthState, Logout } from './../../../core/store/auth.state';
 
 @Component({
   selector: 'app-navbar',

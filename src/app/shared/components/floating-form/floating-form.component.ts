@@ -10,10 +10,11 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
-import { HotelService } from './../../api/hotels/hotel.service';
-import { Utils } from './../../services/utils.service';
-import { APIRegion } from './../../api/hotels/region.model';
-import { SearchForm } from '../../interfaces/search-form';
+import { HotelService } from './../../../api/hotels/hotel.service';
+import { Utils } from './../../../services/utils.service';
+
+import { APIRegion } from './../../../api/hotels/region.model';
+import { SearchForm } from './../../../interfaces/search-form';
 
 @Component({
   selector: 'app-floating-form',
