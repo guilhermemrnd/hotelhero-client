@@ -4,6 +4,9 @@ import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
 import { BehaviorSubject, debounceTime, switchMap, tap } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+import { Store } from '@ngxs/store';
+import { SearchFormState } from './../../core/store/search-form.state';
+
 import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { Utils } from './../../services/utils.service';
@@ -40,13 +43,14 @@ export class SearchResultsComponent implements OnInit {
     private hotelService: HotelService,
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit() {
-    this.searchForm = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
+    this.searchForm = this.store.selectSnapshot(SearchFormState);
 
-    this.setupDebouncedHotelSearch(); // Set up subscription for delayed hotel searc
+    this.setupDebouncedHotelSearch(); // Set up subscription for delayed hotel search
 
     this.triggerSearch.next();
   }

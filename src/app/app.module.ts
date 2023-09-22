@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { AuthState } from './core/store/auth.state';
+import { SearchFormState } from './core/store/search-form.state';
 
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -47,8 +48,8 @@ import { SearchResultsModule } from './pages/search-results/search-results.modul
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxsModule.forRoot([AuthState]),
-    NgxsStoragePluginModule.forRoot({ key: ['auth'] }),
+    NgxsModule.forRoot([AuthState, SearchFormState]),
+    NgxsStoragePluginModule.forRoot({ key: ['auth', 'searchForm'] }),
     CalendarModule,
     InputNumberModule,
     InputMaskModule,

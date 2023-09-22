@@ -8,7 +8,6 @@ import { SearchForm } from '../interfaces/search-form';
   providedIn: 'root'
 })
 export class Utils {
-  static readonly SEARCH_FORM_KEY = 'searchForm';
   static readonly BOOKING_DETAILS_KEY = 'bookingDetails';
 
   constructor() {}

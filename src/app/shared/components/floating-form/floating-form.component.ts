@@ -10,6 +10,9 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
+import { Store } from '@ngxs/store';
+import { SetSearchFormData } from 'src/app/core/store/search-form.state';
+
 import { HotelService } from './../../../api/hotels/hotel.service';
 import { Utils } from './../../../services/utils.service';
 
@@ -35,8 +38,9 @@ export class FloatingFormComponent implements OnInit {
   @Output() searchEvent = new EventEmitter<SearchForm>();
 
   constructor(
+    private hotelService: HotelService,
     private formBuilder: FormBuilder,
-    private hotelService: HotelService
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -54,8 +58,10 @@ export class FloatingFormComponent implements OnInit {
   }
 
   public searchHotels(): void {
-    Utils.saveToLocalStorage(Utils.SEARCH_FORM_KEY, this.formData);
-    this.searchEvent.emit(this.formData);
+    if (this.searchForm.valid) {
+      this.store.dispatch(new SetSearchFormData(this.formData));
+      this.searchEvent.emit(this.formData);
+    }
   }
 
   public searchRegions(query: string): void {

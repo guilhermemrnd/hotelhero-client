@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { Store } from '@ngxs/store';
+import { SetSearchFormData } from 'src/app/core/store/search-form.state';
+
 import { HotelService } from './../../api/hotels/hotel.service';
 import { Utils } from './../../services/utils.service';
 import { APIRegion } from './../../api/hotels/region.model';
@@ -21,14 +24,15 @@ export class HomeComponent implements OnInit {
   public minCheckOutDate = new Date();
 
   constructor(
-    private router: Router,
+    private hotelService: HotelService,
     private formBuilder: FormBuilder,
-    private hotelService: HotelService
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
-    const formData = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
-    this.searchForm = formData ? this.buildForm(formData) : this.buildForm();
+    // const formData = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
+    this.searchForm = this.buildForm();
     this.handleCheckInChange();
   }
 
@@ -44,8 +48,8 @@ export class HomeComponent implements OnInit {
 
   public navigate(): void {
     if (this.searchForm.valid) {
-      const formData = this.searchForm.value as SearchForm;
-      Utils.saveToLocalStorage(Utils.SEARCH_FORM_KEY, formData);
+      const formData: SearchForm = this.searchForm.value;
+      this.store.dispatch(new SetSearchFormData(formData));
       const queryParams = Utils.formatSearchFormForURL(formData);
       this.router.navigate(['/search'], { queryParams });
     }

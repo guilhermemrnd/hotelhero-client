@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { Store } from '@ngxs/store';
+import { SearchFormState } from './../../../core/store/search-form.state';
+
 import { AuthService } from './../../../auth/auth.service';
 import { UserService } from 'src/app/api/users/user.service';
 import { Utils } from './../../../services/utils.service';
@@ -17,7 +20,8 @@ export class HotelCardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private store: Store
   ) {}
 
   ngOnInit() {}
@@ -36,8 +40,8 @@ export class HotelCardComponent implements OnInit {
   }
 
   public getTotalStayPrice(price: number): number {
-    const formData = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
-    const nights = Utils.calcTotalNights(formData.checkIn, formData.checkOut);
-    return Utils.calcDailyPrices(nights, price);
+    const formData: SearchForm = this.store.selectSnapshot(SearchFormState);
+    const totalNights = Utils.calcTotalNights(formData.checkIn, formData.checkOut);
+    return Utils.calcDailyPrices(totalNights, price);
   }
 }

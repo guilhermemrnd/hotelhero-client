@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { Store } from '@ngxs/store';
+import { SearchFormState } from 'src/app/core/store/search-form.state';
+
 import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { UserService } from './../../api/users/user.service';
@@ -22,14 +25,14 @@ export class HotelDetailsComponent implements OnInit {
   readonly NEW_USER_DISCOUNT = 50;
   readonly HOTEL_FEE = 24.99;
 
-  public searchForm: SearchForm;
+  searchForm: SearchForm;
 
-  public bookingForm: FormGroup;
+  bookingForm: FormGroup;
 
-  public hotel: APIHotel;
+  hotel: APIHotel;
 
-  public filteredAmenities = [];
-  public mainFacilities = [
+  filteredAmenities = [];
+  mainFacilities = [
     { label: 'Free WiFi', icon: 'fas fa-wifi' },
     { label: 'Free parking', icon: 'fas fa-parking' },
     { label: 'Room service', icon: 'fas fa-concierge-bell' },
@@ -44,20 +47,21 @@ export class HotelDetailsComponent implements OnInit {
     { label: 'Ocean view', icon: 'fas fa-eye' }
   ];
 
-  public currentDate = new Date();
-  public minCheckOutDate = new Date();
+  currentDate = new Date();
+  minCheckOutDate = new Date();
 
   constructor(
     private authService: AuthService,
     private hotelService: HotelService,
     private userService: UserService,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
-    private route: ActivatedRoute
+    private store: Store
   ) {}
 
   ngOnInit(): void {
-    this.searchForm = Utils.getFromLocalStorage<SearchForm>(Utils.SEARCH_FORM_KEY);
+    this.searchForm = this.store.selectSnapshot(SearchFormState);
     if (!this.searchForm) window.location.href = '/';
 
     const { checkIn, checkOut } = this.searchForm;
