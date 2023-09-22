@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { Utils } from '../services/utils.service';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../core/store/auth.state';
+
 import { environment } from '../../environments/environment';
 import { IsAuthenticatedRes } from '../api/interfaces/is-authenticated-res';
 
@@ -12,29 +13,33 @@ import { IsAuthenticatedRes } from '../api/interfaces/is-authenticated-res';
 export class AuthService {
   private readonly API = environment.apiURL;
 
-  constructor(private http: HttpClient) {
-    this.isAuthenticated().subscribe((res) => {
-      Utils.saveToLocalStorage(Utils.USER_ID_KEY, res.userId);
-      Utils.saveToLocalStorage(Utils.LOGGED_IN_KEY, res.authenticated);
-    });
-  }
+  constructor(
+    private http: HttpClient,
+    private store: Store
+  ) {}
 
   public login(email: string, password: string, rememberMe: boolean) {
     const { url, options } = this.getUrlAndOptions('auth/login', true);
     const credentials = { email, password, rememberMe };
-    return this.http.post(url, credentials, options);
+    return this.http.post<{ message: string }>(url, credentials, options);
   }
 
-  public logout(): void {
+  public logout() {
     const { url, options } = this.getUrlAndOptions('auth/logout', true);
-    this.http.post(url, {}, options).subscribe(() => {
-      window.location.href = '/login';
-    });
+    return this.http.post<{ message: string }>(url, {}, options);
   }
 
-  public isAuthenticated(): Observable<IsAuthenticatedRes> {
+  public isAuthenticated() {
     const { url, options } = this.getUrlAndOptions('auth/check', true);
     return this.http.get<IsAuthenticatedRes>(url, options);
+  }
+
+  get isLoggedIn(): boolean {
+    return this.store.selectSnapshot(AuthState.isLoggedIn);
+  }
+
+  get userId(): string {
+    return this.store.selectSnapshot(AuthState.userId);
   }
 
   private getUrlAndOptions(path: string, useCredentials: boolean, id?: string) {

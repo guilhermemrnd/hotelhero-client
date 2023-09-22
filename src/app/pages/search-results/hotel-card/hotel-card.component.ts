@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { AuthService } from './../../../auth/auth.service';
 import { UserService } from 'src/app/api/users/user.service';
 import { Utils } from './../../../services/utils.service';
 
@@ -14,16 +15,19 @@ import { SearchForm } from 'src/app/interfaces/search-form';
 export class HotelCardComponent implements OnInit {
   @Input() hotel: APIHotel;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {}
 
   public toggleFavorite(hotel: APIHotel) {
-    if (!Utils.checkLoggedIn()) {
+    if (!this.authService.isLoggedIn) {
       return alert('You must be logged in to favorite hotels');
     }
 
-    const userId = Utils.getLoggedInUserId();
+    const userId = this.authService.userId;
     hotel.isFavorite = !hotel.isFavorite;
 
     this.userService.toggleFavorite(userId, hotel.id, hotel.isFavorite).subscribe({

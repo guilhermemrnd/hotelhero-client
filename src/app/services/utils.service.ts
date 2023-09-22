@@ -8,8 +8,6 @@ import { SearchForm } from '../interfaces/search-form';
   providedIn: 'root'
 })
 export class Utils {
-  static readonly LOGGED_IN_KEY = 'loggedIn';
-  static readonly USER_ID_KEY = 'userId';
   static readonly SEARCH_FORM_KEY = 'searchForm';
   static readonly BOOKING_DETAILS_KEY = 'bookingDetails';
 
@@ -21,15 +19,6 @@ export class Utils {
 
   public static getFromLocalStorage<T>(key: string): T {
     return JSON.parse(localStorage.getItem(key));
-  }
-
-  public static checkLoggedIn(): boolean {
-    const loggedIn = this.getFromLocalStorage<boolean>(this.LOGGED_IN_KEY);
-    return loggedIn === true;
-  }
-
-  public static getLoggedInUserId(): string | null {
-    return this.getFromLocalStorage<string>(this.USER_ID_KEY);
   }
 
   public static formatDates(

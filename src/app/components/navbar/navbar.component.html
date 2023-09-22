@@ -8,7 +8,7 @@
     <li class="nav-item">
       <i class="far fa-bell fa-lg"></i>
     </li>
-    <li class="nav-item dropdown" *ngIf="loggedIn; else notLoggedIn">
+    <li class="nav-item dropdown" *ngIf="isLoggedIn$ | async; else showLogin">
       <a
         class="nav-link dropdown-toggle"
         data-bs-toggle="dropdown"
@@ -25,9 +25,9 @@
         </a>
       </div>
     </li>
-    <ng-template #notLoggedIn>
+    <ng-template #showLogin>
       <li class="nav-item">
-        <a [routerLink]="'/login'" class="nav-link">Login/Signup</a>
+        <a class="nav-link" (click)="navigateToLogin()">Login/Signup</a>
       </li>
     </ng-template>
   </ul>

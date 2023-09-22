@@ -10,6 +10,7 @@ import {
 import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 
+import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { BookingService } from './../../api/bookings/booking.service';
 import { Library } from '../../shared/moment-utils';
@@ -41,6 +42,7 @@ export class CheckoutComponent implements OnInit {
   editingField: string = null;
 
   constructor(
+    private authService: AuthService,
     private bookingService: BookingService,
     private hotelService: HotelService,
     private formBuilder: FormBuilder,
@@ -191,7 +193,7 @@ export class CheckoutComponent implements OnInit {
     const { checkIn, checkOut } = this.bookingDetails;
 
     return {
-      userId: Utils.getLoggedInUserId(),
+      userId: this.authService.userId,
       hotelId: this.bookingDetails.hotelId.toString(),
       checkIn: Library.formatStringDate(checkIn),
       checkOut: Library.formatStringDate(checkOut),

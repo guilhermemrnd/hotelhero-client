@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { AuthService } from '../../auth/auth.service';
-import { Utils } from './../../services/utils.service';
+import { Select, Store } from '@ngxs/store';
+import { AuthState, Logout } from './../../core/store/auth.state';
 
 @Component({
   selector: 'app-navbar',
@@ -9,15 +10,17 @@ import { Utils } from './../../services/utils.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  public loggedIn = false;
+  @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<boolean>;
 
-  constructor(private authService: AuthService) {}
+  constructor(private store: Store) {}
 
-  ngOnInit() {
-    this.loggedIn = Utils.checkLoggedIn();
-  }
+  ngOnInit() {}
 
   public logout(): void {
-    this.authService.logout();
+    this.store.dispatch(new Logout());
+  }
+
+  public navigateToLogin(): void {
+    window.location.href = '/login';
   }
 }

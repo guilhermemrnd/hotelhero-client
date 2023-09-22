@@ -20,6 +20,8 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "@ngxs/storage-plugin": "^3.8.1",
+    "@ngxs/store": "^3.8.1",
     "bootstrap": "5.3",
     "moment": "^2.29.4",
     "ngx-spinner": "^14.0.0",

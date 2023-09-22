@@ -4,6 +4,7 @@ import { ChangeContext, LabelType, Options } from '@angular-slider/ngx-slider';
 import { BehaviorSubject, debounceTime, switchMap, tap } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { Utils } from './../../services/utils.service';
 import { Library } from './../../shared/moment-utils';
@@ -35,6 +36,7 @@ export class SearchResultsComponent implements OnInit {
   options: Options = this.setSliderOptions();
 
   constructor(
+    private authService: AuthService,
     private hotelService: HotelService,
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
@@ -149,7 +151,7 @@ export class SearchResultsComponent implements OnInit {
       page: this.currentPage
     };
 
-    const userId = Utils.getLoggedInUserId();
+    const userId = this.authService.userId;
     if (userId) params.userId = userId;
 
     if (!filters) return params;

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { UserService } from './../../api/users/user.service';
 import { Library } from './../../shared/moment-utils';
@@ -47,6 +48,7 @@ export class HotelDetailsComponent implements OnInit {
   public minCheckOutDate = new Date();
 
   constructor(
+    private authService: AuthService,
     private hotelService: HotelService,
     private userService: UserService,
     private formBuilder: FormBuilder,
@@ -96,11 +98,11 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   public toggleFavorite(hotel: APIHotel): void {
-    if (!Utils.checkLoggedIn()) {
+    if (!this.authService.isLoggedIn) {
       return alert('You must be logged in to favorite hotels');
     }
 
-    const userId = Utils.getLoggedInUserId();
+    const userId = this.authService.userId;
     hotel.isFavorite = !hotel.isFavorite;
     this.userService.toggleFavorite(userId, hotel.id, hotel.isFavorite).subscribe({
       error: (e) => console.error('Error updating favorite status', e)
@@ -138,7 +140,7 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   public navigateToCheckout(): void {
-    if (!Utils.checkLoggedIn()) {
+    if (!this.authService.isLoggedIn) {
       return alert('You must be logged in to book hotels');
     }
 
@@ -150,7 +152,7 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   private buildQueryParams(formData: SearchForm, hotelId: string): HotelDetailsReq {
-    const userId = Utils.getLoggedInUserId();
+    const userId = this.authService.userId;
 
     const params = {
       hotelId: Number(hotelId),
