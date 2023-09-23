@@ -41,6 +41,7 @@ export class CheckoutComponent implements OnInit {
 
   dates: Date[] = [];
   currentDate = new Date();
+  disabledDates: Date[] = [];
 
   editingField: string = null;
 
@@ -62,6 +63,11 @@ export class CheckoutComponent implements OnInit {
     this.dates = [new Date(checkIn), new Date(checkOut)];
 
     const hotelId = this.bookingDetails.hotelId.toString();
+
+    this.hotelService.getHotelUnavailableDates(hotelId).subscribe((res) => {
+      this.disabledDates = res.dates?.map((date) => new Date(date));
+    });
+
     this.hotelService.getHotelById(hotelId).subscribe({
       next: (data) => (this.hotel = data),
       error: (err) => console.error('Failed to get hotel', err)

@@ -50,6 +50,7 @@ export class HotelDetailsComponent implements OnInit {
 
   currentDate = new Date();
   minCheckOutDate = new Date();
+  disabledDates: Date[] = [];
 
   constructor(
     private authService: AuthService,
@@ -75,10 +76,16 @@ export class HotelDetailsComponent implements OnInit {
 
     const hotelId = this.route.snapshot.paramMap.get('id');
 
-    const params = this.buildQueryParams(this.bookingForm.value, hotelId);
+    const userId = this.authService?.userId;
+    const params = Utils.buildHotelDetailsParams(this.searchForm, +hotelId, userId);
+
     this.hotelService.getHotelDetails(params).subscribe((hotel) => {
       this.hotel = hotel;
       this.setupHotelAmenities(hotel);
+    });
+
+    this.hotelService.getHotelUnavailableDates(hotelId).subscribe((res) => {
+      this.disabledDates = res.dates?.map((date) => new Date(date));
     });
 
     this.handleCheckInChange();
@@ -156,25 +163,13 @@ export class HotelDetailsComponent implements OnInit {
     }
   }
 
-  private buildQueryParams(formData: SearchForm, hotelId: string): HotelDetailsReq {
-    const userId = this.authService.userId;
-
-    const params = {
-      hotelId: Number(hotelId),
-      checkIn: Library.convertDate(formData.checkIn),
-      checkOut: Library.convertDate(formData.checkOut),
-      guests: formData.guests
-    };
-
-    return userId ? { ...params, userId } : params;
-  }
-
   private handleCheckInChange(): void {
     this.bookingForm.get('checkIn').valueChanges.subscribe((selectedDate: Date) => {
       this.minCheckOutDate = new Date(selectedDate);
       this.minCheckOutDate.setDate(this.minCheckOutDate.getDate() + 1);
 
-      if (this.getFieldValue('checkOut') < this.minCheckOutDate) {
+      const checkOutDate = this.getFieldValue('checkOut');
+      if (checkOutDate && checkOutDate < this.minCheckOutDate) {
         this.bookingForm.patchValue({ checkOut: this.minCheckOutDate });
       }
     });

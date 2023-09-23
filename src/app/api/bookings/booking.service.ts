@@ -1,3 +1,4 @@
+import { APIPostResponse } from './../api-post-response';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -26,10 +27,10 @@ export class BookingService extends BaseService<APIBooking> {
     return this.update(id, bookingDetails, 'bookings', true);
   }
 
-  public finalizeBooking(bookingId: string, paymentId: string): Observable<APIBooking> {
+  public finalizeBooking(bookingId: string, paymentId: string) {
     const url = `${this.API}/bookings/${bookingId}/finalize`;
     const [body, options] = [{ paymentId }, { withCredentials: true }];
-    return this.httpClient.patch<APIBooking>(url, body, options);
+    return this.httpClient.patch<APIPostResponse<APIBooking>>(url, body, options);
   }
 
   // Missing implementation in the API

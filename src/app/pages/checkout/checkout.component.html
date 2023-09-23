@@ -21,6 +21,7 @@
                 [required]="true"
                 [baseZIndex]="999"
                 [minDate]="currentDate"
+                [disabledDates]="disabledDates"
                 (onClickOutside)="updateDates()"
                 *ngIf="editingField === 'dates'"
               ></p-calendar>

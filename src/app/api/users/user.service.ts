@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { Cacheable } from '../../shared/cacheable.decorator';
 import { BaseService } from '../base.service';
+
 import { APIUser } from './user.model';
 import { APIBooking } from '../bookings/booking.model';
-import { APIPostResponse } from '../api-post-response';
 import { UserInputReq } from '../interfaces/user-input-req';
 
 @Injectable({
@@ -20,6 +21,7 @@ export class UserService extends BaseService<APIUser> {
     return this.create(item, 'users', false);
   }
 
+  @Cacheable()
   public checkEmail(email: string): Observable<{ exists: boolean }> {
     const url = `${this.API}/users/check-email`;
     return this.httpClient.post<{ exists: boolean }>(url, { email });
