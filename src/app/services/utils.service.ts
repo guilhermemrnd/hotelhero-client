@@ -3,6 +3,7 @@ import * as moment from 'moment';
 
 import { Library } from '../shared/moment-utils';
 import { SearchForm } from '../interfaces/search-form';
+import { HotelDetailsReq } from '../api/interfaces/hotel-details-req';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,20 @@ export class Utils {
     const checkIn = Library.convertDate(formData.checkIn);
     const checkOut = Library.convertDate(formData.checkOut);
     return { destination, checkIn, checkOut, guests: formData.guests };
+  }
+
+  public static buildHotelDetailsParams(
+    formData: SearchForm,
+    hotelId: number,
+    userId?: string
+  ): HotelDetailsReq {
+    const params = {
+      hotelId: Number(hotelId),
+      checkIn: Library.convertDate(formData.checkIn),
+      checkOut: Library.convertDate(formData.checkOut),
+      guests: formData.guests
+    };
+
+    return userId ? { ...params, userId } : params;
   }
 }

@@ -8,6 +8,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import * as moment from 'moment';
 
 import { Store } from '@ngxs/store';
@@ -29,6 +30,8 @@ export class FloatingFormComponent implements OnInit {
   searchForm: FormGroup;
 
   regions: APIRegion[] = [];
+
+  searchSubject = new Subject<string>();
 
   currentDate = new Date();
 
@@ -55,6 +58,8 @@ export class FloatingFormComponent implements OnInit {
     this.searchForm.get('dates').valueChanges.subscribe((dates: Date[]) => {
       this.validateDateRange(dates);
     });
+
+    this.subscribeToSearchRegions();
   }
 
   public searchHotels(): void {
@@ -65,9 +70,7 @@ export class FloatingFormComponent implements OnInit {
   }
 
   public searchRegions(query: string): void {
-    this.hotelService.getRegions(query).subscribe((regions: APIRegion[]) => {
-      this.regions = regions;
-    });
+    this.searchSubject.next(query);
   }
 
   public getFieldValue(fieldName: string): any {
@@ -153,5 +156,19 @@ export class FloatingFormComponent implements OnInit {
     if (endDate.isSame(startDate, 'day')) {
       this.searchForm.get('dates').setValue(null, { emitEvent: false });
     }
+  }
+
+  private subscribeToSearchRegions(): void {
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        filter((search) => search.length > 2)
+      )
+      .subscribe((search: string) => {
+        this.hotelService.getRegions(search).subscribe((regions: APIRegion[]) => {
+          this.regions = regions;
+        });
+      });
   }
 }

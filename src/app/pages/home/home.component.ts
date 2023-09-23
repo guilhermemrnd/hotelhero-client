@@ -74,8 +74,9 @@ export class HomeComponent implements OnInit {
       this.minCheckOutDate = new Date(selectedDate);
       this.minCheckOutDate.setDate(this.minCheckOutDate.getDate() + 1);
 
-      if (this.getFieldValue('checkOut') < this.minCheckOutDate) {
-        this.searchForm.patchValue({ checkOut: this.minCheckOutDate });
+      const checkOutDate = this.getFieldValue('checkOut');
+      if (checkOutDate && checkOutDate < this.minCheckOutDate) {
+        this.searchForm.patchValue({ checkOut: null });
       }
     });
   }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { Filters } from './../../../interfaces/filters';
 
@@ -8,6 +9,8 @@ import { Filters } from './../../../interfaces/filters';
   styleUrls: ['./hotel-filter.component.scss']
 })
 export class HotelFilterComponent implements OnInit {
+  private filterSubject = new Subject<Filters>();
+
   filters: Filters = {
     propertyType: {
       hotel: false,
@@ -68,7 +71,11 @@ export class HotelFilterComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.filterSubject.pipe(debounceTime(500), distinctUntilChanged()).subscribe((filters) => {
+      this.filterChanged.emit(filters);
+    });
+  }
 
   public applyFilter(): void {
     const normalizedFilters = JSON.parse(JSON.stringify(this.filters));
@@ -85,7 +92,7 @@ export class HotelFilterComponent implements OnInit {
       }
     }
 
-    this.filterChanged.emit(normalizedFilters);
+    this.filterSubject.next(normalizedFilters);
   }
 
   get propertyTypeKeys() {
