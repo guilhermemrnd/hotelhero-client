@@ -5,7 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxsModule } from '@ngxs/store';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import {
+  LOCAL_STORAGE_ENGINE,
+  NgxsStoragePluginModule,
+  SESSION_STORAGE_ENGINE
+} from '@ngxs/storage-plugin';
 import { AuthState } from './core/store/auth.state';
 import { SearchFormState } from './core/store/search-form.state';
 import { BookingDetailsState } from './core/store/booking-details.state';
@@ -50,7 +54,13 @@ import { AuthGuard } from './auth/auth.guard';
     FormsModule,
     ReactiveFormsModule,
     NgxsModule.forRoot([AuthState, SearchFormState, BookingDetailsState]),
-    NgxsStoragePluginModule.forRoot({ key: ['auth', 'searchForm'] }),
+    NgxsStoragePluginModule.forRoot({
+      key: [
+        { key: AuthState, engine: LOCAL_STORAGE_ENGINE },
+        { key: SearchFormState, engine: LOCAL_STORAGE_ENGINE },
+        { key: BookingDetailsState, engine: SESSION_STORAGE_ENGINE }
+      ]
+    }),
     CalendarModule,
     InputNumberModule,
     InputMaskModule,
