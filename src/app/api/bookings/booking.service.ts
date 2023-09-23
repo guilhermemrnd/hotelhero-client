@@ -18,7 +18,7 @@ export class BookingService extends BaseService<APIBooking> {
     return this.create(bookingDetails, 'bookings', true);
   }
 
-  public getBookingById(id: string) {
+  public getBookingById(id: string): Observable<APIBooking> {
     return this.getOne(id, 'bookings', true);
   }
 

@@ -10,6 +10,9 @@ import {
 import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 
+import { Store } from '@ngxs/store';
+import { BookingDetailsState, SetBookingDetails } from './../../core/store/booking-details.state';
+
 import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
 import { BookingService } from './../../api/bookings/booking.service';
@@ -47,15 +50,16 @@ export class CheckoutComponent implements OnInit {
     private hotelService: HotelService,
     private formBuilder: FormBuilder,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit() {
-    this.bookingDetails = Utils.getFromLocalStorage<BookingDetails>(Utils.BOOKING_DETAILS_KEY);
+    this.bookingDetails = this.store.selectSnapshot(BookingDetailsState);
     if (!this.bookingDetails) window.location.href = '/';
 
     const { checkIn, checkOut } = this.bookingDetails;
-    this.dates = [Library.parseDate(checkIn), Library.parseDate(checkOut)];
+    this.dates = [new Date(checkIn), new Date(checkOut)];
 
     const hotelId = this.bookingDetails.hotelId.toString();
     this.hotelService.getHotelById(hotelId).subscribe({
@@ -109,7 +113,10 @@ export class CheckoutComponent implements OnInit {
           const paymentId = uuidv4();
           const bookingId = res.data.id;
           this.bookingService.finalizeBooking(bookingId, paymentId).subscribe({
-            next: (res) => this.router.navigate(['/payment-success']),
+            next: (res) => {
+              this.store.dispatch(new SetBookingDetails(null));
+              this.router.navigate(['/payment-success', bookingId]);
+            },
             error: (err) => console.error('Failed to finalize booking', err)
           });
         },

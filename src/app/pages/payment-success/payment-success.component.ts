@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { JSONService } from '../../services/json.service';
+import { Store } from '@ngxs/store';
+import { SearchFormState } from './../../core/store/search-form.state';
+
+import { BookingService } from './../../api/bookings/booking.service';
 import { Library } from '../../shared/moment-utils';
 
-import { APIHotel } from './../../api/hotels/hotel.model';
-import { BookingDetails } from './../../interfaces/booking-details';
+import { APIBooking } from './../../api/bookings/booking.model';
 
 @Component({
   selector: 'app-payment-success',
@@ -12,18 +15,23 @@ import { BookingDetails } from './../../interfaces/booking-details';
   styleUrls: ['./payment-success.component.scss']
 })
 export class PaymentSuccessComponent implements OnInit {
-  reservation: BookingDetails;
+  reservation: APIBooking;
+  destination: string;
 
-  hotel: APIHotel;
-
-  constructor(private jsonService: JSONService) {}
+  constructor(
+    private bookingService: BookingService,
+    private route: ActivatedRoute,
+    private store: Store
+  ) {}
 
   ngOnInit() {
-    this.reservation = this.jsonService.getBookingDetails();
+    const bookingId = this.route.snapshot.paramMap.get('bookingId');
+    this.bookingService.getBookingById(bookingId).subscribe((data) => {
+      this.reservation = data;
+    });
 
-    // this.jsonService.getHotelById(this.reservation.hotelId).subscribe((data) => {
-    //   this.hotel = data;
-    // });
+    const { destination } = this.store.selectSnapshot(SearchFormState);
+    this.destination = destination.name.split(',')[0];
   }
 
   public getFormattedDates(): string {

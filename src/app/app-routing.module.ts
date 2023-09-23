@@ -16,7 +16,11 @@ const routes: Routes = [
   { path: 'search', component: SearchResultsComponent },
   { path: 'hotel-details/:id', component: HotelDetailsComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
-  { path: 'payment-success', component: PaymentSuccessComponent, canActivate: [AuthGuard] }
+  {
+    path: 'payment-success/:bookingId',
+    component: PaymentSuccessComponent,
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

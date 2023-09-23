@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Store } from '@ngxs/store';
 import { SearchFormState } from 'src/app/core/store/search-form.state';
+import { BookingDetailsState, SetBookingDetails } from './../../core/store/booking-details.state';
 
 import { AuthService } from './../../auth/auth.service';
 import { HotelService } from './../../api/hotels/hotel.service';
@@ -149,8 +150,8 @@ export class HotelDetailsComponent implements OnInit {
     }
 
     if (this.bookingForm.valid) {
-      const bookingDetails = { ...this.bookingForm.value, hotelId: this.hotel.id };
-      Utils.saveToLocalStorage<BookingDetails>(Utils.BOOKING_DETAILS_KEY, bookingDetails);
+      const bookingDetails = this.buildBookingDetails();
+      this.store.dispatch(new SetBookingDetails(bookingDetails));
       this.router.navigate(['/checkout']);
     }
   }
@@ -177,5 +178,16 @@ export class HotelDetailsComponent implements OnInit {
         this.bookingForm.patchValue({ checkOut: this.minCheckOutDate });
       }
     });
+  }
+
+  private buildBookingDetails(): BookingDetails {
+    const { checkIn, checkOut, guests } = this.bookingForm.value;
+
+    return {
+      hotelId: this.hotel.id,
+      checkIn: Library.convertDate(checkIn),
+      checkOut: Library.convertDate(checkOut),
+      guests: guests
+    };
   }
 }

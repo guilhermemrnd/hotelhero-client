@@ -8,17 +8,7 @@ import { SearchForm } from '../interfaces/search-form';
   providedIn: 'root'
 })
 export class Utils {
-  static readonly BOOKING_DETAILS_KEY = 'bookingDetails';
-
   constructor() {}
-
-  public static saveToLocalStorage<T>(key: string, value: T): void {
-    localStorage.setItem(key, JSON.stringify(value));
-  }
-
-  public static getFromLocalStorage<T>(key: string): T {
-    return JSON.parse(localStorage.getItem(key));
-  }
 
   public static formatDates(
     dateOne: Date | string,
