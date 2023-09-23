@@ -85,8 +85,9 @@ export class SearchResultsComponent implements OnInit {
     this.triggerSearch.next();
   }
 
-  public changePage(newPage: number) {
+  public changePage(newPage: number): void {
     this.currentPage = newPage;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.triggerSearch.next();
   }
 
@@ -121,8 +122,7 @@ export class SearchResultsComponent implements OnInit {
   private setupDebouncedHotelSearch() {
     this.triggerSearch
       .pipe(
-        tap(() => this.spinner.show('search-spinner')),
-        debounceTime(1500),
+        tap(() => this.spinner.show()),
         switchMap(() => {
           const [formData, filters] = [this.searchForm, this.currentFilters];
           const params = this.buildQueryParams(formData, filters);
@@ -134,10 +134,10 @@ export class SearchResultsComponent implements OnInit {
           this.hotels = res.data;
           this.totalItems = res.total;
           this.totalPages = Math.ceil(res.total / 10);
-          this.spinner.hide('search-spinner');
+          this.spinner.hide();
         },
         error: (err) => {
-          this.spinner.hide('search-spinner');
+          this.spinner.hide();
           console.error('Failed to get hotels', err);
         }
       });
