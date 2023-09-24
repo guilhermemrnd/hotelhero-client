@@ -49,6 +49,10 @@
 }
 
 .gallery-section {
+  img {
+    cursor: pointer;
+  }
+
   .main-image {
     height: 560px;
     border-radius: 8px 0 0 8px;
@@ -85,6 +89,40 @@
     &:hover {
       background-color: #171a1fff;
       color: white;
+    }
+  }
+}
+
+:host ::ng-deep .custom-galleria {
+  &.p-galleria {
+    .custom-galleria-footer {
+      display: flex;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.9);
+      padding: 0.5rem;
+      color: #ffffff;
+      > button {
+        background-color: transparent;
+        color: #ffffff;
+        border: 0 none;
+        border-radius: 0;
+        margin: 0.2rem 0;
+        &.fullscreen-button {
+          margin-left: auto;
+        }
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+    .title-container {
+      > span {
+        font-size: 0.9rem;
+        padding-left: 0.829rem;
+        &.title {
+          font-weight: bold;
+        }
+      }
     }
   }
 }

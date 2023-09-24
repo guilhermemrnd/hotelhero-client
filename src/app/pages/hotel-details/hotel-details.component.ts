@@ -32,6 +32,24 @@ export class HotelDetailsComponent implements OnInit {
 
   hotel: APIHotel;
 
+  images: any[] = [];
+  activeIndex: number = 0;
+  showGalleria: boolean = false;
+  responsiveOptions: any[] = [
+    {
+      breakpoint: '1024px',
+      numVisible: 5
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 3
+    },
+    {
+      breakpoint: '560px',
+      numVisible: 1
+    }
+  ];
+
   filteredAmenities = [];
   mainFacilities = [
     { label: 'Free WiFi', icon: 'fas fa-wifi' },
@@ -81,6 +99,7 @@ export class HotelDetailsComponent implements OnInit {
 
     this.hotelService.getHotelDetails(params).subscribe((hotel) => {
       this.hotel = hotel;
+      this.images = hotel.photos;
       this.setupHotelAmenities(hotel);
     });
 
@@ -121,6 +140,11 @@ export class HotelDetailsComponent implements OnInit {
     });
   }
 
+  public imageClick(index: number): void {
+    this.activeIndex = index;
+    this.showGalleria = true;
+  }
+
   public getFieldValue(field: string): any {
     return this.bookingForm.get(field).value;
   }
@@ -140,12 +164,6 @@ export class HotelDetailsComponent implements OnInit {
     return dailyPrices + this.HOTEL_FEE - this.NEW_USER_DISCOUNT;
   }
 
-  public setupHotelAmenities(hotel: APIHotel): void {
-    this.filteredAmenities = hotel?.amenities
-      .filter((amenity) => this.mainFacilities.some((f) => f.label === amenity.name))
-      .slice(0, 9);
-  }
-
   public findIconByLabel(amenityName: string): string {
     const facility = this.mainFacilities.find((f) => f.label === amenityName);
     return facility ? facility.icon : '';
@@ -161,6 +179,12 @@ export class HotelDetailsComponent implements OnInit {
       this.store.dispatch(new SetBookingDetails(bookingDetails));
       this.router.navigate(['/checkout']);
     }
+  }
+
+  private setupHotelAmenities(hotel: APIHotel): void {
+    this.filteredAmenities = hotel?.amenities
+      .filter((amenity) => this.mainFacilities.some((f) => f.label === amenity.name))
+      .slice(0, 9);
   }
 
   private handleCheckInChange(): void {

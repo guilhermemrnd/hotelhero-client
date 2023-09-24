@@ -29,19 +29,55 @@
 
   <div class="gallery-section row pt-3">
     <div class="col-md-9 px-2">
-      <img [src]="hotel?.photos[1]" class="img-fluid main-image w-100" />
+      <img [src]="hotel?.photos[0]" (click)="imageClick(0)" class="img-fluid main-image w-100" />
     </div>
     <div class="col-md-3 px-0">
       <div class="d-flex flex-column">
         <div class="position-relative">
-          <img [src]="hotel?.photos[2]" class="img-fluid side-image" />
-          <img [src]="hotel?.photos[3]" class="img-fluid side-image" />
-          <img [src]="hotel?.photos[4]" class="img-fluid side-image" />
-          <button class="btn-show-all"><i class="far fa-images"></i> See all photos</button>
+          <img [src]="hotel?.photos[1]" (click)="imageClick(1)" class="img-fluid side-image" />
+          <img [src]="hotel?.photos[2]" (click)="imageClick(2)" class="img-fluid side-image" />
+          <img [src]="hotel?.photos[3]" (click)="imageClick(3)" class="img-fluid side-image" />
+          <button class="btn-show-all" (click)="showGalleria = true">
+            <i class="far fa-images"></i> See all photos
+          </button>
         </div>
       </div>
     </div>
   </div>
+
+  <p-galleria
+    #galleria
+    [value]="images"
+    [(visible)]="showGalleria"
+    [(activeIndex)]="activeIndex"
+    [responsiveOptions]="responsiveOptions"
+    [containerStyle]="{ 'max-width': '850px' }"
+    containerClass="custom-galleria"
+    [numVisible]="5"
+    [circular]="true"
+    [fullScreen]="true"
+    [showItemNavigators]="true"
+    [showThumbnails]="false"
+    [baseZIndex]="999"
+  >
+    <ng-template pTemplate="item" let-item>
+      <img [src]="item" style="width: 100%; max-height: 600px; display: block" />
+    </ng-template>
+    <ng-template pTemplate="thumbnail" let-item>
+      <div class="grid grid-nogutter justify-content-center">
+        <img [src]="item" style="display: block" />
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer" let-item>
+      <div class="custom-galleria-footer">
+        <span *ngIf="images" class="title-container">
+          <span>{{ activeIndex + 1 }}/{{ images.length }}</span>
+          <span class="title">{{ images[activeIndex].title }}</span>
+          <span>{{ images[activeIndex].alt }}</span>
+        </span>
+      </div>
+    </ng-template>
+  </p-galleria>
 
   <div class="row mt-4">
     <div class="col-md-7">
