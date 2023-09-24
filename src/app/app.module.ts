@@ -21,6 +21,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { GalleriaModule } from 'primeng/galleria';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -68,6 +69,7 @@ import { AuthGuard } from './auth/auth.guard';
     MessageModule,
     ToastModule,
     AutoCompleteModule,
+    GalleriaModule,
     ComponentsModule,
     SearchResultsModule
   ],
