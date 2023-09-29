@@ -1,6 +1,29 @@
 # HotelHero Client
 
-O *HotelHero* é uma aplicação de reserva de hotéis projetada para oferecer uma experiência agradável desde a busca por hotéis até a realização da reserva. Desenvolvido com o objetivo de aprimorar e desafiar minhas habilidades de desenvolvimento, o projeto busca aliar requisitos reais com uma implementação prática e eficiente.
+O *HotelHero* é uma aplicação de reserva de hotéis projetada para oferecer uma experiência agradável desde a busca por hotéis até a realização da reserva. Desenvolvido com o objetivo de aprimorar e desafiar minhas habilidades de desenvolvimento, o projeto busca aliar requisitos reais com uma implementação prática e eficiente. Veja a aplicação ao vivo na Vercel clicando [aqui](https://hotelhero.vercel.app/).
+
+## Principais Funcionalidades
+- Login e Criação de conta
+- Busca de hotéis com filtros
+- Visualização detalhada do hotel
+- Efetivação de reservas (fictícia)
+
+### Página de Cadastro
+![Login Page](./images/home.png)
+
+### Página Home
+![Home Page](./images/home.png)
+
+### Resultados da Pesquisa
+![Search Results](./images/search-results.png)
+
+### Visualização Detalhada do Hotel
+![Hotel Details](./images/hotel-details-1.png)
+![Hotel Images](./images/hotel-images.png)
+![Hotel Details](./images/hotel-details-2.png)
+
+### Página de Pagamento
+![Payment Page](./images/checkout.png)
 
 <!-- ## Índice
 - [Desafios & Aprendizados](#desafios-e-aprendizados)
