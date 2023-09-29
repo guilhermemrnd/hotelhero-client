@@ -1,35 +1,34 @@
-# HotelHero: Plataforma de Reservas de Hotéis
+# HotelHero Client
 
-Bem-vindo ao **HotelHero**, uma plataforma de reservas de hotéis centrada no usuário, projetada para atender tanto aos viajantes quanto aos proprietários de hotéis. Desenvolvido com paixão e atenção aos detalhes, este projeto não apenas apresenta as características de uma plataforma de reserva típica, mas também as decisões técnicas, desafios e aprendizados por trás de seu desenvolvimento. Experimente a aplicação ao vivo [aqui](https://hotelhero.vercel.app/).
+## Visão Geral
+O *HotelHero* é uma aplicação de reserva de hotéis projetada para oferecer uma experiência agradável desde a busca por hotéis até a realização da reserva. Desenvolvido com o objetivo de aprimorar e desafiar minhas habilidades de desenvolvimento, o projeto busca aliar requisitos reais com uma implementação prática e eficiente.
 
 ## Índice
-- [Desafios Enfrentados](#desafios-enfrentados)
-- [O Que Aprendi](#o-que-aprendi)
+- [Desafios & Aprendizados](#desafios-e-aprendizados)
 - [Melhorias Futuras](#melhorias-futuras)
 
-## Desafios Enfrentados
-- **Seleção de Framework:** Um dos primeiros desafios foi escolher o framework frontend adequado. Enquanto Vue.js era um território desconhecido, React.js, apesar de performático, parecia menos organizado para a escala que eu imaginava para o HotelHero. No final, optei pelo Angular, valorizando sua estrutura e escalabilidade, mesmo com uma pequena compensação no desempenho.
+## Desafios & Aprendizados
+- **Seleção de Framework:** Escolhi o Angular por sua estrutura e escalabilidade, valorizando sua organização em detrimento de outras opções como Vue.js e React.js.
 
-- **Gerenciamento de Estado com NGXS:** A aplicação exigia um gerenciamento de estado consistente em várias páginas, especialmente para recursos como o formulário de busca de hotéis, estado de autenticação e detalhes da reserva. Usar armazenamento do navegador ou parâmetros de URL para informações sensíveis não era uma opção. NGXS foi escolhido em vez de NgRx por sua simplicidade, garantindo que estados como o estado de autenticação pudessem ditar ações da barra de navegação e que os detalhes da reserva permanecessem seguros.
+- **Gerenciamento de Estado com NGXS:** Para manter estados consistentes, como o formulário de busca de hotéis e o estado de autenticação, optei pelo NGXS por sua simplicidade em relação ao NgRx.
 
-- **Autenticação JWT:** Para garantir a segurança dos dados do usuário, implementei a autenticação JWT via cookies. Esta abordagem foi escolhida para equilibrar segurança e experiência do usuário, eliminando a necessidade de atualizações frequentes de tokens ou dependência de tokens rolante, dadas as exigências de segurança da aplicação.
+- **Autenticação JWT:** Implementei a autenticação JWT via cookies, uma abordagem que equilibra segurança e experiência do usuário, sem a necessidade de atualizações frequentes de tokens.
 
-- **Estratégia de Deploy:** O deploy do frontend na Vercel envolveu a integração com o GitHub Actions. Isso não apenas acelerou o processo de deploy, mas também garantiu um pipeline simplificada onde testes unitários e automatizados eram executados usando Karma antes do deploy.
+- **Estratégia de Deploy:** Utilizei o GitHub Actions para acelerar o processo de deploy na Vercel, garantindo também a execução de testes unitários com Karma.
 
-- **Integração Backend:** O plano inicial era aproveitar uma API pública para dados reais de hotéis. No entanto, limitações com APIs públicas disponíveis levaram à decisão de criar um backend personalizado. Este backend atenderia especificamente às necessidades do frontend, conectaria a um banco de dados armazenando dados obtidos da API externa (eliminando buscas redundantes de dados) e lidaria com segredos da API de forma mais segura.
+- **Integração Backend:** A necessidade de um backend personalizado surgiu devido às limitações das APIs públicas, permitindo uma integração mais eficaz e segura com o frontend.
 
-- **Design do Banco de Dados:** O banco de dados foi projetado para ser minimalista, armazenando apenas os dados essenciais exigidos pelo frontend. A ênfase foi colocada na estruturação eficaz das relações. Para uma visão detalhada do esquema do banco de dados e das colunas da tabela, consulte o README do repositório do backend.
+- **Design do Banco de Dados:** Enfatizei um design minimalista, armazenando apenas dados essenciais e focando na estruturação eficaz das relações entre tabelas.
 
-## O Que Aprendi
-- **Habilidades de Design Frontend:** Antes deste projeto, eu tinha receios sobre minha proficiência em HTML e CSS, especialmente quando se tratava de replicar designs. No entanto, ao implementar o design com base em um template da [Visily](https://www.visily.ai/), fiquei agradavelmente surpreso com minha capacidade de dar vida ao design, aumentando minha confiança no desenvolvimento frontend.
+- **Habilidades de Design Frontend:** A implementação baseada em um template da [Visily](https://www.visily.ai/) reforçou minha confiança e habilidades em HTML e CSS.
 
-- **Integração de API com Observables:** Embora eu já tivesse experiência anterior com integração de APIs usando promises, este projeto foi um mergulho exclusivo no mundo dos Observables usando a biblioteca Rxjs. A mudança me tornou mais hábil e confortável com essa abordagem de programação reativa.
+- **Integração de API com Observables:** Optei por Observables usando Rxjs, uma abordagem reativa que agora me sinto mais confortável em usar.
 
-- **Estrutura do Projeto e Autenticação:** Minha experiência profissional inicial me fez mergulhar em um projeto em andamento, deixando-me com exposição limitada a decisões fundamentais como estruturação de projeto e mecanismos de autenticação. Com o HotelHero, tive a oportunidade de arquitetar o projeto desde o início e aprofundar-me na autenticação. Aproveitar os robustos recursos do Angular, como Route Guards, Interceptors e manipulação de JWT com cookies, foi uma experiência esclarecedora.
+- **Estrutura do Projeto e Autenticação:** Com o HotelHero, pude arquitetar um projeto desde o início, utilizando recursos robustos do Angular, como Route Guards e Interceptors, e aprofundando-me na autenticação JWT.
 
-- **Gerenciamento de Estado:** No passado, eu frequentemente recorria ao uso de propriedades nos serviços para compartilhar dados entre componentes, o que não está de acordo com o princípio de *stateless service*. A introdução às ferramentas de gerenciamento de estado neste projeto foi transformadora. Não apenas simplificou o compartilhamento de dados, mas também se tornou um aspecto do desenvolvimento que realmente aprecio.
+- **Gerenciamento de Estado:** A introdução ao NGXS transformou minha abordagem ao compartilhamento de dados, mostrando a eficácia das ferramentas de gerenciamento de estado.
 
-- **DevOps e Deploy:** Este projeto foi a aplicação frontend que pude fazer o deploy. A jornada foi rica em aprendizado, desde entender as complexidades do DevOps, configurar pipelines usando GitHub Actions (Jenkins foi considerado, mas parecia exagero para este projeto), até ter experiência prática com Docker e solucionar problemas de deploy.
+- **DevOps e Deploy:** Aprendi sobre Docker, configuração de pipelines com GitHub Actions e solução de problemas de deploy, enriquecendo minha experiência em DevOps.
 
 ## Melhorias Futuras
 - **Integrações de Pagamento:** Para oferecer uma experiência de reserva contínua, integrações com plataformas de pagamento de terceiros como Stripe, PayPal e Google Payments estão planejadas. Isso proporcionará aos usuários uma variedade de opções de pagamento, melhorando a experiência geral do usuário.
