@@ -1,11 +1,10 @@
 # HotelHero Client
 
-## Visão Geral
 O *HotelHero* é uma aplicação de reserva de hotéis projetada para oferecer uma experiência agradável desde a busca por hotéis até a realização da reserva. Desenvolvido com o objetivo de aprimorar e desafiar minhas habilidades de desenvolvimento, o projeto busca aliar requisitos reais com uma implementação prática e eficiente.
 
-## Índice
+<!-- ## Índice
 - [Desafios & Aprendizados](#desafios-e-aprendizados)
-- [Melhorias Futuras](#melhorias-futuras)
+- [Melhorias Futuras](#melhorias-futuras) -->
 
 ## Desafios & Aprendizados
 - **Seleção de Framework:** Escolhi o Angular por sua estrutura e escalabilidade, valorizando sua organização em detrimento de outras opções como Vue.js e React.js.
