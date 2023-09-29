@@ -6,24 +6,35 @@ O *HotelHero* é uma aplicação de reserva de hotéis projetada para oferecer u
 - Login e Criação de conta
 - Busca de hotéis com filtros
 - Visualização detalhada do hotel
-- Efetivação de reservas (fictícia)
+- Agendamento de reservas (fictício)
 
-### Página de Cadastro
-![Login Page](./images/home.png)
+### Screenshots da Aplicação
 
-### Página Home
-![Home Page](./images/home.png)
+<div align="center">
 
-### Resultados da Pesquisa
-![Search Results](./images/search-results.png)
+  ![Login Page](./public/signup.png)
+  <sub>**Página de Cadastro**</sub><br><br>
 
-### Visualização Detalhada do Hotel
-![Hotel Details](./images/hotel-details-1.png)
-![Hotel Images](./images/hotel-images.png)
-![Hotel Details](./images/hotel-details-2.png)
+  ![Home Page](./public/home.png)
+  <sub>**Página Home**</sub><br><br>
 
-### Página de Pagamento
-![Payment Page](./images/checkout.png)
+  ![Search Results](./public/search-results.png)
+  <sub>**Resultados da Pesquisa**</sub><br><br>
+
+  **Visualização Detalhada do Hotel**
+  ![Hotel Details 1](./public/hotel-details-1.png)
+  <sub>**Detalhes do Hotel (1)**</sub><br><br>
+
+  ![Hotel Images](./public/hotel-photos.png)
+  <sub>**Imagens do Hotel**</sub><br><br>
+
+  ![Hotel Details 2](./public/hotel-details-2.png)
+  <sub>**Detalhes do Hotel (2)**</sub><br><br>
+
+  ![Payment Page](./public/checkout.png)
+  <sub>**Página de Pagamento**</sub>
+
+</div>
 
 <!-- ## Índice
 - [Desafios & Aprendizados](#desafios-e-aprendizados)
